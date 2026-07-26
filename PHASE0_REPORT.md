@@ -1,0 +1,174 @@
+# PHASE 0 REPORT — mapping the reproducibility gap
+
+Read-only mapping pass. No analysis code written, no export touched.
+
+**Sources read, in the required order:** `GROUND_TRUTH.md` (336 lines) →
+`results/exports/README.md` (489 lines) → `results/exports/paper_numbers_manifest.csv`
+(216 rows) → `verification_manifest.md` **(does not exist — see Blocker).**
+
+Baseline commit: `01ed819` *Pre-rebuild snapshot of UROP TAR study* — 487 files, clean tree.
+
+---
+
+## BLOCKER — `verification_manifest.md` is not in the repo
+
+It is absent from the repo root, and a search across both
+`OneDrive\0 Rong\01 Documents\` and `OneDrive\0 Rong 1\` found no file matching
+`verification_manifest*`. It has never been added.
+
+Everything in this report that depends on the **paper side** is therefore unfilled:
+
+| Phase 0 requirement | Status |
+|---|---|
+| (b) which `verification_manifest` entries each round covers | **BLOCKED** |
+| (b) `verification_manifest` entries covered by NO export | **BLOCKED** |
+| (c) `paper_numbers_manifest.csv` vs `verification_manifest.md` disagreements | **BLOCKED** |
+| Section E known text errors — verdicts | **BLOCKED** |
+| (b) round → spec → export mapping | **DONE** (below) |
+| (b) export existence verification | **DONE** — all 61 CSVs + 5 figures present |
+| (b) which analyses have surviving code | **DONE** (below) |
+| Internal supersession conflicts among surviving docs | **DONE** — added, see §4 |
+
+Drop `verification_manifest.md` into the repo root and I will complete (b)-coverage and (c)
+without redoing the rest.
+
+---
+
+## 1. Round → spec → export map
+
+Every file named in the exports README **exists**. Verified against a full directory listing:
+61 CSVs, 1 README, 1 `vintage_availability_note.md`, 5 figures.
+
+| Round | Manifest IDs (n) | Spec essentials | Exports produced | Code in `src/`? |
+|---|---|---|---|---|
+| **1** — base manifest | `A`–`J` (93) | Fresh recompute of every cited number from `data/combined/monthly_panel.csv` + CCI + estimator | `paper_numbers_manifest.csv`, `efficiency_ranking_fresh`, `appendixA_granger_global_cci`, `appendixB_episode_coverage`, `appendixC_dcci_correlations`, `F6_within_market_means`, `item4_country_cci_T_screen`, `horizon_test`, `horizon_test_exp_phase`, `horizon_test_per_market`, `prices_monthly`, `cci_series`, `figures/` ×4 | **PARTIAL** — see §2 |
+| **2** — R1–R4d | `R` (11) | Constant-EXP-n check; pool exclusions; return basis; Option A/B agreement, `INSAMPLE_END=2015-06` | `expn_check`, `horizon_test_exclusions`, `appendixD_optionAB_agreement` | **MISSING** |
+| **3** — S1–S3 | `S` (7) | Standalone country-CCI TAR; episode-level EXP test (30 episodes, Japan excluded, own-market RW baseline); MR cluster count | `localised_runs`, `episodes_exp` | **PARTIAL** (S1 only) |
+| **4** — T1–T5 | `T` (13) | **T1 placebo: 50 RW-with-drift/market matched on T/mean/vol, `seed=20260721`, spec=1, 100-pt grid**; scale-adjusted stability; China CCI; pre-1990; unrestricted b₂ | `placebo_thresholds`, `placebo_summary`, `stability_scale_adjusted`, `unrestricted_b2`, `cci_CHN_fetched`, `localised_runs` (updated) | **MISSING** |
+| **5** — V1–V5 | `V` (4) | Reverse-Granger S&P→US-CCI q=4; episode market count; 2025–26 gCCI/MCSI labels | `reverse_granger_extra`, `gcci_labels_2025_2026`, `mcsi_2025_2026`, `figures/figure6_3_episodes.png` | **MISSING** |
+| **6** — W1–W5 | `W` (7) | α₃ drift table; Japan in/out; **Benjamini–Hochberg q=0.05** on 56 Granger + 45 coefficient tests | `table4_drift`, `fdr_exogeneity`, `fdr_coefficients` | **MISSING** |
+| **7** — X1–X8 | `X` (19) | Horse race vs trailing return; episode test year-cluster-robust + cluster bootstrap B=2000; OOS moving-block; matched-window localisation; Turkey real; **Cohen κ**; drift/variance; Fisher-z CIs | `horserace_label_vs_trailing`, `episode_dep_corrected`, `oos_exp_dep_corrected`, `matched_window_localisation`, `turkey_real_return`, `kappa_stability`, `drift_variance_ratio`, `rho_confidence_intervals` | **MISSING** |
+| **8** — Y1–Y4 | `Y` (10) | Rank stability spec=0 and spec=2 vs spec=1; **circular-shift permutation B=5000, `seed=20260722`**; MR horse race | `rank_stability_drift`, `permutation_exp` | **MISSING** |
+| **9** — P1–P8 (referee) | part of `P` (52) | Regime-dynamics audit; two-metric efficiency; horizon rebuild incl. **P4c leave-episode-out**; comparability; Fisher-z; publication lag | `regime_dynamics_audit`, `efficiency_ranking_two_metrics`, `horizon_test_rebuilt`, `episodes_exp_ex_afc`, `horse_race_sort`, `cci_distribution_diagnostics`, `percentile_trigger_run`, `appendixC_with_se`, `cutoff_loco`, `crisis_window_rho`, `horizon_test_publag`, `vintage_availability_note.md` | **MISSING** |
+| **10** — JEF P1–P9 | part of `P` (52) | **Vectorised fast grid (matches `find_optimal_thresholds` to 1e-9, 347×)**; full-pipeline bootstrap **B=1000, `seed=20260722`**, 4 schemes; min-regime trimming; RW-band BH; Wald DK; recursive horse race; publag; scale; **placebo B=1000** | `threshold_bootstrap`, `pooled_bootstrap_gaps`, `min_regime_trimming`, `min_regime_summary`, `rw_band_validation`, `wald_tar_vs_fixed`, `recursive_horserace`, `publag_corrected`, `common_level_scale`, `normalized_local_runs`, `placebo_1000` | **MISSING** |
+
+Manifest row totals reconcile: 93 + 11 + 7 + 13 + 4 + 7 + 19 + 10 + 52 = **216** ✓
+
+---
+
+## 2. Code coverage — what actually survives
+
+**EXISTS (committed, runnable)** — 2 groups, both already tagged `HISTORICAL` in the manifest:
+- Block `J` (Sec 7.1 composite story) → `src/archive/composite_study.py`
+- `C6`, `C7` (CAPE / BAA narrative) → `src/archive/cape_study.py`, `src/archive/baa_study.py`
+
+**PARTIAL — the computation exists in `src/` but writes elsewhere or omits the CSV.** These
+are the cheapest wins in Phase 1: re-point or extend, don't reimplement.
+
+| Export | Surviving code | Gap |
+|---|---|---|
+| `horizon_test.csv`, `horizon_test_per_market.csv`, `horizon_test_exp_phase.csv` (blocks `D`,`E`) | [horizon_test.py:293-307](src/horizon_test.py#L293-L307) | Writes to `results/gcci/`, not `results/exports/`. Per GROUND_TRUTH §5 the `results/gcci/` copies were never saved — only the PNG. |
+| `efficiency_ranking_fresh.csv` (block `B`, 28 rows) | [gcci_figures.py:97](src/gcci_figures.py#L97) | Writes `results/gcci/efficiency_ranking.csv`; column set differs |
+| `appendixA_granger_global_cci.csv` (`A6`) | [global_cci_study.py:168-202](src/global_cci_study.py#L168-L202) | Screen computes F/p/gate but **prints only** — no CSV writer |
+| `localised_runs.csv` (`G2`,`G4`,`S1`) | [country_cci_study.py:203](src/country_cci_study.py#L203) | Writes `results/country_cci/country_cci_results.csv` |
+| `appendixC_dcci_correlations.csv` (`G5`) | [country_cci_study.py:461](src/country_cci_study.py#L461) | Writes `table_a2_cci_correlations.csv` |
+| `item4_country_cci_T_screen.csv` (`G6`) | [mixed_trigger_study.py:211](src/mixed_trigger_study.py#L211) | Derived from `mixed_trigger_results.csv`; the T-screen slice is not written |
+| `prices_monthly.csv`, `cci_series.csv` (Item 1) | — | Trivial reshapes of the committed panel; no estimator involved |
+
+**MISSING — no generating code anywhere.** Rounds 2 and 4–10 in full: approximately **121 of
+216 manifest rows**. This is the Phase 1 workload.
+
+---
+
+## 3. Recovered script inventory — the Phase 1 blueprint
+
+The scripts were **not** heredocs. They were real `.py` files written to a Claude Code session
+scratchpad (`…\Temp\claude\c--Users-rongq-OneDrive-0-Rong-01-Documents-UROP\827dbcd9-…\scratchpad\`)
+instead of to `src/`, and were deleted with that session. Their filenames survive in the
+`permissions.allow` list of `C:\Users\rongq\.claude\settings.json`, because each run was
+individually approved. The mapping to rounds is near 1:1:
+
+| Lost script | Round / scope | Rebuild as |
+|---|---|---|
+| **`fastgrid.py`** | **Round 10 fast grid — keystone; everything B≥1000 depends on it** | `scripts/fastgrid.py` |
+| `build_R.py` | Round 2, R1–R4d | `scripts/round02_pool_and_optionAB.py` |
+| `build_S.py` | Round 3, S1–S3 | `scripts/round03_episodes.py` |
+| `build_T1.py` | Round 4, T1 placebo (seed 20260721) | `scripts/round04_placebo.py` |
+| `build_T2345.py` | Round 4, T2–T5 | `scripts/round04_stability_china_b2.py` |
+| `build_V.py` | Round 5, V1–V5 | `scripts/round05_audit.py` |
+| `build_W.py` | Round 6, W1–W5 (BH FDR) | `scripts/round06_drift_fdr.py` |
+| `build_X.py` | Round 7, X1–X8 | `scripts/round07_dependence.py` |
+| `build_Y.py`, `build_Y4.py` | Round 8, Y1–Y3 / Y4 | `scripts/round08_rank_permutation.py` |
+| `build_P12.py`, `build_P4.py`, `build_P678.py`, `build_P43.py` | Round 9, P1/P2, P4, P6–P8, P4.3 | `scripts/round09_*.py` |
+| `build_P23.py`, `build_P41_P5.py`, `build_P8_P9.py` | Round 10, P2/P3, P4.1/P5, P8/P9 | `scripts/round10_*.py` |
+| `make_exports.py`, `build_manifest.py`, `build_figures.py` | Round 1 exports, manifest, figures | `scripts/round01_*.py` |
+
+**Also recovered:** the runs used `../.venv/Scripts/python.exe`, and the allowlist records
+import checks for **`statsmodels`** and **`linearmodels`** — the latter is how the
+Driscoll–Kraay SEs were computed. **Neither is in `requirements.txt`.** Round 1 note F5 confirms
+DK ran via statsmodels `hac-groupsum` with 11 lags.
+
+---
+
+## 4. Internal conflicts and supersessions in the surviving docs
+
+`verification_manifest.md` is absent, so (c) cannot be done. What I *can* report is where the
+surviving documents contradict **each other** — these are live risks for the paper text,
+because `paper_numbers_manifest.csv` still holds the superseded value in each case.
+
+| # | Conflict | Manifest row at risk | Resolution per README |
+|---|---|---|---|
+| 1 | **T1 placebo verdict.** Round 4 T1 (B=50, iid): "threshold placement is DISTINGUISHABLE from trigger-driven." Round 10 P9 (B=1000, block/vol-clustering null): only **3/23** — "largely not distinguishable from chance." | `T1_verdict`, `T1_rss_percentile_median`, `T1_band_share` | README explicitly says the T1 claim "does not hold and must be softened." **Cite Round 10.** |
+| 2 | **TAR vs naive percentile sort.** Round 9 P4d: TAR EXP significant (−11.28, p=0.019), fixed >90th not (p=0.59) → "adds beyond the naive sort." Round 10 P4.1 Wald: difference −6.92, Var 113 → **does not reject equality** (DK p≈0.5, block p=0.62). | `P4d_horserace_fixedbands` | README: the earlier claim "does **not** survive the direct comparison." **Cite Round 10.** |
+| 3 | **α₃ interpretation.** Round 6 W1: α₃ positive in all 22, median **1.585**, "explosive label justified by drift." Round 9 P1: that median is "uninterpretable" and is **replaced** by state-conditional mean return **+1.03%/mo**. | `W1_alpha3_summary` | Supersession, not error. **Cite Round 9 framing.** |
+| 4 | **Publication lag.** Round 9 P8: 12m EXP discount stable, −7.49 → −7.27 → −6.57, all p≈0. Round 10 P5: EXP−RW **gap** lag-2 −12.3 **loses significance** under block bootstrap (p 0.08–0.10). | `P8_*`, `P5_*` | Different quantities (discount vs gap) — not a contradiction, but the paper must not cite P8's "stable" as covering the gap. |
+| 5 | **Ranking robustness.** Round 8 Y1 (no-drift): Spearman **0.050** — not robust. Y4 (constant-drift, the fair comparison): **0.417** — weakly robust. Round 9 P2 (two-metric): **0.878** — robust. | `Y1_rank_corr`, `Y4_rank_corr_constdrift`, `P2_rank_corr` | Not a conflict: robust to *metric*, not to *drift spec*. The paper must not conflate them. |
+| 6 | **"22 markets" vs "21".** Round 5 V2 corrects Sec 6.3 to **21** markets contributing 30 episodes. Round 6 W1 says α₃ positive for "all 22 markets with EXP months." | `V2_exp_market_count`, `W1_alpha3_summary` | **Reconciled, not a conflict:** 22 markets have EXP months (23 − Bovespa at 0%); 21 contribute episodes (Japan excluded). Both correct. |
+
+Two further known-wrong items already flagged in the surviving docs, carried forward:
+- **V1** — the paper's claim that the S&P 500 *passes* the reverse-Granger screen under the US
+  CCI is **false**: F=3.5358, p=0.0075 → fails. Prose fix required.
+- **X4** — the Turkey localisation claim is mostly a **window** effect, not a trigger effect
+  (matched 240-month window: global 6/38/56 vs country 7/45/48). Greece's claim holds.
+
+---
+
+## 5. Recommended Phase 1 order
+
+Driven by dependency and referee risk, not by round number:
+
+1. **`scripts/fastgrid.py`** — nothing with B≥1000 is feasible without it (1.4 s → 4.1 ms/fit).
+   Its acceptance test is built in and free: **must match `find_optimal_thresholds` to 1e-9 on
+   all 23 markets**. Build this first; it validates itself against surviving code.
+2. **`config.py`** — seeds (`20260721` T1, `20260722` Round 8/10, `12345` fixed-label block),
+   `INSAMPLE_END = "2015-06"`, B values, block lengths, grid settings (100 points, `min_gap=4`).
+3. **Round 10 P1 bootstrap** and **P9 placebo-1000** — the two that *revise* headline verdicts.
+4. **Round 8 Y2 permutation** (B=5000) — the strongest surviving defence of Contribution 3.
+5. **Round 7 X1** — the episode-level test the README says Contribution 3 should rest on.
+6. The PARTIAL set in §2 — cheap, and they re-anchor blocks `A`–`J` to committed code.
+7. Everything else, round order.
+
+---
+
+## 6. Assumptions this report makes (also logged in `ASSUMPTIONS.md`)
+
+1. `results/exports/README.md` is authoritative for spec where it and the manifest differ —
+   it records the parameters, the manifest records only outputs.
+2. Round 1 blocks `A`–`J` map to `make_exports.py` / `build_manifest.py` / `build_figures.py`.
+   The README does not state this; it is inferred from the recovered filenames and the export
+   list under "⭐ paper_numbers_manifest.csv".
+3. "Missing" means no code writes that CSV. Some values may still be recomputable from a
+   surviving module by hand; §2 lists the ones I could confirm.
+4. The 23-market panel in `results/tables/global_cci_all_markets.csv` is the fixed input to all
+   rebuilt analyses — not re-estimated unless a round's spec explicitly re-estimates it.
+
+---
+
+## STOP — awaiting approval before Phase 1
+
+Two things I need from you:
+
+1. **`verification_manifest.md`** — put it in the repo root so the paper-side half of this
+   report can be filled in. Without it there is no target list to verify *against*; Phase 2's
+   layers 2 and 3 cannot run at all.
+2. **Approval of the §5 order**, or a different one.
