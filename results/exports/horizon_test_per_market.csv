@@ -1,0 +1,24 @@
+market,country,T,n_MR,n_RW,n_EXP
+ipc,Mexico,414,112,291,11
+bovespa,Brazil,397,197,200,0
+merval,Argentina,355,18,293,44
+ibex35,Spain,394,8,339,47
+smi,Switzerland,426,12,368,46
+aex,Netherlands,403,22,341,40
+athex,Greece,345,14,305,26
+ta125,Israel,403,28,353,22
+ta35,Israel (TA-35),403,28,353,22
+bist100,Turkey,346,12,326,8
+nikkei225,Japan,436,25,147,264
+shanghai,China (SSE),346,162,180,4
+szse,China (SZSE),345,129,198,18
+hangseng,Hong Kong,436,44,381,11
+hscei,Hong Kong (H-shr),394,26,324,44
+kospi,South Korea,353,65,244,44
+sti,Singapore,436,25,389,22
+twse,Taiwan,346,6,300,40
+jkse,Indonesia,433,22,368,43
+lq45,Indonesia (LQ45),351,25,284,42
+klci,Malaysia,389,6,351,32
+set,Thailand,353,18,291,44
+psei,Philippines,436,196,235,5

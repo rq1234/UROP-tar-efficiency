@@ -1,0 +1,5 @@
+variant,mr,episode_mean,episode_p,n_ep
+full_23,14.6,-15.04,0.0017,30
+excl_AFC_onset,,-11.45,0.017,23
+one_index_per_country,14.7,-14.93,0.0062,26
+drop_1997_2000,,,,1

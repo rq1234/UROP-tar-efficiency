@@ -1,0 +1,24 @@
+market,country,orth_cci,orth_yc,orth_epu,max_orth,granger_bic,test_lag,p_value,verdict,tar_verdict
+sp500,USA,5,1,12,12,1,16,0.0136,FAIL,
+ftse100,UK,5,1,12,12,1,16,0.0711,PASS,BOTH TAILS
+dax,Germany,6,1,12,12,1,16,0.052,PASS,BOTH TAILS
+cac40,France,11,1,12,12,1,16,0.0025,FAIL,
+nikkei225,Japan,1,1,12,12,1,16,0.9381,PASS,BOTH TAILS
+shanghai,China,9,1,12,12,1,16,0.0967,PASS,BOTH TAILS
+hangseng,Hong Kong,6,1,12,12,1,16,0.0763,PASS,BOTH TAILS
+kospi,South Korea,1,1,12,12,1,16,0.8699,PASS,EUPHORIA GAUGE
+nifty50,India,10,1,12,12,1,16,0.8406,PASS,WEAK
+tsx,Canada,6,1,12,12,1,16,0.0541,PASS,BOTH TAILS
+asx200,Australia,12,1,12,12,1,16,0.0027,FAIL,
+bovespa,Brazil,1,1,12,12,1,16,0.7041,PASS,BOTH TAILS
+eurostoxx50,Eurozone,7,1,12,12,1,16,0.523,PASS,WEAK
+ibex35,Spain,10,1,12,12,1,16,0.0723,PASS,EUPHORIA GAUGE
+smi,Switzerland,7,1,12,12,1,16,0.0007,FAIL,
+sti,Singapore,1,1,12,12,1,16,0.9715,PASS,BOTH TAILS
+twse,Taiwan,1,1,12,12,1,16,0.8691,PASS,BOTH TAILS
+jse,South Africa,1,1,12,12,1,16,0.2358,PASS,WEAK
+aex,Netherlands,10,12,12,12,1,16,0.0923,PASS,EUPHORIA GAUGE
+ipc,Mexico,10,1,12,12,1,16,0.1668,PASS,BOTH TAILS
+jkse,Indonesia,1,1,12,12,1,16,0.9982,PASS,EUPHORIA GAUGE
+ta125,Israel,1,1,12,12,1,16,0.3566,PASS,BOTH TAILS
+klci,Malaysia,1,1,12,12,1,16,0.9967,PASS,FEAR GAUGE

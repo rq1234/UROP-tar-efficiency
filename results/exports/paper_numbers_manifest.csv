@@ -1,0 +1,217 @@
+id,paper_location,description,value
+A1,Sec 3.2,total candidate markets tested for exogeneity,57
+A2,Sec 3.2,markets with no usable data,1 (colcap)
+A3,Sec 3.2/Tab3.1,pass reverse-Granger q=4 p>0.05,32
+A4,Sec 3.2/Tab3.1,fail reverse-Granger q=4,24
+A5,Sec 3.3,pass AND T>=340 (final panel; list),"23 | ipc,bovespa,merval,ibex35,smi,aex,athex,ta125,ta35,bist100,nikkei225,shanghai,szse,hangseng,hscei,kospi,sti,twse,jkse,lq45,klci,set,psei"
+A6,Appendix A,per-market F/p all 57 (fresh file),appendixA_granger_global_cci.csv
+A7,Appendix A,q=12 rerun on 23 admissible: pass/23 ; Japan p,22/23 pass ; nikkei225 p=0.0420
+B1,Table 4.1,bist100,T=346;c1=97.330;c2=102.160;RW=94%;MR=3%;EXP=2%;bMR=0.0589***;bEXP=-0.9035***;BOTH TAILS
+B2,Table 4.1,klci,T=389;c1=97.056;c2=101.499;RW=90%;MR=2%;EXP=8%;bMR=-1.2547***;bEXP=-0.2736***;EUPHORIA GAUGE
+B3,Table 4.1,sti,T=436;c1=97.881;c2=101.721;RW=89%;MR=6%;EXP=5%;bMR=-0.0042;bEXP=-0.3128***;BOTH TAILS
+B4,Table 4.1,athex,T=345;c1=97.552;c2=101.544;RW=88%;MR=4%;EXP=8%;bMR=-0.1583***;bEXP=-0.2702***;BOTH TAILS
+B5,Table 4.1,ta125,T=403;c1=98.092;c2=101.675;RW=88%;MR=7%;EXP=5%;bMR=0.0132;bEXP=-0.1923**;BOTH TAILS
+B6,Table 4.1,ta35,T=403;c1=98.092;c2=101.675;RW=88%;MR=7%;EXP=5%;bMR=0.0163;bEXP=-0.1857**;BOTH TAILS
+B7,Table 4.1,hangseng,T=436;c1=98.450;c2=102.006;RW=87%;MR=10%;EXP=3%;bMR=-0.1364**;bEXP=-0.8646***;BOTH TAILS
+B8,Table 4.1,twse,T=346;c1=97.023;c2=101.317;RW=87%;MR=2%;EXP=12%;bMR=-0.7991**;bEXP=-0.1515*;EUPHORIA GAUGE
+B9,Table 4.1,smi,T=426;c1=97.284;c2=101.207;RW=86%;MR=3%;EXP=11%;bMR=0.0701*;bEXP=-0.1787***;BOTH TAILS
+B10,Table 4.1,ibex35,T=394;c1=97.128;c2=101.189;RW=86%;MR=2%;EXP=12%;bMR=-0.7603***;bEXP=-0.1496***;BOTH TAILS
+B11,Table 4.1,jkse,T=433;c1=97.800;c2=101.284;RW=85%;MR=5%;EXP=10%;bMR=-0.0043;bEXP=-0.2594***;BOTH TAILS
+B12,Table 4.1,aex,T=403;c1=97.799;c2=101.383;RW=85%;MR=5%;EXP=10%;bMR=0.0314;bEXP=-0.1111**;BOTH TAILS
+B13,Table 4.1,merval,T=355;c1=97.745;c2=101.253;RW=83%;MR=5%;EXP=12%;bMR=0.0303**;bEXP=-0.1801**;BOTH TAILS
+B14,Table 4.1,set,T=353;c1=97.739;c2=101.257;RW=82%;MR=5%;EXP=12%;bMR=0.0301;bEXP=-0.1856**;BOTH TAILS
+B15,Table 4.1,hscei,T=394;c1=98.014;c2=101.263;RW=82%;MR=7%;EXP=11%;bMR=-0.2468**;bEXP=-0.1333**;BOTH TAILS
+B16,Table 4.1,lq45,T=351;c1=97.884;c2=101.330;RW=81%;MR=7%;EXP=12%;bMR=-0.0098;bEXP=-0.3412***;BOTH TAILS
+B17,Table 4.1,ipc,T=414;c1=99.267;c2=102.011;RW=70%;MR=27%;EXP=3%;bMR=-0.0203***;bEXP=-0.8274***;BOTH TAILS
+B18,Table 4.1,kospi,T=353;c1=98.733;c2=101.257;RW=69%;MR=18%;EXP=12%;bMR=0.0584**;bEXP=-0.0890;BOTH TAILS
+B19,Table 4.1,szse,T=345;c1=99.467;c2=101.767;RW=57%;MR=37%;EXP=5%;bMR=-0.0981**;bEXP=-0.4740***;BOTH TAILS
+B20,Table 4.1,psei,T=436;c1=100.157;c2=102.219;RW=54%;MR=45%;EXP=1%;bMR=-0.0198***;bEXP=-0.3254;BOTH TAILS
+B21,Table 4.1,shanghai,T=346;c1=100.167;c2=102.237;RW=52%;MR=47%;EXP=1%;bMR=-0.0626***;bEXP=-0.3605***;BOTH TAILS
+B22,Table 4.1,bovespa,T=397;c1=100.444;c2=102.430;RW=50%;MR=50%;EXP=0%;bMR=-0.0506***;bEXP=0.0000;FEAR GAUGE
+B23,Table 4.1,nikkei225,T=436;c1=97.881;c2=99.872;RW=34%;MR=6%;EXP=61%;bMR=0.0489*;bEXP=-0.0351***;BOTH TAILS
+B24,Sec 4,"c1 min,max across 23","97.023,100.444"
+B25,Sec 4,"c2 min,max across 23","99.872,102.430"
+B26,Sec 4,"c1 min,max excluding 6 MR-heavy","97.023,98.450"
+B27,Sec 4,"c2 min,max excluding nikkei225","101.189,102.430"
+B28,Sec 4,markets whose c1 > B26 max,"ipc,kospi,szse,psei,shanghai,bovespa"
+C1,Tab3.1,"MCSI rolling c1 min,max,range","57.5,103.6,46.0"
+C2,Tab3.1,MCSI rolling c2 range,47.6 (min 59.7 max 107.3)
+C3,Tab3.1,US CCI rolling c1 range,4.4 (min 96.40 max 100.75)
+C4,Tab3.1/Fig3.1,"global CCI rolling c1 min,max,range ; c2 range","c1 96.53,101.37,4.84 ; c2 range 3.84"
+C5,Sec 3.2,global-CCI rolling: n windows ; span years,27 windows ; 26.0 yr (1999-12..2025-12)
+C6,Tab3.1,CAPE rolling c1 range,HISTORICAL: Week/archive value 21.4 ; script src/archive/cape_study.py ; results/archive/tables/rolling_thresholds_SP500_CAPE.csv (not re-run)
+C7,Sec 3.2,BAA euphoria compression ; GFC spike,"HISTORICAL: 0.56pp ; 3.7pp ; src/archive/baa_study.py (narrative, not re-run)"
+D0,Tab6.1/Fig6.1,labelling convention,state=_assign_states(z[1:]): the global-CCI level at the END of month t labels the return realised over month t; forward[i]=sum of the h monthly log-returns strictly after t; last h months of each market dropped (no forward window); Japan EXP excluded from EXP cell only
+D_1m_MR,Tab6.1,"1m MR mean%,n","+0.69,1183"
+D_1m_RW,Tab6.1,"1m RW mean%,n","+0.78,6855"
+D_1m_EXP,Tab6.1,"1m EXP mean%,n","-0.44,615"
+D_1m_pMRRW,Tab6.1,1m Welch p MR-vs-RW,0.7407
+D_1m_pEXRW,Tab6.1,1m Welch p EXP-vs-RW,0.01013
+D_3m_MR,Tab6.1,"3m MR mean%,n","+2.63,1163"
+D_3m_RW,Tab6.1,"3m RW mean%,n","+2.23,6829"
+D_3m_EXP,Tab6.1,"3m EXP mean%,n","-1.90,615"
+D_3m_pMRRW,Tab6.1,3m Welch p MR-vs-RW,0.4889
+D_3m_pEXRW,Tab6.1,3m Welch p EXP-vs-RW,4.378e-07
+D_6m_MR,Tab6.1,"6m MR mean%,n","+7.18,1145"
+D_6m_RW,Tab6.1,"6m RW mean%,n","+4.08,6778"
+D_6m_EXP,Tab6.1,"6m EXP mean%,n","-3.34,615"
+D_6m_pMRRW,Tab6.1,6m Welch p MR-vs-RW,0.0007233
+D_6m_pEXRW,Tab6.1,6m Welch p EXP-vs-RW,1.769e-12
+D_12m_MR,Tab6.1,"12m MR mean%,n","+14.60,1109"
+D_12m_RW,Tab6.1,"12m RW mean%,n","+8.01,6676"
+D_12m_EXP,Tab6.1,"12m EXP mean%,n","-7.49,615"
+D_12m_pMRRW,Tab6.1,12m Welch p MR-vs-RW,4.803e-07
+D_12m_pEXRW,Tab6.1,12m Welch p EXP-vs-RW,3.992e-26
+E0,Tab6.2,spell rule,"first ceil(L/2) months of every EXP run = early, remainder = late; no minimum run length; Japan excluded"
+E_1m,Tab6.2,"1m early mean%,n / late mean%,n / p","early +0.91,314 | late -1.85,301 | p=0.002649"
+E_3m,Tab6.2,"3m early mean%,n / late mean%,n / p","early +1.81,314 | late -5.76,301 | p=1.376e-06"
+E_6m,Tab6.2,"6m early mean%,n / late mean%,n / p","early +2.95,314 | late -9.90,301 | p=7.357e-11"
+E_12m,Tab6.2,"12m early mean%,n / late mean%,n / p","early +0.60,314 | late -15.94,301 | p=6.593e-10"
+F1,Sec6.4,tercile CCI cutoffs; bottom/mid/top 12m mean%; bottom-top spread pp,"cut 99.57,100.76; +11.14/+8.17/+2.98; spread +8.16pp"
+F2,Sec6.4,10th/90th CCI cutoffs; below/mid/above 12m mean%; spread pp,"cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp"
+F3,Sec6.4,TAR MR-EXP 12m spread pp,+22.09pp
+F4_L12,Sec6.4,"block-bootstrap L=12 (B=1000): MR-RW SE,p ; EXP-RW SE,p",MR-RW +6.59pp SE 5.27 p 0.211 ; EXP-RW -15.50pp SE 8.94 p 0.083 (EXP valid reps 997/1000)
+F4_L24,Sec6.4,"block-bootstrap L=24 (B=1000): MR-RW SE,p ; EXP-RW SE,p",MR-RW +6.59pp SE 6.43 p 0.306 ; EXP-RW -15.50pp SE 7.89 p 0.049 (EXP valid reps 995/1000)
+F4_L36,Sec6.4,"block-bootstrap L=36 (B=1000): MR-RW SE,p ; EXP-RW SE,p",MR-RW +6.59pp SE 7.00 p 0.346 ; EXP-RW -15.50pp SE 6.97 p 0.026 (EXP valid reps 983/1000)
+F5,Sec6.4,"Driscoll-Kraay (11 lags): MR coef,p ; EXP coef,p",MR +6.59 p 0.179 ; EXP -15.50 p 0.040
+F6,Sec6.4,sign test MR>RW /23 (binom p) ; EXP<RW /denom (binom p),"19/23 p=0.002599 ; 20/21 p=2.098e-05 | MR exceptions: shanghai,szse,hangseng,klci | EXP exceptions: shanghai"
+G1,Tab5.1,"Greece GLOBAL T,c1,c2,MR/RW/EXP%","345,97.55,101.54,4.1/88.4/7.5"
+G2,Tab5.1,"Greece COUNTRY T,c1,c2,MR/RW/EXP%","317,99.08,101.59,43.5/31.2/25.2"
+G3,Tab5.1,"Turkey GLOBAL T,c1,c2,MR/RW/EXP%","346,97.33,102.16,3.5/94.2/2.3"
+G4,Tab5.1,"Turkey COUNTRY T,c1,c2,MR/RW/EXP%","240,95.17,100.85,6.7/45.4/47.9"
+G5,Appendix C,"first-diff corr fresh (USA,ESP,JPN,GRC,TUR,NZL,CZE,AUS,FIN)",USA=0.8078; ESP=0.7053; JPN=0.6661; GRC=0.3684; TUR=0.3758; NZL=0.286; CZE=0.4151; AUS=0.4353; FIN=0.4824
+G6,Tab5.1,country-CCI T screen (fresh file): n pass T>=340 ; T>=240,6 ; 14 -> item4_country_cci_T_screen.csv
+H1,Appendix B,per-market dotcom-EXP/GFC-MR/COVID-MR (fresh file),appendixB_episode_coverage.csv
+H2,Sec7.2,latest global CCI value ; month,97.552 ; 2026-05
+H3,Fig7.1,May-2026 regime counts across 23 (MR/RW/EXP),"MR=17,RW=6,EXP=0"
+I1,Sec3.1,"replicated S&P & FTSE MCSI c1,c2 (spec=1) vs published(HIST)",S&P c1=59.7 c2=107.3 (pub HIST Tab7) ; FTSE c1=59.7 c2=105.7 (pub HIST Tab7)
+I2,Sec3.1,FTSE no-drift c2 replicated vs published 82.6 ; RSS gap (fresh),"replicated c2=61.8 (c1=59.7) ; published 82.6 (HIST A&S Tab7) ; RSS gap 0.018% (RSS at pub-c2 vs replicated optimum, fresh)"
+J1,Sec7.1,composite 23/23 tautological exogeneity passes,"HISTORICAL: Week 3 report; 23/23; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+J2,Sec7.1,k-sweep cliff,"HISTORICAL: Week 3 report; documented cliff; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+J3,Sec7.1,BIC composite lag,"HISTORICAL: Week 3 report; 12; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+J4,Sec7.1,composite markets corrected vs CCI-alone,"HISTORICAL: Week 3 report; 3/23; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+J5,Sec7.1,CCI+EPU pass rate ; PC1 variance,"HISTORICAL: Week 3 report; 18/23 ; 79% PC1; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+J6,Sec7.1,both-tails count,"HISTORICAL: Week 3 report; 10/23; script COMMITTED at src/archive/composite_study.py (+bic_composite_study.py, combinatorial_search.py); outputs in results/archive/tables/; NOT re-run this session"
+R1_min_gap_months,Tab6.1,"min months between last EXP month and sample end, over pooled-EXP markets (excl Japan; bovespa has 0 EXP)",94 (market: ibex35)
+R1_verdict,Tab6.1,constant n_EXP=615 across horizons is REAL if min gap>=12,REAL
+R2a_12m,Sec6.4,"exclude Greece+Turkey (21 mkts, Japan-EXP still excluded)",n_markets=21; MR +13.77 (n=1083); RW +7.70 (n=6069); EXP -6.55 (n=581); pMR-RW=4.33e-06; pEXP-RW=1.19e-21
+R2b_12m,Sec6.4,also exclude Japan entirely (20 mkts),n_markets=20; MR +13.78 (n=1060); RW +7.68 (n=5932); EXP -6.55 (n=581); pMR-RW=5.88e-06; pEXP-RW=1.41e-21
+R2c_12m,Sec6.4,also exclude Spain (19 mkts),n_markets=19; MR +13.73 (n=1052); RW +7.85 (n=5605); EXP -7.39 (n=534); pMR-RW=1.5e-05; pEXP-RW=1.31e-21
+R3a_basis,Sec3.3,monthly_panel close: currency / price-vs-total-return / nominal-vs-real,"LOCAL currency (Yahoo native per index); PRICE-return index close via yfinance auto_adjust=True (dividend/split-adjusted, but index tickers carry no dividend distributions so dividends NOT included -> price return); NOMINAL (not inflation-adjusted). Source: src/collect_data.py:44,47"
+R3b_12m,Sec7.2,exclude Turkey+Argentina (high-inflation nominal); 12m,n_markets=21; MR +12.45 (n=1080); RW +6.26 (n=6080); EXP -5.94 (n=563); pMR-RW=8.78e-07; pEXP-RW=3.87e-16
+R4a_agreement_by_market,Appendix D,per-market A-vs-B agreement (fresh file),appendixD_optionAB_agreement.csv
+R4b_overall_and_post2015,Appendix D,panel A-vs-B agreement: full sample ; 2016-01+ (in-sample cutoff=2015-06 per pipeline),full 88.17% ; post-2015 84.63% (n_post2015=2875)
+R4c_boundary_share,Appendix D,"share of A-vs-B disagreeing months with global CCI within 0.25 of any of {c1_A,c2_A,c1_B,c2_B}",38.8% (410/1058 disagreeing months)
+R4d,Sec7.2,"Option-B OOS: 12m horizon on post-2015 months, B labels (Japan EXP excluded)",MR +10.03 (n=326); RW +8.87 (n=2141); EXP -0.97 (n=76); pMR-RW=0.481; pEXP-RW=2.14e-05
+S1_greece_country,Tab5.1,athex + cci_GRC standalone TAR (identical code path),T=317; c1=99.08; c2=101.59; MR/RW/EXP=43.5/31.2/25.2; bMR=-0.0818***; bEXP=0.0037
+S1_turkey_country,Tab5.1,bist100 + cci_TUR standalone TAR (identical code path),T=240; c1=95.17; c2=100.85; MR/RW/EXP=6.7/45.4/47.9; bMR=0.0574**; bEXP=-0.0341***
+S2_n_episodes,Sec6.3,"contiguous EXP spells (markets, Japan excluded); mean length",30 episodes; mean length 20.5 months
+S2_mean_excess,Sec6.3,mean episode-level 12m excess vs own-market RW baseline,-15.04pp
+S2_t_p,Sec6.3,one-sample t-test of episode excess vs 0,t=-3.46; p=0.0017; df=29
+S2_share_negative,Sec6.3,episodes with negative excess,26/30
+S3_mr_clusters,Sec6.3,distinct MR calendar months ; n clusters (gap<=3m) ; ranges,222 MR months ; 9 clusters ; 1990-09..1991-02; 1991-10..1994-03; 2001-10..2001-11; 2002-09..2003-09; 2005-09..2005-10; 2007-10..2014-12; 2015-08..2015-09; 2016-03..2016-09; 2020-02..2026-05
+T2_mcsi,Tab3.1/Sec3.2,"MCSI: c1_range,sigma,c1_range/sigma,c1_range/span","c1: 46.04, sig 13.87, r/sig 3.32, r/span 0.740 | c2: 47.65, r/sig 3.44"
+T2_uscci,Tab3.1/Sec3.2,"US_CCI: c1_range,sigma,c1_range/sigma,c1_range/span","c1: 4.35, sig 1.53, r/sig 2.84, r/span 0.654 | c2: 3.69, r/sig 2.40"
+T2_gcci,Tab3.1/Sec3.2,"global_CCI: c1_range,sigma,c1_range/sigma,c1_range/span","c1: 4.84, sig 1.17, r/sig 4.12, r/span 0.864 | c2: 3.84, r/sig 3.27"
+T3_availability,Sec5,"China CCI (FRED CSCICP03CNM665S) start,end,obs",1990-01..2023-12; 408 obs
+T3_shanghai,Sec5,"shanghai + China CCI: T,c1,c2,shares; 2006-08 & 2014-15 EXP months","T=317; c1=100.77; c2=104.37; MR/RW/EXP=71.0/27.4/1.6; bMR=-0.0361*** bEXP=-0.7703***; EXP 06-08=0/35mo, 14-15=0/23mo"
+T3_szse,Sec5,"szse + China CCI: T,c1,c2,shares; 2006-08 & 2014-15 EXP months","T=316; c1=100.77; c2=104.38; MR/RW/EXP=70.9/27.9/1.3; bMR=-0.0262** bEXP=-0.5942***; EXP 06-08=0/35mo, 14-15=0/23mo"
+T3_corr,AppC,"corr(dGlobalCCI,dChinaCCI) first differences","0.2528 (n=407, 1990-01..2023-12)"
+T4_pre1990,Sec7.2/defensive,late-80s global CCI peak; pre-90 EXP by market; STI episode,peak=101.84 (1988-09); sti(c2=101.72):6EXP_pre90; hangseng(c2=102.01):0EXP_pre90; psei(c2=102.22):0EXP_pre90; nikkei225(c2=99.87):82EXP_pre90; STI episode 1988-08..1989-01 12m_fwd=29.8pp excess=25.9pp
+T5_count_sig,Sec7.2,markets with RW slope b2 != 0 at 5% (unrestricted),8/23
+T5_median_b2,Sec7.2,median unrestricted RW slope b2,-0.00871
+T1_band_share,Sec3.2/placebo,"pooled share of placebo (c1,c2) inside both cluster bands (97.02, 98.45)&(101.19, 102.43) (seed=20260721,50 sims,100-pt grid)",25.5% of 1150 placebo runs
+T1_rss_percentile_median,Sec3.2/placebo,median across 23 markets of the real RSS-improvement percentile within its placebo distribution,94.0 (n_markets=23)
+T1_verdict,Sec3.2/placebo,placebo verdict,threshold placement DISTINGUISHABLE from trigger-driven (real RSS gains sit in the placebo tail)
+V1_uscci_granger,AppA/A3,"S&P500 return -> d(US CCI), q=4: F, p",F=3.5358; p=0.0075; q=4; gate=FAIL
+V2_exp_market_count,Sec6.3,distinct markets contributing the 30 EXP episodes,"21 distinct markets contribute 30 episodes: aex,athex,bist100,hangseng,hscei,ibex35,ipc,jkse,klci,kospi,lq45,merval,psei,set,shanghai,smi,sti,szse,ta125,ta35,twse"
+V3_gcci_2025h2,Sec6/A1,"S&P500 global-CCI labels Aug2025-Jan2026 (Option B c1=97.53,c2=101.93)",OptB RW/RW/RW/RW/RW/RW ; full Aug25-May26 OptA=RW/RW/RW/RW/RW/RW/RW/RW/RW/MR
+V4_mcsi_cascade,Sec3/A1,"UMCSENT cascade start; min val,month; frozen c1 used",cascade_start=2025-08; min=44.8 (2026-05); c1=59.68; range 2025-06..2026-05
+W1_alpha3_summary,Tab4.1/Sec4,"EXP-state drift a3: n>0, n sig@5%, median, range (excl bovespa=0 EXP)","22/22 positive; 20/22 sig; median a3=1.585; range [0.339,8.382]"
+W1_contemp_EXP,Tab4.1/Sec4,mean CONTEMPORANEOUS monthly return during EXP months (is the state rising?),"12/22 markets positive; median +1.03%/mo; range [-7.42,+7.39]%/mo"
+W1_note,Tab4.1/Sec4,interpretation,"EXP months carry a large positive drift a3 (all 22 markets) and rising contemporaneous prices; the negative b_EXP and negative 12m FORWARD return describe the reversal that FOLLOWS the euphoria state. Label justified by drift+contemporaneous rise, not by an explosive AR root. Full table: table4_drift.csv"
+W2_exp_japan_bothways,Sec6.3/robust,EXP 12m mean vs RW: Japan EXCLUDED (paper) vs INCLUDED,"EXCL: -7.49% (n=615), p=4e-26 | INCL: -6.08% (n=879), p=8.9e-36 | Japan-EXP alone -2.78% (n=264); RW baseline +8.01%"
+W3_exog_fdr,AppA/limits,exogeneity FAILs raw p<0.05 vs Benjamini-Hochberg q=0.05 (of tested markets),tested=56; FAIL raw=24; FAIL after BH=19 (PASS count unchanged: 32 raw)
+W4_coef_fdr,Tab4.1/limits,coefficient tests (b_MR+b_EXP) sig raw p<0.05 vs BH q=0.05,tests=45; sig raw=33; sig after BH=30
+W5_mt_note,Sec limitations,ready-to-paste multiple-testing sentence,"""Exogeneity screening applies 56 Granger F-tests and regime coefficients carry per-market significance stars without a family-wise or false-discovery adjustment; a Benjamini-Hochberg correction (q=0.05) leaves 19 of 24 exogeneity rejections and 30 of 33 coefficient rejections intact, so the qualitative pattern is unchanged, but individual stars should be read as descriptive."""
+X3_regime_only,Sec6/contrib3,"(a) fwd~MR+EXP (DK): MR,EXP coef,p; R2=0.019",MR +3.31(p0.422) EXP -14.07(p0.061)
+X3_trailing_only,Sec6/contrib3,"(b) fwd~trailing (DK): coef,p; R2=0.003",trail -0.0506(p0.505)
+X3_both,Sec6/contrib3,(c) fwd~MR+EXP+trailing (DK): R2=0.022,MR +2.66(p0.449) EXP -14.06(p0.057) trail -0.0434(p0.545) | CCI-level robustness: z -3.089(p0.087)
+X3_verdict,Sec6/contrib3,horse-race verdict (coef-stability test + DK-significance caveat),"labels NOT subsumed by past return: EXP coef -14.07(a)->-14.06(c) when trailing added [ratio 1.00]; trailing insignificant (p=0.55). CAVEAT: under Driscoll-Kraay the pooled monthly EXP effect is marginal (p=0.057) with or without trailing, so contribution-3 significance rests on the episode-level test (X1), not this regression."
+X1_n_year_clusters,Sec6.3,distinct calendar-year clusters of the 30 episodes (by midpoint),"5 years: 1997:2, 1998:6, 1999:15, 2000:6, 2018:1"
+X1_episode_yearcluster,Sec6.3,"episode excess vs 0, cluster-robust SE by midpoint year",mean -15.04pp; t=-4.68; p=0.0000; clusters=5
+X1_episode_bootstrap,Sec6.3,"episode excess, year cluster bootstrap B=2000",SE=3.65; p=0.0000
+X1_episode_yearcollapsed,Sec6.3,year-collapsed mean excess t-test (most conservative),mean -18.31pp; t=-3.16; p=0.0343; n_years=5
+X2_oos_windows_markets,Sec7.2,"post-2015 EXP months: n, distinct years, distinct markets",n_EXP=76; years=4; markets=4; gap(EXP-RW)=-9.84pp
+X2_oos_block_p,Sec7.2,"OOS EXP-RW gap, moving-block bootstrap (block=12,B=2000)",gap=-9.84pp; SE=7.98; p=0.2176
+X2_oos_dk_p,Sec7.2,"OOS EXP-RW, Driscoll-Kraay (11 lags)",EXP coef -9.84; p=0.1876
+X4_greece_matched,Tab5.1/Sec5,athex matched window 1997-07..2024-01 (T=317): global vs country MR/RW/EXP,GLOBAL 7/83/10 vs COUNTRY 44/31/25
+X4_turkey_matched,Tab5.1/Sec5,bist100 matched window 2004-01..2024-01 (T=240): global vs country MR/RW/EXP,GLOBAL 6/38/56 vs COUNTRY 7/45/48
+X5_turkey_real,Sec7.2,"bist100 REAL (deflated by TURCPIALLMINMEI, TUR CCI) vs NOMINAL-country: MR/RW/EXP; b_EXP",REAL T=240 6/11/82 bEXP=-0.099*** | NOMINAL-country 7/45/48 bEXP=-0.034 (caveat: real series dominated by post-2021 hyperinflation break)
+X6_cci_kappa,Sec3.2,"global-CCI Option A-vs-B Cohen kappa (per market): mean, range vs raw agreement","mean kappa=0.740; range [-0.147,1.000]; mean agree=87.7%"
+X6_mcsi_kappa_sp,Sec3.2,S&P500 MCSI Option A-vs-B kappa & agreement (like-for-like),kappa=0.944; agree=99.3%
+X7_exp_drift_var,Sec3.1,"EXP drift/sd ratio (alpha3/resid-sd): median, range; markets EXP>MR","median=17.77; range [4.03,165.90]; EXP|ratio|>MR in 17/22"
+X7_mr_drift_var,Sec3.1,"MR drift/sd ratio: median, range (caveat: alpha is log-price-level dependent)","median=0.23; range [-15.25,336.48]"
+X8_rho_ci,AppC,Fisher 95% CIs; Turkey 0.3758 & Czechia 0.4151 overlap?,"TUR [0.26,0.48] CZE [0.32,0.50] -> OVERLAP (0.04 gap within sampling error)"
+Y1_rank_corr,Sec4.2/7.2,Spearman rank corr of RW-share ranking: spec=1 vs no-drift,"rho=0.0504 (p=0.82, n=23)"
+Y1_share_shift,Sec4.2/7.2,"abs change in RW share (no-drift - drift): mean, max",mean=22.9pp; max=76.4pp (ta125)
+Y1_verdict,Sec4.2/7.2,rank-stability verdict,ranking NOT robust: Spearman 0.050; top-8 preserved 2/8; bottom-8 preserved 3/8
+Y2_perm_p,Sec6.3,circular-shift permutation p (share of null <= observed): episode stat ; pooled gap,episode p=0.0000 (obs -15.04pp) ; pooled-gap p=0.0000 (obs -15.49pp)
+Y2_perm_percentile,Sec6.3,observed episode statistic percentile in null distribution,"0.00 pctile (null mean +0.05pp, sd 3.99)"
+Y2_seed,Sec6.3,permutation seed and B,seed=20260722; B=5000
+Y3_mr_horserace,Sec6/contrib3,MR coef with/without trailing (DK) from X3,MR +3.31(p0.42) without trailing -> +2.66(p0.45) with trailing; both insignificant; trailing does not absorb an MR effect
+Y4_rank_corr_constdrift,Sec4.2/7.2,"Spearman RW-ranking: switching(spec1) vs constant-drift(spec2) [FAIR, both non-degenerate]","rho=0.4167 (p=0.048, n=23); c2<100 markets: constdrift=1, nodrift=5"
+Y4_share_shift,Sec4.2/7.2,"abs RW-share change spec1->spec2: mean, max",mean=9.1pp; max=40.4pp (psei)
+Y4_verdict,Sec4.2/7.2,fair rank-stability verdict (spec1 vs spec2),"ranking NOT robust even spec1 vs spec2: Spearman(switch,const)=0.417, top-8 preserved 4/8, bottom-8 5/8. [Contrast: switch-vs-nodrift Spearman=0.050, and the no-drift spec places 5/23 markets' c2 below 100 (degenerate).]"
+P1_mr_correction_count,Sec4.2/R1,"low-state correction dynamics (beta_MR<0, one-sided 5%): pass/23",11/23 markets show significant MR correction slope
+P1_exp_root_count,Sec4.2/R1,"high-state explosive root (beta_EXP>0, one-sided 5%): pass/23",0/23 markets show an explosive root (expected 0; all beta_EXP<0)
+P1_exp_mean_return,Sec4.2/R1,"EXP band state-conditional mean MONTHLY return (replaces 'alpha3 median 1.6'): median, sd across markets","median +1.030%/mo; sd 2.963%/mo; range [-7.42,+7.39]%/mo"
+P1_note,Sec4.2/R1,interpretation,"intercepts reported as state-conditional mean returns (demeaned lagged price -> intercept invariant to index rebasing); thresholds/shares unchanged. MR names supported by correction slope in most; 'explosive' NOT supported by an AR root (none), so 'explosive' should read as the high-sentiment positional band, not an explosive process. Table: regime_dynamics_audit.csv"
+P2_metricB_shares,Sec4.2/R2,"Metric B (dynamically-validated efficient share): mean, range vs Metric A mean",B mean=80.2% (range 39-98); A mean=76.9%
+P2_rank_corr,Sec4.2/R2,Spearman rank corr Metric A vs Metric B efficiency ranking,"rho=0.8781 (p=3.7e-08, n=23)"
+P2_movers,Sec4.2/R2,largest rank movers A->B,twse(8->1); hangseng(7->13); athex(4->10); aex(12->7); lq45(16->11)
+P4a_afc_excluded,Sec6.3/R5,"episode test excl 7 AFC-onset spells (1997-06..12): mean,t,p,n vs full",EXCL-AFC mean=-11.45pp t=-2.58 p=0.0170 n=23 | FULL mean=-15.04pp t=-3.46 p=0.0017 n=30
+P4a_afc_spells,Sec6.3/R5,"the AFC-onset spells themselves: mean excess,t,p,n",mean=-26.84pp t=-2.41 p=0.0523 n=7
+P4b_one_index_12m,Tab6.1/R9,"12m pooled on 20 unique-country markets: MR/RW/EXP mean,n; p",MR +14.70(n1036) RW +8.20(n5745) EXP -6.85(n507); pMR-RW=2.6e-06 pEXP-RW=2.9e-22
+P4b_one_index_episode,Sec6.3/R9,"episode test on unique-country set: mean,t,p,n",mean=-14.93pp t=-2.99 p=0.0062 n=26
+P4c_leave_era_out,Sec6.3/R5,episode test after dropping 1997-2000 era: remaining episodes,n=1 remaining: ibex35 2018-07(-14pp) | too few for a test
+P4d_horserace_fixedbands,Sec6/R6,"fwd12 ~ TAR(MR,EXP)+fixed CCI bands(<98.4,>101.4), DK",MR +2.94(p0.539) EXP -11.28(p0.019) belowP10 +7.92(p0.097) aboveP90 -4.36(p0.593)
+P4d_fixedband_rankcorr,Sec6/R6,"per-market RW share: estimated thresholds vs fixed common bands (98.4,101.4): Spearman",rho=0.0159 (p=0.94); mean RW est=76.9% fixed=80.2%
+P6a_cci_distribution,Sec5/R7,national CCI diag (8 markets w/ national series): c2 domestic-percentile spread,"pctile of global c2 in national dist ranges 43-86%; c1 8-41%; skew range [-0.85,0.14]"
+P6b_percentile_trigger,Sec5/R7,RW-share rank corr: level trigger vs percentile-rank trigger (monotone transform),Spearman rho=0.5650 (p=0.005); mean |diff|=18.04pp
+P7a_rho_fisher_se,AppC/R10,Fisher-z 90% CIs added for all rho (appendixC_with_se.csv),25 correlations; median 90% CI half-width=0.054
+P7b_cutoff_loco,AppC/R10,0.40 cutoff: 3 countries below; boundary pair & CI overlap,"below-0.40: NZL,GRC,TUR; boundary TUR(0.376) vs CZE(0.415) -> 90% CIs OVERLAP (cutoff fragile)"
+P7c_crisis_rho,Sec5/R10,crisis-window sub-period rho (8 national markets): GFC median vs full median,full median=0.57; GFC median=0.77; COVID median=0.94
+P8_publag_12m,Sec3.2/R4,12m EXP mean under publication lag 0 / 1 / 2 months,lag0 EXP -7.49(p0.0e+00) | lag1 -7.27(p0.0e+00) | lag2 -6.57(p0.0e+00)
+P8_vintage_note,Sec3.2/R4,vintage availability,final-vintage series used; ALFRED real-time vintage NOT pulled (documented in vintage_availability_note.md); Option B = final-vintage stability
+P2_pct5,Sec4/Prio2,"min-regime pct5: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.81; MR-RW=+6.5 EXP-RW=-13.2; 97-00 32/33
+P2_pct10,Sec4/Prio2,"min-regime pct10: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.43; MR-RW=+9.0 EXP-RW=-7.7; 97-00 34/49
+P2_pct15,Sec4/Prio2,"min-regime pct15: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.25; MR-RW=+6.7 EXP-RW=-5.1; 97-00 20/118
+P2_abs20,Sec4/Prio2,"min-regime abs20: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.84; MR-RW=+6.8 EXP-RW=-12.6; 97-00 32/33
+P2_abs30,Sec4/Prio2,"min-regime abs30: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.61; MR-RW=+9.6 EXP-RW=-8.8; 97-00 47/56
+P2_abs40,Sec4/Prio2,"min-regime abs40: feasible, Spearman vs base, MR-RW & EXP-RW gaps, EXP eps in 97-00",feas=23/23 (infeas:none); rho=0.49; MR-RW=+8.8 EXP-RW=-7.7; 97-00 36/48
+P2_baseline_gaps,Sec4/Prio2,baseline pooled 12m MR-RW & EXP-RW gaps (reference),MR-RW=+6.59pp EXP-RW=-15.50pp
+P3_bRW_signs,Sec4.2/Prio3,unrestricted middle-band slope b_RW: negative / positive / insignificant(raw),"neg=16, pos=7; sig raw p<0.05=6/23; reject after BH=0/23"
+P3_bRW_magnitude,Sec4.2/Prio3,"b_RW economic magnitude: median, range, median |CI half-width|","median b_RW=-0.0063; range [-0.0204,+0.0102]; median 95%CI hw=0.0131"
+P3_validated_share,Sec4.2/Prio3,validated-RW interpretation (DEFINITION stated) + markets flagged,DEF: positional RW share is 'validated' only where the unrestricted b_RW fails to reject the imposed RW at BH q<0.05; markets whose RW restriction REJECTS (0): none -> their RW% overstates efficiency
+P1_boot_c1_width,Prio1,block24 95% CI width for c1: median across markets (B=1000),median c1 width=2.93; c2 width=2.68
+P1_boot_share_width,Prio1,block24 95% CI width for RW/EXP share: median across markets,RW share width median=67.2pp; EXP share width=61.6pp
+P1_boot_bEXP_signstable,Prio1,markets whose b_EXP 95% CI (block24) excludes 0 (stays negative),5/23 keep b_EXP<0; boundary frac median=0.02; degenerate median=0.010
+P1_boot_design,Prio1,bootstrap design,"full grid RE-ESTIMATED each draw (validated fast grid==repo); B=1000; seed=20260722; wild=Rademacher on spec-1 residuals (x,z fixed); block=moving-block of (dep,x,z) triples, grid bounds recomputed per draw; CIs=2.5/97.5 pctile"
+P1_pooled_gaps_ci,Prio1,"pooled 12m gaps, calendar-month cross-section resample + full re-estimation (B=1000): 95% CI","MR-RW mean +8.18 [+2.51,+15.41]; EXP-RW mean -10.88 [-18.23,-4.32]"
+P1_boot_wild_conditional,Prio1,wild bootstrap (conditions on observed CCI path): median 95% CI widths + b_EXP sign stability,"c1 width 2.14, c2 width 1.00; RW share width 37pp, EXP share width 13pp; b_EXP<0 CI in 6/23; boundary~0, degenerate 0.001"
+P1_boot_scheme_note,Prio1,"threshold vs share precision, scheme dependence","threshold LEVELS moderately precise (c2 +/-0.5-1.4); regime SHARES precise under conditional wild inference (EXP +/-13pp) but wide when the trigger is resampled (block: EXP +/-60pp) -> report wild as primary, block as conservative bound; per-market b_MR/b_EXP CIs exclude 0 in only 0-6/23 -> individual slope stars are imprecise"
+P41_wald_dk,Sec6/Prio4,"Wald H0: b_EXP==b_above90 (DK 11 lags): diff, cov term, chi2, p",b_EXP=-11.28 b_above90=-4.36 diff=-6.92; Var(diff)=113.412 cov=-12.019; chi2=0.42 p=0.5158
+P41_wald_block,Sec6/Prio4,"same equality test, calendar-block bootstrap (L=24, B=1000): SE, p",diff=-6.92; block SE=13.88; p=0.6182 -> TAR high-band NOT distinguishable from fixed>90
+P5_lag0,Sec3.2/Prio5,"pub-lag 0m EXP-RW gap with corrections: gap, DK p, block12/24/36 p, thr shift",gap=-16.17pp n_EXP=667; DK p=0.020; block p(12/24/36)=0.046/0.017/0.008; thr shift=0.00
+P5_lag1,Sec3.2/Prio5,"pub-lag 1m EXP-RW gap with corrections: gap, DK p, block12/24/36 p, thr shift",gap=-15.90pp n_EXP=583; DK p=0.025; block p(12/24/36)=0.055/0.044/0.025; thr shift=0.95
+P5_lag2,Sec3.2/Prio5,"pub-lag 2m EXP-RW gap with corrections: gap, DK p, block12/24/36 p, thr shift",gap=-12.26pp n_EXP=663; DK p=0.049; block p(12/24/36)=0.103/0.093/0.077; thr shift=1.25
+P8a_common_level_spread,Sec5/Prio8,percentile position of common CCI levels across national dists (min-max),97.7:4-28%; 98.4:9-35%; 100.0:38-51%; 101.4:63-87% -> a fixed level of 100 spans the 38th-51th national percentile
+P8b_athex_norm,Sec5/Prio8,athex local trigger: shares under amplitude / z-score / percentile normalization,raw RW=31% | zscore RW=56% | pctile RW=32% (z-score is affine->identical; pctile monotone)
+P8b_bist100_norm,Sec5/Prio8,bist100 local trigger: shares under amplitude / z-score / percentile normalization,raw RW=42% | zscore RW=47% | pctile RW=9% (z-score is affine->identical; pctile monotone)
+P9_iid,Sec4.1/Prio9,placebo B=1000 iid DGP: markets with emp p_rss<0.05; median real RSS pctile; median null band-share,real RSS-impr exceeds null (emp p<0.05) in 9/23; median real pctile=91.4; median null band-share=25.5%
+P9_block12,Sec4.1/Prio9,placebo B=1000 block12 DGP: markets with emp p_rss<0.05; median real RSS pctile; median null band-share,real RSS-impr exceeds null (emp p<0.05) in 3/23; median real pctile=80.3; median null band-share=20.7%
+P43_recursive_means,Sec6/Prio4.3,recursive forward 12m means by TAR label vs fixed-percentile label (MR/RW/EXP),TAR MR/RW/EXP=8.66/6.56/-16.93 | PCT low/mid/high=7.32/6.56/-21.92 (n=5847)
+P43_recursive_predictive,Sec6/Prio4.3,recursive predictive R2 / RMSE / MAE: TAR vs fixed sort,TAR R2=0.0131 RMSE=25.22 MAE=17.85 | PCT R2=0.0084 RMSE=25.28 MAE=17.88
+P43_encompassing,Sec6/Prio4.3,"encompassing (DK): does recursive TAR-EXP add over fixed high band, & vice-versa",tar_EXP -18.46(p0.000) pct_hi -14.00(p0.001) | tar_MR +2.31(p0.606) pct_lo -0.42(p0.946)
+P43_note,Sec6/Prio4.3,label,"recursive FINAL-VINTAGE (thresholds & percentile cutoffs use only past data; CCI itself is final-vintage, not real-time)"

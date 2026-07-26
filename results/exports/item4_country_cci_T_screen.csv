@@ -1,0 +1,20 @@
+market,country,T,pct_MR,pct_RW,pct_EXP,passes_T340,passes_T240
+omxcopenhagen,Denmark,85,7.06,57.65,35.29,False,False
+psi20,Portugal,129,6.2,23.26,70.54,False,False
+omxhelsinki,Finland,130,5.38,11.54,83.08,False,False
+omxstockholm,Sweden,182,9.34,5.49,85.16,False,False
+topix,Japan (TOPIX),192,9.9,71.88,18.23,False,False
+bist100,Turkey,240,6.67,45.42,47.92,False,True
+nzx50,New Zealand,248,7.26,33.87,58.87,False,True
+ipc,Mexico,272,5.51,15.81,78.68,False,True
+kosdaq,South Korea (KQ),278,16.55,74.46,8.99,False,True
+kospi,South Korea,300,1.67,26.67,71.67,False,True
+ftsemib,Italy,313,25.24,72.52,2.24,False,True
+athex,Greece,317,43.53,31.23,25.24,False,True
+tsx,Canada,335,16.72,51.94,31.34,False,True
+asx200,Australia,374,21.39,76.74,1.87,True,True
+smi,Switzerland,396,39.14,53.28,7.58,True,True
+cac40,France,406,40.15,54.43,5.42,True,True
+nikkei225,Japan,408,0.98,27.7,71.32,True,True
+rut,USA (Small-Cap),408,3.43,93.63,2.94,True,True
+ftse100,UK,408,8.82,90.44,0.74,True,True

@@ -1,0 +1,38 @@
+market,country,T,orth_cci,orth_epu,max_orth,test_lag,p_value,verdict,tar_verdict,new
+sp500,USA,423,5,12,12,16,0.0292,FAIL,,False
+ftse100,UK,423,5,12,12,16,0.1265,PASS,BOTH TAILS,False
+dax,Germany,423,6,12,12,16,0.1388,PASS,BOTH TAILS,False
+cac40,France,421,11,12,12,16,0.007,FAIL,,False
+nikkei225,Japan,423,1,12,12,16,0.9162,PASS,BOTH TAILS,False
+shanghai,China,333,9,12,12,16,0.2098,PASS,BOTH TAILS,False
+hangseng,Hong Kong,423,6,12,12,16,0.0491,FAIL,,False
+kospi,South Korea,340,1,12,12,16,0.8612,PASS,EUPHORIA GAUGE,False
+nifty50,India,211,10,12,12,16,0.8493,PASS,WEAK,False
+tsx,Canada,423,6,12,12,16,0.1179,PASS,EUPHORIA GAUGE,False
+asx200,Australia,389,12,12,12,16,0.0086,FAIL,,False
+bovespa,Brazil,384,1,12,12,16,0.5489,PASS,BOTH TAILS,False
+eurostoxx50,Eurozone,217,7,12,12,16,0.4707,PASS,FEAR GAUGE,False
+ibex35,Spain,381,10,12,12,16,0.1491,PASS,EUPHORIA GAUGE,False
+smi,Switzerland,413,7,12,12,16,0.0054,FAIL,,False
+sti,Singapore,423,1,12,12,16,0.8983,PASS,BOTH TAILS,False
+twse,Taiwan,333,1,12,12,16,0.8395,PASS,EUPHORIA GAUGE,False
+jse,South Africa,158,1,12,12,16,0.1454,PASS,WEAK,False
+aex,Netherlands,390,10,12,12,16,0.1444,PASS,EUPHORIA GAUGE,False
+ipc,Mexico,401,10,12,12,16,0.1468,PASS,BOTH TAILS,False
+jkse,Indonesia,420,1,12,12,16,0.9831,PASS,BOTH TAILS,False
+ta125,Israel,390,1,12,12,16,0.4389,PASS,BOTH TAILS,False
+klci,Malaysia,376,1,12,12,16,0.9992,PASS,BOTH TAILS,False
+ftsemib,Italy,328,10,12,12,16,0.7035,PASS,EUPHORIA GAUGE,True
+nasdaq,USA (NASDAQ),423,4,12,12,16,0.7719,PASS,BOTH TAILS,True
+rut,USA (Small),423,8,12,12,16,0.2838,PASS,BOTH TAILS,True
+rui,USA (Large),388,7,12,12,16,0.0419,FAIL,,True
+ipsa,Chile,197,9,12,12,16,0.631,PASS,FEAR GAUGE,True
+iseq,Ireland,333,10,12,12,16,0.7086,PASS,EUPHORIA GAUGE,True
+athex,Greece,332,9,12,12,16,0.784,PASS,BOTH TAILS,True
+djia,USA (DJIA),399,9,12,12,16,0.0183,FAIL,,True
+sp400,USA (Mid),423,10,12,12,16,0.002,FAIL,,True
+wilshire5000,USA (Total),423,6,12,12,16,0.2335,PASS,,True
+bel20,Belgium,408,8,12,12,16,0.061,PASS,,True
+atx,Austria,389,9,12,12,16,0.1365,PASS,,True
+set,Thailand,340,1,12,12,16,0.9526,PASS,,True
+psei,Philippines,423,1,12,12,16,0.9962,PASS,,True

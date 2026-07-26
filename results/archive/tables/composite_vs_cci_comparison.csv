@@ -1,0 +1,49 @@
+market,country,cci_inefficient,comp_inefficient,beta3_cci,beta3_composite,cci_verdict,comp_verdict
+sp500,USA,,62.2,,-0.0032,--,BOTH TAILS
+nasdaq,USA (NASDAQ),,81.8,,0.0003,--,BOTH TAILS
+djia,USA (DJIA),,99.0,,-0.0016,--,BOTH TAILS
+rut,USA (Small-Cap),,62.9,,-0.0016,--,BOTH TAILS
+rui,USA (Large-Cap),,53.3,,-0.0057,--,BOTH TAILS
+sp400,USA (Mid-Cap),,99.5,,-0.0021,--,BOTH TAILS
+wilshire5000,USA (Total Mkt),,57.6,,-0.0037,--,BOTH TAILS
+tsx,Canada,,96.0,,0.0006,--,BOTH TAILS
+ipc,Mexico,29.7,99.8,-0.8274,0.0,BOTH TAILS,FEAR GAUGE
+bovespa,Brazil,49.6,19.2,0.0,0.0524,FEAR GAUGE,FEAR GAUGE
+ipsa,Chile,9.6,99.5,-0.0972,-0.016,FEAR GAUGE,FEAR GAUGE
+merval,Argentina,17.5,99.1,-0.1801,0.0062,BOTH TAILS,BOTH TAILS
+eurostoxx50,Eurozone,,49.3,,-0.1201,--,FEAR GAUGE
+ftse100,UK,,97.9,,-0.0067,--,BOTH TAILS
+dax,Germany,,41.0,,0.0042,--,BOTH TAILS
+cac40,France,,95.3,,-0.0107,--,BOTH TAILS
+ibex35,Spain,14.0,87.9,-0.1496,-0.0178,BOTH TAILS,BOTH TAILS
+smi,Switzerland,13.6,75.9,-0.1787,0.0036,BOTH TAILS,BOTH TAILS
+aex,Netherlands,15.4,97.7,-0.1111,-0.012,BOTH TAILS,BOTH TAILS
+ftsemib,Italy,,76.6,,-0.0152,--,BOTH TAILS
+iseq,Ireland,,95.9,,-0.0077,--,BOTH TAILS
+athex,Greece,11.6,99.4,-0.2702,-0.0086,BOTH TAILS,BOTH TAILS
+bel20,Belgium,,99.0,,-0.0106,--,BOTH TAILS
+atx,Austria,,99.0,,-0.0054,--,BOTH TAILS
+psi20,Portugal,49.0,40.7,-0.2227,-0.2329,WEAK,WEAK
+omxstockholm,Sweden,,97.5,,-0.0067,--,WEAK
+omxhelsinki,Finland,,82.1,,-0.0392,--,WEAK
+oseax,Norway,,96.0,,0.0048,--,WEAK
+ta125,Israel,12.4,3.3,-0.1923,-1.7772,BOTH TAILS,FEAR GAUGE
+ta35,Israel (TA-35),12.4,3.3,-0.1857,-1.5158,BOTH TAILS,FEAR GAUGE
+bist100,Turkey,5.8,96.2,-0.9035,-0.0026,BOTH TAILS,BOTH TAILS
+jse,South Africa,,54.3,,-0.0758,--,WEAK
+nikkei225,Japan,66.3,79.3,-0.0351,-0.045,BOTH TAILS,BOTH TAILS
+shanghai,China (SSE),48.0,99.7,-0.3605,-0.0172,BOTH TAILS,BOTH TAILS
+szse,China (SZSE),42.6,85.5,-0.474,-0.0178,BOTH TAILS,BOTH TAILS
+hangseng,Hong Kong,12.6,85.1,-0.8646,-0.0102,BOTH TAILS,BOTH TAILS
+kospi,South Korea,30.9,5.8,-0.089,-0.1814,BOTH TAILS,BOTH TAILS
+kosdaq,South Korea (KQ),2.9,80.3,-1.8738,-0.0525,EUPHORIA GAUGE,BOTH TAILS
+nifty50,India,,98.6,,0.0019,--,FEAR GAUGE
+sti,Singapore,10.8,5.8,-0.3128,-0.1969,BOTH TAILS,BOTH TAILS
+twse,Taiwan,13.3,4.7,-0.1515,0.4506,EUPHORIA GAUGE,BOTH TAILS
+jkse,Indonesia,15.0,20.9,-0.2594,0.0133,BOTH TAILS,BOTH TAILS
+lq45,Indonesia (LQ45),19.1,98.3,-0.3412,-0.0065,BOTH TAILS,BOTH TAILS
+klci,Malaysia,9.8,54.5,-0.2736,-0.0561,EUPHORIA GAUGE,BOTH TAILS
+set,Thailand,17.6,48.0,-0.1856,0.0194,BOTH TAILS,BOTH TAILS
+psei,Philippines,46.1,98.4,-0.3254,-0.0077,BOTH TAILS,BOTH TAILS
+asx200,Australia,,85.8,,-0.0026,--,BOTH TAILS
+nzx50,New Zealand,49.3,97.8,-0.0051,-0.0043,FEAR GAUGE,FEAR GAUGE

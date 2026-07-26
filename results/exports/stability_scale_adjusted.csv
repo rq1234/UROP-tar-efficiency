@@ -1,0 +1,4 @@
+trigger,sigma,span,c1_range,c2_range,c1_range_over_sigma,c2_range_over_sigma,c1_range_over_span,c2_range_over_span
+MCSI,13.87,62.2,46.04,47.646,3.319,3.435,0.74,0.766
+US_CCI,1.533,6.648,4.351,3.687,2.837,2.405,0.654,0.555
+global_CCI,1.173,5.597,4.836,3.84,4.122,3.274,0.864,0.686

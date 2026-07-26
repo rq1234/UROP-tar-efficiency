@@ -1,0 +1,24 @@
+market,country,F,p,gate
+sp500,USA,3.959,0.0036,FAIL
+ftse100,UK,3.562,0.0072,FAIL
+dax,Germany,2.717,0.0295,FAIL
+cac40,France,3.303,0.0111,FAIL
+nikkei225,Japan,1.395,0.2348,PASS
+shanghai,China,3.083,0.0163,FAIL
+hangseng,Hong Kong,0.984,0.4158,PASS
+kospi,South Korea,1.226,0.2996,PASS
+nifty50,India,2.867,0.0242,FAIL
+tsx,Canada,1.519,0.1956,PASS
+asx200,Australia,3.407,0.0094,FAIL
+bovespa,Brazil,2.725,0.0292,FAIL
+eurostoxx50,Eurozone,1.293,0.2737,PASS
+ibex35,Spain,1.36,0.2473,PASS
+smi,Switzerland,2.368,0.0521,PASS
+sti,Singapore,1.345,0.2524,PASS
+twse,Taiwan,1.904,0.1095,PASS
+jse,South Africa,1.11,0.354,PASS
+aex,Netherlands,1.952,0.1012,PASS
+ipc,Mexico,2.771,0.027,FAIL
+jkse,Indonesia,0.556,0.695,PASS
+ta125,Israel,0.901,0.4635,PASS
+klci,Malaysia,1.386,0.2383,PASS

@@ -1,0 +1,9 @@
+model,term,coef,dk_p,R2
+a_regime_only,MR,3.3124,0.4216,0.0194
+a_regime_only,EXP,-14.0682,0.0612,0.0194
+b_trailing_only,trail12,-0.0506,0.5052,0.0031
+c_both,MR,2.6622,0.4487,0.0216
+c_both,EXP,-14.0647,0.057,0.0216
+c_both,trail12,-0.0434,0.5453,0.0216
+c2_cci_level,zlev,-3.089,0.0871,0.0205
+c2_cci_level,trail12,-0.0262,0.7143,0.0205

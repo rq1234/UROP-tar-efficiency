@@ -1,0 +1,4 @@
+method,t,p,clusters
+year_cluster_robust,-4.679,0.0,5
+year_cluster_bootstrap,-4.121,0.0,5
+year_collapsed,-3.155,0.0343,5

@@ -1,0 +1,24 @@
+market,country,effA_rw_pct,MR_slope_sig5,EXP_slope_sig5,effB_dynvalid_pct,rankA,rankB,rank_move
+bist100,Turkey,94.22,True,True,94.22,1,5,4
+klci,Malaysia,90.23,True,True,90.23,2,6,4
+sti,Singapore,89.22,False,True,94.95,3,2,-1
+athex,Greece,88.41,True,True,88.4,4,10,6
+ta125,Israel,87.59,False,True,94.54,5,3,-2
+ta35,Israel (TA-35),87.59,False,True,94.54,5,3,-2
+hangseng,Hong Kong,87.39,True,True,87.39,7,13,6
+twse,Taiwan,86.71,True,False,98.27,8,1,-7
+smi,Switzerland,86.38,False,True,89.2,9,9,0
+ibex35,Spain,86.04,True,True,86.04,10,14,4
+jkse,Indonesia,84.99,False,True,90.07,11,7,-4
+aex,Netherlands,84.62,False,True,90.07,12,7,-5
+merval,Argentina,82.54,True,True,82.54,13,15,2
+set,Thailand,82.44,False,True,87.54,14,12,-2
+hscei,Hong Kong (H-shr),82.23,True,True,82.23,15,16,1
+lq45,Indonesia (LQ45),80.91,False,True,88.03,16,11,-5
+ipc,Mexico,70.29,True,True,70.29,17,18,1
+kospi,South Korea,69.12,True,False,81.59,18,17,-1
+szse,China (SZSE),57.39,True,True,57.39,19,19,0
+psei,Philippines,53.9,True,False,55.05,20,20,0
+shanghai,China (SSE),52.02,True,True,52.02,21,21,0
+bovespa,Brazil,50.38,True,False,50.38,22,22,0
+nikkei225,Japan,33.72,False,True,39.45,23,23,0

@@ -1,0 +1,24 @@
+market,country,orth_cci,orth_vix,orth_bci,max_orth,var_exp
+sp500,USA,5,12,12,12,0.5147
+ftse100,UK,5,12,12,12,0.5271
+dax,Germany,6,12,12,12,0.5297
+cac40,France,11,10,12,12,0.5027
+nikkei225,Japan,1,12,12,12,0.5783
+shanghai,China,9,12,12,12,0.5956
+hangseng,Hong Kong,6,12,12,12,0.5503
+kospi,South Korea,1,12,12,12,0.6233
+nifty50,India,10,12,12,12,0.6204
+tsx,Canada,6,12,12,12,0.5233
+asx200,Australia,12,12,12,12,0.486
+bovespa,Brazil,1,12,12,12,0.5926
+eurostoxx50,Eurozone,7,12,12,12,0.6123
+ibex35,Spain,10,12,12,12,0.5691
+smi,Switzerland,7,12,12,12,0.5385
+sti,Singapore,1,12,12,12,0.5662
+twse,Taiwan,1,12,12,12,0.6264
+jse,South Africa,1,12,1,12,0.6225
+aex,Netherlands,10,12,12,12,0.5131
+ipc,Mexico,10,12,12,12,0.5518
+jkse,Indonesia,1,12,12,12,0.5867
+ta125,Israel,1,12,12,12,0.5869
+klci,Malaysia,1,12,12,12,0.6188
