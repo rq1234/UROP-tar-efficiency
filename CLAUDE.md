@@ -40,7 +40,12 @@ keeping the working tree backed up by OneDrive.
 **Consequences to know:**
 - `git` commands work normally from the repo directory. Nothing changes day to day.
 - The path in the `.git` pointer is absolute. Opening this folder from OneDrive on a *different
-  machine* will not find the repo — it is single-machine by design.
-- Back up `C:\Users\rongq\gitrepos\UROP.git` (or push to a remote); OneDrive no longer covers it.
+  machine* will not find the repo — clone from GitHub instead (below).
+- `gh` does not recognise a gitdir pointer file and reports "not a git repository". Use plain
+  `git` for remote work, or run `gh` with `--repo rq1234/UROP-tar-efficiency`.
 - If an edit seems to vanish, look for a `*-LAPTOP-*` conflict copy before redoing the work.
   Those are gitignored.
+
+**Backup.** `C:\Users\rongq\gitrepos\` is outside OneDrive and not covered by it. The backup is
+the private GitHub remote **`rq1234/UROP-tar-efficiency`**. Push after every session — that is
+the only off-machine copy of the history.
