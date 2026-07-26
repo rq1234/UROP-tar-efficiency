@@ -20,8 +20,27 @@ Claude Code session **scratchpad** (a temp directory), which is deleted automati
 in a scratchpad is as lost as one never written. If it writes anything under `results/` or
 `outputs/`, it lives in `scripts/` and is committed.
 
-## Note on OneDrive
+## Note on OneDrive and where `.git` lives
 
-This repo is inside OneDrive. OneDrive creates sync-conflict copies named
-`<name>-LAPTOP-XXXX.<ext>` and can revert a file you just edited. If an edit seems to vanish,
-check for a `*-LAPTOP-*` copy before redoing the work. Those copies are gitignored.
+The working tree is inside OneDrive, but **git's internals are not**:
+
+```
+.git                          <- a 41-byte pointer file, NOT a directory
+    gitdir: C:/Users/rongq/gitrepos/UROP.git
+```
+
+The real repository is at **`C:\Users\rongq\gitrepos\UROP.git`**, outside OneDrive.
+
+**Why.** Git rewrites hundreds of small files in `.git` on every commit; OneDrive tried to sync
+each one. The two fought, OneDrive burned an hour of CPU, and it silently reverted an edited
+`.gitignore` into a conflict copy (`-LAPTOP-K0CP9ISC.gitignore`) — so a commit captured the old
+version of a file that had already been changed. Moving `.git` out ends that class of bug while
+keeping the working tree backed up by OneDrive.
+
+**Consequences to know:**
+- `git` commands work normally from the repo directory. Nothing changes day to day.
+- The path in the `.git` pointer is absolute. Opening this folder from OneDrive on a *different
+  machine* will not find the repo — it is single-machine by design.
+- Back up `C:\Users\rongq\gitrepos\UROP.git` (or push to a remote); OneDrive no longer covers it.
+- If an edit seems to vanish, look for a `*-LAPTOP-*` conflict copy before redoing the work.
+  Those are gitignored.
