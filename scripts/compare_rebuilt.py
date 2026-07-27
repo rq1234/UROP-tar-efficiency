@@ -45,11 +45,24 @@ def numeric(v):
         return None
 
 
-def key_of(row):
-    """Row identity: prefer market+scheme, else market, else stat, else index."""
-    for combo in (("market", "scheme"), ("market",), ("stat",), ("id",)):
-        if all(c in row for c in combo):
-            return tuple(row[c] for c in combo)
+# Candidate row-identity columns, most specific first. A combo is only used if it
+# is actually UNIQUE across the file - keying fdr_coefficients on "market" alone
+# silently collapses its two rows per market and reports spurious differences.
+KEY_COMBOS = (
+    ("market", "scheme"), ("market", "coef"), ("market", "dgp"),
+    ("market", "method"), ("market", "rule"), ("market", "trigger"),
+    ("market",), ("stat",), ("rule",), ("method",), ("id",), ("country",),
+)
+
+
+def choose_key(rows):
+    """First candidate combo present in the rows AND unique across them."""
+    for combo in KEY_COMBOS:
+        if not all(c in rows[0] for c in combo):
+            continue
+        keys = [tuple(r[c] for c in combo) for r in rows]
+        if len(set(keys)) == len(keys):
+            return combo
     return None
 
 
@@ -64,12 +77,16 @@ def compare_file(name):
     old, new = read(old_p), read(new_p)
     notes = [f"rows {len(old)} -> {len(new)}"]
 
-    if key_of(old[0]) is None:
+    combo = choose_key(old)
+    if combo is None:
         pairs = list(zip(old, new))
+        notes.append("paired positionally (no unique key column found)")
     else:
-        idx = {key_of(r): r for r in new}
-        pairs = [(o, idx[key_of(o)]) for o in old if key_of(o) in idx]
-        missing = [key_of(o) for o in old if key_of(o) not in idx]
+        kf = lambda r: tuple(r[c] for c in combo)          # noqa: E731
+        idx = {kf(r): r for r in new if all(c in r for c in combo)}
+        pairs = [(o, idx[kf(o)]) for o in old if kf(o) in idx]
+        missing = [kf(o) for o in old if kf(o) not in idx]
+        notes.append(f"keyed on {'+'.join(combo)}")
         if missing:
             notes.append(f"{len(missing)} rows absent from rebuild, e.g. {missing[:3]}")
 
