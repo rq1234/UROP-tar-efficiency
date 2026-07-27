@@ -1,0 +1,5 @@
+variant,mr,episode_mean,episode_p,n_ep
+all_episodes,,-15.043,0.0017,30
+ex_AFC_onset,,-11.451,0.017,23
+one_index_per_country,,-14.931,0.0062,26
+leave_1997_2000_out,,-14.343,,1
