@@ -1,0 +1,24 @@
+market,country,mean_MR_pct,n_MR,mean_RW_pct,n_RW,mean_EXP_pct,n_EXP
+ipc,Mexico,12.149,100,11.329,291,-9.615,11
+bovespa,Brazil,24.114,185,16.455,200,,0
+merval,Argentina,111.082,17,31.29,282,-20.422,44
+ibex35,Spain,20.541,8,4.786,327,2.917,47
+smi,Switzerland,7.392,12,6.393,356,2.297,46
+aex,Netherlands,8.399,21,5.945,330,3.218,40
+athex,Greece,30.355,14,0.581,293,-16.769,26
+ta125,Israel,13.204,26,8.953,343,1.605,22
+ta35,Israel (TA-35),11.787,26,8.905,343,3.224,22
+bist100,Turkey,71.261,12,20.984,314,-45.441,8
+nikkei225,Japan,13.163,23,8.495,137,-2.783,264
+shanghai,China (SSE),2.803,150,4.908,180,18.34,4
+szse,China (SZSE),0.921,117,6.513,198,2.211,18
+hangseng,Hong Kong,6.551,41,6.751,372,-20.966,11
+hscei,Hong Kong (H-shr),10.238,24,3.117,314,-16.931,44
+kospi,South Korea,16.656,53,5.547,244,3.325,44
+sti,Singapore,13.712,23,3.616,379,-9.858,22
+twse,Taiwan,15.5,6,7.266,288,-16.385,40
+jkse,Indonesia,21.779,21,9.04,357,-7.687,43
+lq45,Indonesia (LQ45),18.057,23,8.511,274,-10.945,42
+klci,Malaysia,-2.114,6,2.64,339,-10.89,32
+set,Thailand,11.72,17,4.779,280,-11.384,44
+psei,Philippines,13.985,184,-0.272,235,-10.684,5
