@@ -1,0 +1,3 @@
+statistic,observed,n_obs_episodes,null_mean,null_sd,null_p05,null_p50,perm_p_le_obs,observed_percentile,B,seed
+episode_mean_excess_pp,-15.043,30.0,-0.065,4.075,-6.771,-0.062,0.0,0.0,5000,20260722
+pooled_EXP_RW_gap_pp,-15.501,,-0.536,3.792,-6.597,-0.629,0.0,0.0,5000,20260722
