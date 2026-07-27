@@ -58,3 +58,95 @@ not synchronised by anything in this repo and will drift.
 never-committed git repository already exists with its root at `C:\Users\rongq` (263 MB, 53
 staged files belonging to the unrelated `Optimiser` project). GROUND_TRUTH.md §1b independently
 records this. The new repo is nested inside it; the outer repo was left untouched.
+
+*(A0.9 superseded: the home-directory repo has since been deleted, and this working tree now
+lives at `C:\Users\rongq\projects\UROP`, outside OneDrive — see A1.1.)*
+
+---
+
+## Phase 1 — relocation
+
+**A1.1 — The repo left OneDrive.** OneDrive repeatedly undid work: it reverted committed
+`.gitignore` and `README.md` to pre-commit versions while diverting the edits into
+`*-LAPTOP-*` conflict copies, and it resurrected deleted directories as cloud-only
+placeholders. The working tree is now `C:\Users\rongq\projects\UROP` with a normal `.git`
+directory, `origin` = `rq1234/UROP-tar-efficiency`. GitHub is the backup; `data/` and
+`results/` are tracked, so nothing depends on OneDrive.
+
+**A1.2 — Relocation was done by clone, not by move.** A `git clone` of the committed history
+was used rather than moving files. Rationale: it restores the correct committed `.gitignore`
+and `README.md` automatically, leaves the 14 untracked duplicate ghosts behind, and avoids
+forcing OneDrive to hydrate cloud-only placeholders. Before relying on it, all 14 untracked
+files were confirmed to have tracked counterparts, and `data/`(18M) + `results/`(19M) sizes
+and `git fsck` were verified in the clone.
+
+---
+
+## Phase 2 — verification
+
+**A2.1 — Verification compares against committed outputs, not fresh computation.**
+`scripts/verify_paper.py` checks `verification_manifest.md` targets against
+`results/tables/` and `results/exports/`. It deliberately does *not* recompute from `data/`;
+that is what the round scripts do. So a MATCH means "the paper agrees with what the pipeline
+produced", not "the pipeline was re-run and agrees".
+
+**A2.2 — Comparison is done at the precision the paper prints.** The manifest's class-E rule
+is "within 1 in the last printed digit". Three verifier bugs were found and fixed by
+inspecting the data rather than trusting the first verdict: substring matching (which flagged
+Greece 43.5 vs a printed 44 as a mismatch), `round()` at the boundary (float representation
+makes `round(-3.155, 2) == -3.15`), and a missing epsilon (`abs(-3.155 - -3.16)` evaluates to
+0.0050000000000004, exceeding a `<= 0.005` test). A verifier that cries wolf is worse than none.
+
+---
+
+## Phase 3 — rebuild
+
+**A3.1 — `fastgrid` is exact, and that is tested, not assumed.** It reproduces
+`src/estimate.find_optimal_thresholds` on all 23 panel markets to 1e-9 (largest ΔRSS 9.5e-12)
+and runs ~300× faster. `python scripts/fastgrid.py` exits non-zero on any disagreement, so it
+gates the rest of the rebuild. It replicates the reference's `> 2` regime guards, the RW band's
+forced β with α = mean, and first-minimum tie-breaking to match the original's strict `<`.
+
+**A3.2 — `fastgrid` covers spec=1 / mode='returns' only.** That is the paper's main
+specification and the only one the bootstrap needs. Other specs raise rather than silently
+returning something unvalidated; Round 8's Y1/Y4 (spec 0 and 2) must use the reference
+implementation or extend the validation first.
+
+**A3.3 — Seeded stochastic results do NOT reproduce exactly, and cannot.** A seed fixes the
+RNG stream, but reproducing a bootstrap bit-for-bit also requires the original *call order* —
+how many draws, in what sequence, across markets and schemes. That was lost with the scripts.
+So class-S outputs are expected to differ in point estimates; the test is whether the paper's
+qualitative claim survives.
+
+For Round 10 Priority 1 (B=1000, seed 20260722), rebuilt vs original:
+
+| | original | rebuilt |
+|---|---|---|
+| pooled MR−RW | +8.178 [+2.515, +15.408] | +8.110 [+1.532, +16.057] |
+| pooled EXP−RW | −10.879 [−18.232, −4.316] | −12.600 [−20.991, −5.160] |
+| wild RW-share CI width | 37.310 pp | **37.310 pp** |
+| wild c2 CI width | 0.997 | 1.011 |
+| block24 c1 / c2 width | 2.925 / 2.680 | 2.853 / 2.577 |
+| block24 markets with b_EXP CI < 0 | 5/23 | **1/23** |
+| wild markets with b_EXP CI < 0 | 6/23 | 5/23 |
+
+**Qualitative claims survive:** both pooled gaps keep their sign and both 95% CIs still
+exclude 0, so "the aggregate explosive discount survives full threshold uncertainty" holds.
+The wild scheme's share widths reproduce essentially exactly, which is expected — it conditions
+on the observed CCI path.
+
+**One divergence to report, not to hide:** under block24 the rebuild finds b_EXP CIs excluding
+zero in **1/23** markets against the original's 5/23. This does not overturn the paper's claim;
+it *strengthens* it in the same direction. The paper already concludes "individual slope stars
+are fragile" and recommends de-emphasising per-market coefficient stars. The rebuild says they
+are more fragile still. Section 4.2 should not lean on per-market stars under the block scheme.
+
+**A3.4 — The wild scheme holds `x` and `z` fixed.** Per manifest row `P1_boot_design`
+("wild=Rademacher on spec-1 residuals (x,z fixed)"), `dep* = fitted + resid · η`,
+η ~ Rademacher. This produces a `dep` that corresponds to no single log-price path, so it
+cannot go through the `y`-based entry point; `fastgrid.fast_grid_rss_parts` exists for exactly
+this. Block schemes resample (dep, x, z) triples and recompute grid bounds per draw, since the
+trigger itself is resampled.
+
+**A3.5 — Japan is excluded from the pooled EXP cell only.** `config.EXCLUDED_EXP_MARKETS`
+makes explicit what was buried at `src/horizon_test.py:145`. Its MR and RW months are kept.

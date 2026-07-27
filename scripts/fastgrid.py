@@ -80,10 +80,22 @@ def fast_grid_rss(y, z, grid, min_gap):
     """
     y = np.asarray(y, dtype=float)
     z = np.asarray(z, dtype=float)
+    return fast_grid_rss_parts(np.diff(y), y[:-1], z[1:], grid, min_gap)
 
-    dep = np.diff(y)      # length T-1
-    x = y[:-1]            # length T-1
-    zt = z[1:]            # the trigger values the state assignment uses
+
+def fast_grid_rss_parts(dep, x, zt, grid, min_gap):
+    """Same as fast_grid_rss but takes the regression parts directly.
+
+    The bootstrap needs this: the wild scheme perturbs `dep` while holding `x`
+    and `z` fixed, which does not correspond to any single log-price path, and
+    the block schemes resample (dep, x, z) triples. Both break the assumption
+    that dep == diff(y) and x == y[:-1], so they cannot go through fast_grid_rss.
+
+    All three arrays must already be aligned and the same length (T-1).
+    """
+    dep = np.asarray(dep, dtype=float)
+    x = np.asarray(x, dtype=float)
+    zt = np.asarray(zt, dtype=float)
 
     order = np.argsort(zt, kind="stable")
     zs = zt[order]
@@ -173,6 +185,49 @@ def fast_optimal_thresholds(y, z, z_min, z_max, gridlength=None, min_gap=None,
     rss, i_idx, j_idx = fast_grid_rss(y, z, grid, min_gap)
     k = int(np.argmin(rss))     # first minimum, matching the strict `<` in the original
     return {"c1": float(grid[i_idx[k]]), "c2": float(grid[j_idx[k]]), "RSS": float(rss[k])}
+
+
+def optimal_from_parts(dep, x, zt, z_min, z_max, gridlength=None, min_gap=None):
+    """Threshold pair minimising RSS, from regression parts (bootstrap path)."""
+    gridlength = gridlength or config.GRID_LENGTH
+    min_gap = min_gap if min_gap is not None else config.MIN_GAP_FLOOR
+    grid = np.linspace(z_min, z_max, gridlength)
+    rss, i_idx, j_idx = fast_grid_rss_parts(dep, x, zt, grid, min_gap)
+    k = int(np.argmin(rss))
+    return float(grid[i_idx[k]]), float(grid[j_idx[k]])
+
+
+def fit_spec1(dep, x, zt, c1, c2):
+    """Fit spec=1 at given thresholds; return coefficients, counts and residuals.
+
+    Mirrors src/estimate.gridsearch's spec=1 / mode='returns' branch, including
+    the `> 2` guards, so bootstrap draws are generated from exactly the model
+    the paper estimates.
+    """
+    dep = np.asarray(dep, dtype=float)
+    x = np.asarray(x, dtype=float)
+    state = np.zeros(len(zt), dtype=int)
+    state[np.asarray(zt) < c1] = 1
+    state[np.asarray(zt) > c2] = 2
+
+    a = np.zeros(3)
+    b = np.zeros(3)
+    for s, idx in ((1, state == 1), (2, state == 2)):
+        if idx.sum() > 2:
+            xs, ys = x[idx], dep[idx]
+            n = xs.size
+            den = n * (xs @ xs) - xs.sum() ** 2
+            if abs(den) > 1e-14:
+                b[s] = (n * (xs @ ys) - xs.sum() * ys.sum()) / den
+            a[s] = (ys.sum() - b[s] * xs.sum()) / n
+    rw = state == 0
+    if rw.sum() > 0:
+        a[0] = dep[rw].mean()
+
+    fitted = a[state] + b[state] * x
+    return {"alpha": a, "beta": b, "state": state,
+            "fitted": fitted, "resid": dep - fitted,
+            "n": np.array([(state == 1).sum(), rw.sum(), (state == 2).sum()])}
 
 
 # ===========================================================================
