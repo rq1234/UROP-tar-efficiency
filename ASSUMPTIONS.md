@@ -150,3 +150,53 @@ trigger itself is resampled.
 
 **A3.5 — Japan is excluded from the pooled EXP cell only.** `config.EXCLUDED_EXP_MARKETS`
 makes explicit what was buried at `src/horizon_test.py:145`. Its MR and RW months are kept.
+
+---
+
+## Phase 4 — consolidation
+
+**A4.1 — Nothing in `src/archive/` was deleted, and the evidence says it must not be.**
+The instruction was to keep one copy and delete superseded scripts once replaced. The rule
+applied was "delete only what is provably replaced". Checking each archived module against
+`paper_numbers_manifest.csv` shows they are not replaced by anything:
+
+| Archived module | Sole provenance for |
+|---|---|
+| `cape_study.py` | `C6` — CAPE rolling threshold range |
+| `baa_study.py` | `C7` — BAA euphoria compression vs GFC spike |
+| `anfci_study.py` | `C9` — ANFCI high-sentiment firing rate |
+| `composite_study.py` | `J1`, `J2`, `J4`, `J6` — the Section 7.1 composite story |
+| `bic_composite_study.py` | `J3` — BIC orthogonalisation lag |
+
+`results/exports/README.md` tags these rows `HISTORICAL` and states their generating scripts
+are "committed under `src/archive/`". The rebuilt scripts regenerate the **global-CCI exports**,
+not the alternative-trigger studies, so they replace none of this. Deleting them would destroy
+the only remaining source for numbers the paper cites — the exact failure this repo exists to
+repair.
+
+**A4.2 — `results/exports/` is kept as the frozen vintage.** It is not a duplicate of
+`outputs/rebuilt/`. The deterministic exports can now be regenerated exactly, but the seeded
+ones cannot be reproduced bit-for-bit without the original RNG call order (A3.3). The exports
+are what the draft was written against; the rebuild is the living reproduction. Keeping both is
+one copy of each thing.
+
+**A4.3 — Real duplication left undone, deliberately.** `_episode_verdict` is copy-pasted seven
+times across the study modules, each re-hardcoding the same episode windows, and six study
+modules share a ~70% identical skeleton. Consolidating that is a `src/` refactor touching code
+that currently produces the published panel, with no test suite behind it. `config.py` now holds
+single definitions of the constants (including both episode window sets, see A4.4), which is the
+safe half of the job. The refactor itself should follow a TAR recovery test, per
+`PHASE0_REPORT.md`.
+
+**A4.4 — Two episode window sets exist and conflating them corrupts Appendix B.**
+`HISTORICAL_EPISODES` (`src/global_cci_study.py:64`) drives `_episode_coverage` and Appendix B:
+dot-com 1998-01..2001-03 expecting EXP, GFC 2008-09..2009-03 expecting MR, COVID
+2020-02..2020-04 expecting MR. The verdict windows used by `_episode_verdict` are wider and
+different. `config.EPISODES_COVERAGE` and `config.EPISODES_VERDICT` now carry both explicitly.
+
+**A4.5 — Round 7 partial reproductions, recorded as gaps not matches.**
+`episode_dep_corrected` (year-collapsed mean −11.98pp vs the export's −18.31pp),
+`kappa_stability` (mean κ 0.694 vs 0.740) and `drift_variance_ratio` do not yet reproduce. X1's
+structure is right — 30 episodes in the same 5 calendar-year clusters, 29 in 1997–2000 — so the
+gap is in how episodes are assigned to clusters or weighted. The exports remain the source for
+those three numbers, and `VERIFICATION_REPORT.md` records A14/C38 as MATCH against the export.

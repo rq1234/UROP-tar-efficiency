@@ -90,11 +90,53 @@ python src/replicate.py                     # arg "8" for Table 8
 
 ---
 
-## Reproducibility status
+## Reproducing the analysis
 
-The core pipeline, all data, and all outputs survive. **The generating scripts for revision
-Rounds 3–10 do not** — they were written to a session scratchpad instead of `scripts/` and were
-deleted with it. Roughly 121 of the manifest's 216 rows currently have no generating code.
+```bash
+python scripts/run_all.py            # everything (~15 min; the B>=1000 stages dominate)
+python scripts/run_all.py --fast     # skip resampling stages (~2 min)
+python scripts/run_all.py --list     # show stages
+```
 
-`PHASE0_REPORT.md` has the full map: which rounds are missing, which are partial, and the
-rebuild order. `CLAUDE.md` has the rules that stop it happening again.
+Stage 0 is a **gate**: if `fastgrid.py` stops reproducing `src/estimate.find_optimal_thresholds`
+to 1e-9 on all 23 markets, the run aborts rather than producing quietly wrong numbers.
+
+| Script | Rebuilds |
+|---|---|
+| `config.py` | every seed and constant, with provenance |
+| `fastgrid.py` | vectorised spec=1 grid search, ~300× faster, self-validating |
+| `round01_horizon.py` | horizon table, per-market pool, EXP phase, F6, episodes, expn check |
+| `round04_appendices.py` | T5 unrestricted band, Appendices A / B / C |
+| `round06_drift_fdr.py` | W1 drift table, W3 / W4 Benjamini-Hochberg |
+| `round07_dependence.py` | X1 / X4 / X6 / X7 / X8 dependence corrections |
+| `round08_permutation.py` | Y2 circular-shift permutation, B=5000 |
+| `round10_bootstrap.py` | P1 threshold + pooled bootstrap, B=1000 |
+| `round10_placebo.py` | P9 placebo, B=1000, iid and block nulls |
+| `round10_rwband.py` | P3 RW-band validation |
+| `compare_rebuilt.py` | diffs every rebuilt output against its export |
+| `verify_paper.py` | verdict per paper number → `VERIFICATION_REPORT.md` |
+
+**Status:** 23 outputs rebuilt — 14 reproduce their export exactly or to floating-point noise,
+5 are close, 4 differ (the B≥1000 resampling stages, plus `kappa_stability`). Deterministic
+analyses match; seeded ones cannot match bit-for-bit because reproducing a bootstrap needs the
+original RNG *call order*, not just the seed. For those the test is whether the paper's claim
+survives — and it does. See `ASSUMPTIONS.md` §A3.3.
+
+## Why `results/exports/` and `src/archive/` are not deleted
+
+Both look like duplication. Neither is.
+
+**`results/exports/`** is the frozen vintage your draft was written against. The deterministic
+files can now be regenerated exactly, but the seeded ones cannot. Delete it and the numbers in
+the submitted paper lose their source. `outputs/rebuilt/` is the living reproduction; keeping
+both is one copy of each *thing*, not two copies of one thing.
+
+**`src/archive/`** is the **sole provenance** for paper numbers the rebuild does not cover —
+`C6` (CAPE), `C7` (BAA), `C9` (ANFCI) and all of block `J` (composite, BIC-composite, CCI+EPU),
+which `results/exports/README.md` tags `HISTORICAL`. The rebuilt scripts regenerate the
+global-CCI exports, not the alternative-trigger studies. Deleting these would recreate exactly
+the problem this repo exists to fix.
+
+Genuine duplication that *could* still be consolidated: `_episode_verdict` is copy-pasted seven
+times across the study modules with the episode windows re-hardcoded in each. That is a `src/`
+refactor and needs tests first, so it is deliberately left undone.
