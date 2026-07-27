@@ -1,0 +1,210 @@
+{
+  "A1": {
+    "verdict": "MATCH",
+    "target": "57 candidates / 32 pass / 23 retained; 24 FAIL, 1 NO_DATA",
+    "observed": "57 rows; PASS=32, FAIL=24, NO_DATA=1; panel=23",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "B5": {
+    "verdict": "MATCH",
+    "target": "57 rows with F, p, screen",
+    "observed": "57 rows, 0 missing F/p",
+    "class": "E",
+    "priority": "P2",
+    "note": "all rows populated"
+  },
+  "B1": {
+    "verdict": "MATCH",
+    "target": "23 rows, values as printed in the draft",
+    "observed": "23/23 markets match on all five columns",
+    "class": "E",
+    "priority": "P1",
+    "note": "all 23 exact"
+  },
+  "B2": {
+    "verdict": "MATCH",
+    "target": "4 horizons x (mean, n) for low / RW / high",
+    "observed": "1m MR 0.6878 n=1183; 3m MR 2.6252 n=1163; 6m MR 7.1811 n=1145; 12m MR 14.6011 n=1109",
+    "class": "E",
+    "priority": "P1",
+    "note": "all horizons exact"
+  },
+  "A9": {
+    "verdict": "MATCH",
+    "target": "+14.60 / +8.01 / -7.49",
+    "observed": "14.6011 / 8.0093 / -7.4919",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "A10": {
+    "verdict": "MATCH",
+    "target": "1109 / 6676 / 615",
+    "observed": "1109 / 6676 / 615",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "B2x": {
+    "verdict": "MATCH",
+    "target": "615 at every horizon",
+    "observed": "n_EXP values seen: [615]",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "A4": {
+    "verdict": "MATCH",
+    "target": "6 raw, 0 after BH",
+    "observed": "6 raw, 0 after BH (n=23)",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C20": {
+    "verdict": "MATCH",
+    "target": "16 neg, 7 pos, 6 raw, 0 BH, median -0.0063",
+    "observed": "16 neg, 7 pos, 6 raw, 0 BH, median -0.0063",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C20x": {
+    "verdict": "MATCH",
+    "target": "Sec 7.2: 8/23, median -0.0087 (thresholds re-estimated)",
+    "observed": "8/23, median -0.00871; identical b in only 13/23 markets",
+    "class": "E",
+    "priority": "P2",
+    "note": "Both correct, different specifications. The draft must not present them as the same check: Sec 4 holds thresholds FIXED, Sec 7.2 RE-ESTIMATES them."
+  },
+  "A5": {
+    "verdict": "MATCH",
+    "target": "block12 3/23, iid 9/23",
+    "observed": "block12 3/23; iid 9/23",
+    "class": "S",
+    "priority": "P1",
+    "note": "exact, and the qualitative claim holds: against a realistic vol-clustering null the TAR fit is largely not distinguishable from chance"
+  },
+  "C13": {
+    "verdict": "MATCH",
+    "target": "9/23",
+    "observed": "9/23",
+    "class": "S",
+    "priority": "P2",
+    "note": ""
+  },
+  "C14": {
+    "verdict": "MATCH",
+    "target": "3/23",
+    "observed": "3/23",
+    "class": "S",
+    "priority": "P2",
+    "note": ""
+  },
+  "A11": {
+    "verdict": "MATCH",
+    "target": "-10.88 [-18.23, -4.32]",
+    "observed": "-10.879 [-18.232, -4.316]",
+    "class": "S",
+    "priority": "P1",
+    "note": "Exact at printed precision. CI excludes 0, so the aggregate explosive discount survives full threshold uncertainty - qualitative claim holds."
+  },
+  "C36": {
+    "verdict": "MATCH",
+    "target": "+8.18 [+2.52,+15.41] and -10.88 [-18.23,-4.32]",
+    "observed": "MR-RW 8.178 [2.515, 15.408]; EXP-RW -10.879 [-18.232, -4.316]",
+    "class": "S",
+    "priority": "P2",
+    "note": "both gaps exact at printed precision; both CIs exclude 0"
+  },
+  "C37": {
+    "verdict": "MATCH",
+    "target": "30 episodes, 26 negative",
+    "observed": "30 episodes, 26 negative (col 'excess_pp')",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "A13": {
+    "verdict": "MATCH",
+    "target": "29 of 30",
+    "observed": "29 of 30 start in 1997-2000",
+    "class": "E",
+    "priority": "P1",
+    "note": "confirms the discount is overwhelmingly a dot-com/Asian-crisis phenomenon - a real limit on generality"
+  },
+  "A14": {
+    "verdict": "MATCH",
+    "target": "t=-3.16, p=0.034, 5 clusters",
+    "observed": "year_collapsed t=-3.155, p=0.0343, clusters=5",
+    "class": "E",
+    "priority": "P1",
+    "note": "Exact at printed precision. This is the most conservative dependence correction (5 obs) and the discount still holds. The mean -18.31pp is carried in paper_numbers_manifest row X1_episode_yearcollapsed, not in this CSV - the CSV holds only the test statistics."
+  },
+  "C38": {
+    "verdict": "MATCH",
+    "target": "t=-3.16, p=0.034, 5 clusters",
+    "observed": "year_collapsed t=-3.155, p=0.0343, clusters=5",
+    "class": "E",
+    "priority": "P1",
+    "note": "duplicate of A14"
+  },
+  "A6": {
+    "verdict": "MATCH",
+    "target": "83% RW",
+    "observed": "global RW = 83.0",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "A7": {
+    "verdict": "MATCH",
+    "target": "44 / 31 / 25 (paper rounds to whole %)",
+    "observed": "43.5 / 31.2 / 25.2 -> rounds to 44 / 31 / 25",
+    "class": "E",
+    "priority": "P1",
+    "note": "exact once rounded to the precision the paper prints"
+  },
+  "B3": {
+    "verdict": "MATCH",
+    "target": "Greece 7/83/10 vs 44/31/25; Turkey 6/38/56 vs 7/45/48",
+    "observed": "GR global (7, 83, 10) country (44, 31, 25); TR global (6, 38, 56) country (7, 45, 48)",
+    "class": "E",
+    "priority": "P1",
+    "note": "All four rows exact at printed precision. Carries the X4 finding: Turkey's global (6/38/56) and country (7/45/48) splits are nearly identical on the MATCHED window, so the draft's Turkey localisation claim is mostly a WINDOW effect, not a trigger effect. Greece's is real (7/83/10 vs 44/31/25). Turkey's claim needs revising."
+  },
+  "B7": {
+    "verdict": "NEAR",
+    "target": "26 countries",
+    "observed": "25 rows in appendixC_dcci_correlations.csv",
+    "class": "V",
+    "priority": "P2",
+    "note": "25 rows here; the paper's 26th (China) comes from a separate file, cci_CHN_fetched.csv, fetched in Round 4 T3. Table C.1 is assembled from TWO files - record that or merge them."
+  },
+  "C51": {
+    "verdict": "MATCH",
+    "target": "19 of 24; 30 of 33",
+    "observed": "fdr_exogeneity 56 rows; fdr_coefficients 45 rows",
+    "class": "E",
+    "priority": "P2",
+    "note": "both files present with per-test detail; counts confirmed in paper_numbers_manifest rows W3_exog_fdr and W4_coef_fdr"
+  },
+  "E2": {
+    "verdict": "MISMATCH",
+    "target": "count Brazil's high-band months",
+    "observed": "bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex=''",
+    "class": "E",
+    "priority": "P1",
+    "note": "TEXT IS WRONG. Brazil's high band is EMPTY (n_ex=0), so beta_ex=0.0 is a placeholder, not an estimate - se and stars are blank. Fix: 'every ESTIMATED b_EXP is negative; Brazil has no high-sentiment months, so no slope is identified.'"
+  },
+  "E3": {
+    "verdict": "MISMATCH",
+    "target": "identify the criterion; test whether any yields 14 or 10",
+    "observed": ">0%: 22; >1%: 22; >1.5%: 20; >2%: 18; >2.5%: 16; >3%: 13; >5%: 12; >10%: 1",
+    "class": "E",
+    "priority": "P1",
+    "note": "RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', which yields exactly 20 and drops precisely ['klci', 'twse'] - the two the table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the >1.5% rule under Table 4.1; delete or re-source the '14'."
+  }
+}
