@@ -83,7 +83,7 @@ def fast_grid_rss(y, z, grid, min_gap):
     return fast_grid_rss_parts(np.diff(y), y[:-1], z[1:], grid, min_gap)
 
 
-def fast_grid_rss_parts(dep, x, zt, grid, min_gap):
+def fast_grid_rss_parts(dep, x, zt, grid, min_gap, rw_free=False):
     """Same as fast_grid_rss but takes the regression parts directly.
 
     The bootstrap needs this: the wild scheme perturbs `dep` while holding `x`
@@ -161,9 +161,11 @@ def fast_grid_rss_parts(dep, x, zt, grid, min_gap):
         out[ok] = Syy[ok] - (Sy[ok] * Sy[ok]) / n[ok]
         return out
 
-    rss = (rss_ols(*mr)
-           + rss_mean_only(rw[0], rw[2], rw[5])
-           + rss_ols(*ex))
+    # rw_free=True gives the THREE-FREE-REGIMES model of Round 4 T5, where the
+    # middle band also gets an intercept OLS instead of the imposed beta=0.
+    # The optimal thresholds under that model are not generally the spec=1 ones.
+    rw_rss = rss_ols(*rw) if rw_free else rss_mean_only(rw[0], rw[2], rw[5])
+    rss = rss_ols(*mr) + rw_rss + rss_ols(*ex)
     return rss, i_idx, j_idx
 
 

@@ -84,13 +84,28 @@ EXCLUDED_EXP_MARKETS = ("nikkei225",)  # src/horizon_test.py:145 - Japan's c2=99
 # degenerate (61% of months would be EXP), so its EXP months are dropped from the
 # POOLED EXP cell only; its MR and RW months are kept. Round 6 W2 reports both ways.
 
-# Episode windows, copy-pasted seven times across the study modules. One copy.
-EPISODES = {
+# There are TWO different episode window sets in the codebase and they are easy
+# to confuse - conflating them silently corrupts Appendix B.
+#
+# 1. VERDICT windows: used by _episode_verdict, copy-pasted seven times across
+#    the study modules (global_cci_study.py:209 and six archived clones).
+EPISODES_VERDICT = {
     "dot_com": ("1997-01", "2001-12"),
     "gfc":     ("2007-07", "2009-12"),
     "covid":   ("2020-01", "2020-06"),
     "post22":  ("2022-01", "2023-06"),
 }
+
+# 2. COVERAGE windows: HISTORICAL_EPISODES at src/global_cci_study.py:64, used by
+#    _episode_coverage to produce the panel's dc_exp / gfc_mr / covid_mr columns
+#    and Appendix B. Narrower, and each carries its EXPECTED regime.
+EPISODES_COVERAGE = {
+    "dot_com": ("1998-01", "2001-03", 2),   # expect EXP
+    "gfc":     ("2008-09", "2009-03", 1),   # expect MR
+    "covid":   ("2020-02", "2020-04", 1),   # expect MR
+}
+
+EPISODES = EPISODES_VERDICT   # backwards-compatible alias
 
 # Tail-coverage rule behind Table 4.1's tail_coverage column. Recovered in
 # Phase 0 by sweeping candidate rules: >1.5% yields exactly 20 both-tailed and

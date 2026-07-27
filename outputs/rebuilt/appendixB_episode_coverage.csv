@@ -1,0 +1,24 @@
+market,country,dot_com_EXP_pct,GFC_MR_pct,COVID_MR_pct
+ipc,Mexico,28.2,100.0,66.7
+bovespa,Brazil,0.0,100.0,100.0
+merval,Argentina,94.9,85.7,0.0
+ibex35,Spain,97.4,28.6,0.0
+smi,Switzerland,97.4,57.1,0.0
+aex,Netherlands,87.2,100.0,0.0
+athex,Greece,66.7,85.7,0.0
+ta125,Israel,56.4,100.0,0.0
+ta35,Israel (TA-35),56.4,100.0,0.0
+bist100,Turkey,20.5,57.1,0.0
+nikkei225,Japan,100.0,100.0,0.0
+shanghai,China (SSE),10.3,100.0,66.7
+szse,China (SZSE),46.2,100.0,66.7
+hangseng,Hong Kong,28.2,100.0,33.3
+hscei,Hong Kong (H-shr),94.9,100.0,0.0
+kospi,South Korea,94.9,100.0,33.3
+sti,Singapore,56.4,100.0,0.0
+twse,Taiwan,89.7,0.0,0.0
+jkse,Indonesia,92.3,100.0,0.0
+lq45,Indonesia (LQ45),89.7,100.0,0.0
+klci,Malaysia,74.4,0.0,0.0
+set,Thailand,94.9,85.7,0.0
+psei,Philippines,12.8,100.0,66.7
