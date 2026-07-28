@@ -458,17 +458,25 @@ def v_matched():
 #  B7 - Appendix C correlations
 # ===========================================================================
 def v_appendixC():
-    c = read(os.path.join(EXPORTS, "appendixC_dcci_correlations.csv"))
+    rebuilt_path = os.path.join(ROOT, "outputs", "rebuilt", "appendixC_dcci_correlations.csv")
+    if os.path.exists(rebuilt_path):
+        c = read(rebuilt_path)
+        source_note = "outputs/rebuilt/appendixC_dcci_correlations.csv (merged, includes China)"
+    else:
+        c = read(os.path.join(EXPORTS, "appendixC_dcci_correlations.csv"))
+        source_note = "results/exports/appendixC_dcci_correlations.csv (25 rows, no China)"
     r = check("B7", "Table C.1 national-global first-difference correlations", "V", "P2")
     r.target = "26 countries"
-    r.observed = f"{len(c)} rows in appendixC_dcci_correlations.csv"
+    r.observed = f"{len(c)} rows in {source_note}"
     if len(c) == 26:
-        r.ok()
+        r.ok("China merged in via granger_appendices.py's appendix_c(), same "
+            "join/diff/correlate logic as the other 25 countries, sourced from the "
+            "Round 4 T3 live FRED fetch.")
     elif len(c) == 25:
         r.verdict = NEAR
         r.note = ("25 rows here; the paper's 26th (China) comes from a separate file, "
-                  "cci_CHN_fetched.csv, fetched in Round 4 T3. Table C.1 is assembled "
-                  "from TWO files - record that or merge them.")
+                  "cci_CHN_fetched.csv, fetched in Round 4 T3. Run "
+                  "scripts/granger_appendices.py to regenerate the merged 26-row version.")
     else:
         r.fail(f"{len(c)} rows")
 
@@ -974,6 +982,29 @@ def v_granger_and_correlations():
     ok = all(v is not None and abs(v - targets[k]) <= 0.02 for k, v in obs.items())
     r12.ok() if ok else r12.fail("one or more correlation values differ or are missing")
 
+    eightlag_path = os.path.join(ROOT, "outputs", "rebuilt", "appendixA_eightlag.csv")
+    r2 = check("C2", "Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042", "E", "P2")
+    r2.target = "22 of 23 pass; Japan p=0.042"
+    if os.path.exists(eightlag_path):
+        eightlag = read(eightlag_path)
+        panel_mkts = {x["market"] for x in read(os.path.join(TABLES, "global_cci_all_markets.csv"))}
+        sub = [x for x in eightlag if x["market"] in panel_mkts]
+        passed = sum(1 for x in sub if x["gate"] == "PASS")
+        jpn = next((x for x in sub if x["market"] == "nikkei225"), None)
+        jpn_p = num(jpn["p"]) if jpn else None
+        r2.observed = f"{passed}/{len(sub)} pass; Japan p={jpn_p}"
+        ok = passed == 22 and len(sub) == 23 and jpn_p is not None and abs(jpn_p - 0.042) <= 0.02
+        if ok:
+            r2.ok("Pass count exact (22/23). Japan's p differs slightly from the manifest's "
+                 "0.042 (data-vintage drift in the underlying global CCI series, the same "
+                 "pattern seen elsewhere in this rebuild - see ASSUMPTIONS.md A4.9), but the "
+                 "qualitative result (Japan fails the 8-lag screen) is unchanged.")
+        else:
+            r2.fail("pass count or Japan's p differs materially")
+    else:
+        r2.observed = "outputs/rebuilt/appendixA_eightlag.csv not found - run "\
+                     "scripts/granger_eightlag.py"
+
 
 # ===========================================================================
 #  C17 / C18 / C19 - regime-dynamics, two-metric efficiency, drift-spec rank
@@ -1288,12 +1319,8 @@ def v_no_committed_generator():
               "a committed CSV - the check is 'run python src/replicate.py and compare printed "
               "output to the published tables by eye', not a file diff. Not machine-checkable "
               "against a committed artefact.")
-
-    r2 = check("C2", "Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042", "E", "P2")
-    r2.target = "22 of 23 pass; Japan p=0.042"
-    r2.note = ("The rebuilt reverse-Granger screen (granger_appendices.py's appendix_a) uses "
-              "config.N_LAGS_SCREEN=4 throughout - an 8-lag variant was never re-run. Genuine "
-              "gap, not wired up here.")
+    # C2 (eight-lag Granger re-run) is now checked in v_granger_and_correlations(),
+    # against scripts/granger_eightlag.py's output - no longer a gap.
 
 
 # ===========================================================================

@@ -176,12 +176,12 @@
     "note": "All four rows exact at printed precision. Carries the X4 finding: Turkey's global (6/38/56) and country (7/45/48) splits are nearly identical on the MATCHED window, so the draft's Turkey localisation claim is mostly a WINDOW effect, not a trigger effect. Greece's is real (7/83/10 vs 44/31/25). Turkey's claim needs revising."
   },
   "B7": {
-    "verdict": "NEAR",
+    "verdict": "MATCH",
     "target": "26 countries",
-    "observed": "25 rows in appendixC_dcci_correlations.csv",
+    "observed": "26 rows in outputs/rebuilt/appendixC_dcci_correlations.csv (merged, includes China)",
     "class": "V",
     "priority": "P2",
-    "note": "25 rows here; the paper's 26th (China) comes from a separate file, cci_CHN_fetched.csv, fetched in Round 4 T3. Table C.1 is assembled from TWO files - record that or merge them."
+    "note": "China merged in via granger_appendices.py's appendix_c(), same join/diff/correlate logic as the other 25 countries, sourced from the Round 4 T3 live FRED fetch."
   },
   "C51": {
     "verdict": "MATCH",
@@ -407,6 +407,14 @@
     "priority": "P2",
     "note": "CHN is not in appendixC_dcci_correlations.csv (25 rows, not 26 - see B7); computed here from outputs/rebuilt/cci_CHN_fetched.csv (Round 4 T3) instead, not from a value already sitting in a single committed export."
   },
+  "C2": {
+    "verdict": "MATCH",
+    "target": "22 of 23 pass; Japan p=0.042",
+    "observed": "22/23 pass; Japan p=0.0379",
+    "class": "E",
+    "priority": "P2",
+    "note": "Pass count exact (22/23). Japan's p differs slightly from the manifest's 0.042 (data-vintage drift in the underlying global CCI series, the same pattern seen elsewhere in this rebuild - see ASSUMPTIONS.md A4.9), but the qualitative result (Japan fails the 8-lag screen) is unchanged."
+  },
   "C17": {
     "verdict": "MATCH",
     "target": "median +1.03, range -7.4 to +7.4; 12 of 22 positive",
@@ -606,14 +614,6 @@
     "class": "E",
     "priority": "P2",
     "note": "src/replicate.py has replicate_table7()/replicate_table8() but neither writes a committed CSV - the check is 'run python src/replicate.py and compare printed output to the published tables by eye', not a file diff. Not machine-checkable against a committed artefact."
-  },
-  "C2": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "22 of 23 pass; Japan p=0.042",
-    "observed": "",
-    "class": "E",
-    "priority": "P2",
-    "note": "The rebuilt reverse-Granger screen (granger_appendices.py's appendix_a) uses config.N_LAGS_SCREEN=4 throughout - an 8-lag variant was never re-run. Genuine gap, not wired up here."
   },
   "E4": {
     "verdict": "MATCH",

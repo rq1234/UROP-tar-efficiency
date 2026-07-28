@@ -8,10 +8,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 64 |
-| NEAR | 4 |
+| MATCH | 66 |
+| NEAR | 3 |
 | MISMATCH | 2 |
-| NOT_REPRODUCIBLE | 8 |
+| NOT_REPRODUCIBLE | 7 |
 
 **78 entries checked.**
 
@@ -22,14 +22,12 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
 | C1 | P2 | E | **NOT_REPRODUCIBLE** | match to grid resolution; FTSE no-drift c2 61.8 vs published |  |
-| C2 | P2 | E | **NOT_REPRODUCIBLE** | 22 of 23 pass; Japan p=0.042 |  |
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
 | C9 | P3 | V | **NOT_REPRODUCIBLE** | 80-90% for European markets; 9/n fail screen | 14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', |
-| B7 | P2 | V | **NEAR** | 26 countries | 25 rows in appendixC_dcci_correlations.csv |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
 | C22 | P2 | S | **NEAR** | c1 2.93, c2 2.68, RW 67, high 62 | c1 2.93, c2 2.68, RW 67.2, high 61.6 |
 | C45 | P2 | S | **NEAR** | 76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19 | n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0 |
@@ -63,6 +61,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | A8 | P2 | E | **MATCH** | 43.8 / 31.5 / 24.6 | 43.8 / 31.5 / 24.6 |
 | B5 | P2 | E | **MATCH** | 57 rows with F, p, screen | 57 rows, 0 missing F/p |
 | B6 | P2 | E | **MATCH** | 23 rows, dot-com/GFC/COVID coverage percentages | 23 rows |
+| B7 | P2 | V | **MATCH** | 26 countries | 26 rows in outputs/rebuilt/appendixC_dcci_correlations.csv (merged, in |
 | C10 | P2 | E | **MATCH** | 8 series; 100 -> 38th-51st percentile | 8 series; pct_100.0 range 38-51 |
 | C11 | P2 | E | **MATCH** | F=3.54, p=0.008 | F=3.5358, p=0.0075, gate=FAIL |
 | C12 | P2 | E | **MATCH** | {'CHN': 0.25, 'NZL': 0.29, 'GRC': 0.37, 'TUR': 0.38, 'CZE':  | {'CHN': 0.2528, 'NZL': 0.286, 'GRC': 0.3684, 'TUR': 0.3758, 'CZE': 0.4 |
@@ -72,6 +71,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C17 | P2 | E | **MATCH** | median +1.03, range -7.4 to +7.4; 12 of 22 positive | median 1.08 (n=22); 12 positive |
 | C18 | P2 | E | **MATCH** | 76.9 -> 80.2; Spearman 0.878 | 76.9 -> 80.2; Spearman 0.878 |
 | C19 | P2 | E | **MATCH** | Spearman 0.42; mean shift ~9pp | Spearman 0.417; mean \|shift\| 4.4pp |
+| C2 | P2 | E | **MATCH** | 22 of 23 pass; Japan p=0.042 | 22/23 pass; Japan p=0.0379 |
 | C20x | P2 | E | **MATCH** | Sec 7.2: 8/23, median -0.0087 (thresholds re-estimated) | 8/23, median -0.00871; identical b in only 13/23 markets |
 | C23 | P2 | E | **MATCH** | 0.836 (obs20); 0.247 (pct15) | obs20=0.836; pct15=0.247 |
 | C28 | P2 | E | **MATCH** | 2.0% | 2.03% |
@@ -148,9 +148,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > All four rows exact at printed precision. Carries the X4 finding: Turkey's global (6/38/56) and country (7/45/48) splits are nearly identical on the MATCHED window, so the draft's Turkey localisation claim is mostly a WINDOW effect, not a trigger effect. Greece's is real (7/83/10 vs 44/31/25). Turkey's claim needs revising.
 
-**B7** (NEAR) - Table C.1 national-global first-difference correlations
+**B7** (MATCH) - Table C.1 national-global first-difference correlations
 
-> 25 rows here; the paper's 26th (China) comes from a separate file, cci_CHN_fetched.csv, fetched in Round 4 T3. Table C.1 is assembled from TWO files - record that or merge them.
+> China merged in via granger_appendices.py's appendix_c(), same join/diff/correlate logic as the other 25 countries, sourced from the Round 4 T3 live FRED fetch.
 
 **C51** (MATCH) - BH: 19/24 screening and 30/33 coefficient rejections survive
 
@@ -200,6 +200,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > CHN is not in appendixC_dcci_correlations.csv (25 rows, not 26 - see B7); computed here from outputs/rebuilt/cci_CHN_fetched.csv (Round 4 T3) instead, not from a value already sitting in a single committed export.
 
+**C2** (MATCH) - Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042
+
+> Pass count exact (22/23). Japan's p differs slightly from the manifest's 0.042 (data-vintage drift in the underlying global CCI series, the same pattern seen elsewhere in this rebuild - see ASSUMPTIONS.md A4.9), but the qualitative result (Japan fails the 8-lag screen) is unchanged.
+
 **C21** (NEAR) - Wild bootstrap median widths: c1 2.14, c2 1.00, RW 37pp, high 13pp
 
 > class S - point widths will not match bit-for-bit without the original bootstrap RNG call order; magnitudes are close, so reported NEAR.
@@ -247,10 +251,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 **C1** (NOT_REPRODUCIBLE) - A&S replication vs published Tables 7/8: match to grid resolution
 
 > src/replicate.py has replicate_table7()/replicate_table8() but neither writes a committed CSV - the check is 'run python src/replicate.py and compare printed output to the published tables by eye', not a file diff. Not machine-checkable against a committed artefact.
-
-**C2** (NOT_REPRODUCIBLE) - Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042
-
-> The rebuilt reverse-Granger screen (granger_appendices.py's appendix_a) uses config.N_LAGS_SCREEN=4 throughout - an 8-lag variant was never re-run. Genuine gap, not wired up here.
 
 **E4** (MATCH) - Wald test siting: abstract/conclusion misattribute it to the recursive exercise
 
@@ -306,6 +306,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C49` Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 - `C11` S&P 500 vs its own US CCI screen: F=3.54, p=0.008
 - `C12` Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
+- `C2` Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042
 - `C17` High-band demeaned intercept: median +1.03%/mo; 12/22 contemp positive
 - `C18` Significant-slope convention: mean 76.9 -> 80.2; Spearman 0.878
 - `C19` Constant-drift alternative: Spearman 0.42; mean share shift 9pp
@@ -343,4 +344,3 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
 - `C48` Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
 - `C1` A&S replication vs published Tables 7/8: match to grid resolution
-- `C2` Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042

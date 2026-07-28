@@ -85,23 +85,27 @@ def t5_unrestricted_b2():
     return rows
 
 
-def appendix_a():
-    """A6 - reverse-Granger screen over the full 57-market candidate universe."""
+def appendix_a(n_lags=None):
+    """A6 - reverse-Granger screen over the full 57-market candidate universe.
+
+    n_lags defaults to config.N_LAGS_SCREEN (4); pass n_lags=8 for the
+    eight-lag re-run cited at C2 (see scripts/granger_eightlag.py)."""
     from exogeneity import granger_f_test              # noqa: E402
     from global_cci_study import load_global_cci_pair  # noqa: E402
     from market_config import MARKETS                  # noqa: E402
 
+    n_lags = config.N_LAGS_SCREEN if n_lags is None else n_lags
     rows = []
     for mkt in MARKETS:
         rec = {"market": mkt, "country": MARKETS[mkt]["country"],
                "T": "", "F": "", "p": "", "gate": "NO_DATA",
-               "n_lags": config.N_LAGS_SCREEN, "direction": "return->d(globalCCI)"}
+               "n_lags": n_lags, "direction": "return->d(globalCCI)"}
         try:
             y, z, _ = load_global_cci_pair(mkt, config.START, None)
             if len(y) >= 10:
                 F, p = granger_f_test(np.diff(np.asarray(z, dtype=float)),
                                       np.diff(np.asarray(y, dtype=float)),
-                                      config.N_LAGS_SCREEN)[:2]
+                                      n_lags)[:2]
                 rec.update({"T": float(len(y)), "F": round(float(F), 4),
                             "p": round(float(p), 4),
                             "gate": "FAIL" if p <= config.ALPHA else "PASS"})
@@ -149,7 +153,14 @@ def appendix_b():
 
 
 def appendix_c():
-    """G5 - corr(d global CCI, d country CCI) in first differences."""
+    """G5 - corr(d global CCI, d country CCI) in first differences.
+
+    Adds China (B7's 26th row) from the Round 4 T3 live FRED fetch
+    (outputs/rebuilt/cci_CHN_fetched.csv) using the identical join/diff/
+    correlate logic as the other 25 countries. That file is a standing
+    dependency from scripts/country_cci_episodes.py - if it isn't present
+    yet (fresh checkout, run_all.py hasn't reached that stage), China's row
+    is skipped rather than re-fetched here."""
     import pandas as pd
 
     from market_config import MARKETS, OECD_CCI_MARKETS  # noqa: E402
@@ -167,6 +178,15 @@ def appendix_c():
     g = pd.read_csv(gpath, index_col=0, parse_dates=True).iloc[:, 0]
     g.index = pd.to_datetime(g.index).to_period("M")
 
+    def correlate(s, min_n=24):
+        s.index = pd.to_datetime(s.index).to_period("M")
+        j = pd.concat([g.rename("g"), s.rename("c")], axis=1).dropna()
+        if len(j) < min_n:
+            return None
+        d = j.diff().dropna()
+        return {"n": len(d), "start": str(j.index[0]), "end": str(j.index[-1]),
+                "corr_dCCI": round(float(d["g"].corr(d["c"])), 4)}
+
     sent = os.path.join(config.DATA, "sentiment")
     rows = []
     seen = set()
@@ -178,14 +198,22 @@ def appendix_c():
         if not os.path.exists(f):
             continue
         s = pd.read_csv(f, index_col=0, parse_dates=True).iloc[:, 0]
-        s.index = pd.to_datetime(s.index).to_period("M")
-        j = pd.concat([g.rename("g"), s.rename("c")], axis=1).dropna()
-        if len(j) < 24:
+        res = correlate(s)
+        if res is None:
             continue
-        d = j.diff().dropna()
         rows.append({"code": code, "country": label.get(code, code),
-                     "n": len(d), "start": str(j.index[0]), "end": str(j.index[-1]),
-                     "corr_dCCI": round(float(d["g"].corr(d["c"])), 4)})
+                     "source": "OECD_CCI_MARKETS", **res})
+
+    chn_path = os.path.join(config.ROOT, "outputs", "rebuilt", "cci_CHN_fetched.csv")
+    if os.path.exists(chn_path):
+        chn = pd.read_csv(chn_path, index_col=0, parse_dates=True).iloc[:, 0]
+        res = correlate(chn)
+        if res is not None:
+            rows.append({"code": "CHN", "country": "China", "source": "FRED_live_R4T3", **res})
+    else:
+        print("  Appendix C: cci_CHN_fetched.csv not found - China row skipped "
+              "(run country_cci_episodes.py's T3 first)")
+
     rows.sort(key=lambda r: r["corr_dCCI"])
     print(f"  Appendix C: {len(rows)} countries, corr range "
           f"{rows[0]['corr_dCCI']:.3f} to {rows[-1]['corr_dCCI']:.3f}")
