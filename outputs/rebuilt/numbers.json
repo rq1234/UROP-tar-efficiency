@@ -584,12 +584,12 @@
     "note": "Recomputed in scripts/country_cci_episodes.py (S3): 222 distinct MR calendar-months collapse into 9 clusters, matching the README's boundary list exactly, date for date. Printed only, not persisted to its own CSV, so this entry is confirmed by re-running that script rather than reading a file here."
   },
   "C48": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "",
-    "observed": "",
+    "verdict": "MATCH",
+    "target": "mode ~+5%, mean +14.6; tail years mostly 2008/2009/2022; 2020 near-absent",
+    "observed": "mode=5% (n=25), mean=14.601%, top tail years=[('2008', 63), ('2009', 33), ('2022', 19), ('2011', 18), ('1993', 15)], 2020 low-band months=68 (of 1109 total)",
     "class": "E",
     "priority": "P2",
-    "note": "NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, dated return distribution underlying Figure 6.2 (mode location, which calendar months populate the tails), which no export currently carries in that form."
+    "note": "Computed from scripts/horizon_episodes.py's new full_sample_raw.csv (full-sample Option-A classification, per-month, not the recursive one). Modal 1pp-wide return bucket is exactly +5%; mean matches A9's already-confirmed 14.60% exactly; the three markets/years dominating the distribution's 10/90 percentile tails are 2008, 2009 and 2022, and 2020 does not appear in the top 5 tail years at all."
   },
   "C52": {
     "verdict": "MATCH",

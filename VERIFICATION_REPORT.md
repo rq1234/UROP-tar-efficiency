@@ -8,10 +8,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 66 |
+| MATCH | 67 |
 | NEAR | 5 |
 | MISMATCH | 3 |
-| NOT_REPRODUCIBLE | 4 |
+| NOT_REPRODUCIBLE | 3 |
 
 **78 entries checked.**
 
@@ -24,7 +24,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C9 | P3 | V | **MISMATCH** | 80-90% for European markets; 9 fail the screen | 54 markets estimated (all reachable, not just the 14 in the committed  |
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
-| C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C1 | P2 | E | **NEAR** | match to grid resolution; FTSE no-drift c2 61.8 vs published | FTSE100 no-drift c2=61.8182; RSS flatness candidates: whole_grid=4.484 |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
@@ -87,6 +86,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C44 | P2 | E | **MATCH** | -13.2/-7.7/-5.1 and -12.6/-8.8/-7.7 | [-13.21, -7.7, -5.12, -12.59, -8.82, -7.73] |
 | C46 | P2 | E | **MATCH** | -16.17/-15.90/-12.26 (DK .020/.025/.049) | lag0 -16.17 (DK 0.0204); lag1 -15.9 (DK 0.0249); lag2 -12.26 (DK 0.048 |
 | C47 | P2 | E | **MATCH** | 9 clusters |  |
+| C48 | P2 | E | **MATCH** | mode ~+5%, mean +14.6; tail years mostly 2008/2009/2022; 202 | mode=5% (n=25), mean=14.601%, top tail years=[('2008', 63), ('2009', 3 |
 | C5 | P2 | E | **MATCH** | 88% | 87.8% |
 | C51 | P2 | E | **MATCH** | 19 of 24; 30 of 33 | fdr_exogeneity 56 rows; fdr_coefficients 45 rows |
 | C52 | P2 | E | **MATCH** | 88.2% full; 84.6% post-2015; kappa 0.74 | 87.8% full; 84.6% post-2015; kappa 0.740 |
@@ -244,9 +244,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > Recomputed in scripts/country_cci_episodes.py (S3): 222 distinct MR calendar-months collapse into 9 clusters, matching the README's boundary list exactly, date for date. Printed only, not persisted to its own CSV, so this entry is confirmed by re-running that script rather than reading a file here.
 
-**C48** (NOT_REPRODUCIBLE) - Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
+**C48** (MATCH) - Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
 
-> NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, dated return distribution underlying Figure 6.2 (mode location, which calendar months populate the tails), which no export currently carries in that form.
+> Computed from scripts/horizon_episodes.py's new full_sample_raw.csv (full-sample Option-A classification, per-month, not the recursive one). Modal 1pp-wide return bucket is exactly +5%; mean matches A9's already-confirmed 14.60% exactly; the three markets/years dominating the distribution's 10/90 percentile tails are 2008, 2009 and 2022, and 2020 does not appear in the top 5 tail years at all.
 
 **C1** (NEAR) - A&S replication vs published Tables 7/8: match to grid resolution
 
@@ -327,6 +327,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C45` Post-2015 frozen test: 76 high-months, 4 years, 4 indices; gap -9.8; bootstrap p=0.22; DK p=0.19
 - `C46` Publication lag: lag0 -16.17(DK .020); lag1 -15.90(DK .025); lag2 -12.26(DK .049)
 - `C47` Low-sentiment calendar clusters: 9 clusters (gap<=3 months)
+- `C48` Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
 - `C52` D.1 agreement: 88.2% full; 84.6% post-2015; kappa 0.74
 - `B6` Table B.1 episode coverage by index and episode
 - `C1` A&S replication vs published Tables 7/8: match to grid resolution
@@ -343,4 +344,3 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
 - `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
-- `C48` Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent

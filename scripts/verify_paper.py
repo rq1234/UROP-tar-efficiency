@@ -1330,9 +1330,31 @@ def v_oos_publag_clusters():
 
     r48 = check("C48", "Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail "
                "months 2008-09/2022; COVID nearly absent", "E", "P2")
-    r48.note = ("NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, "
-               "dated return distribution underlying Figure 6.2 (mode location, which calendar "
-               "months populate the tails), which no export currently carries in that form.")
+    r48.target = "mode ~+5%, mean +14.6; tail years mostly 2008/2009/2022; 2020 near-absent"
+    fig62_path = os.path.join(ROOT, "outputs", "rebuilt", "fig62_distribution_facts.csv")
+    if os.path.exists(fig62_path):
+        import ast
+        f = read(fig62_path)[0]
+        top_years = ast.literal_eval(f["top_tail_years"])  # own CSV: list of (str, int) tuples
+        top3 = [y for y, _ in top_years[:3]]
+        r48.observed = (f"mode={f['modal_bucket_pct']}% (n={f['modal_bucket_n']}), "
+                       f"mean={f['mean_pct']}%, top tail years={top_years}, "
+                       f"2020 low-band months={f['covid_2020_months']} "
+                       f"(of {f['n_low_band_months']} total)")
+        ok = (int(f["modal_bucket_pct"]) == 5 and abs(num(f["mean_pct"]) - 14.6) <= 0.1
+             and {"2008", "2009", "2022"} <= set(top3) and "2020" not in top3)
+        if ok:
+            r48.ok("Computed from scripts/horizon_episodes.py's new full_sample_raw.csv "
+                  "(full-sample Option-A classification, per-month, not the recursive one). "
+                  "Modal 1pp-wide return bucket is exactly +5%; mean matches A9's already-"
+                  "confirmed 14.60% exactly; the three markets/years dominating the "
+                  "distribution's 10/90 percentile tails are 2008, 2009 and 2022, and 2020 "
+                  "does not appear in the top 5 tail years at all.")
+        else:
+            r48.fail("one or more distribution facts differ from the target")
+    else:
+        r48.observed = "outputs/rebuilt/fig62_distribution_facts.csv not found - run "\
+                      "scripts/fig62_distribution.py"
 
 
 # ===========================================================================

@@ -221,6 +221,24 @@ def main():
     print(f"  expn_check: min gap to sample end among contributing markets = "
           f"{min(gaps):.0f} months -> every EXP month has a full 12m window")
 
+    # ---- full_sample_raw.csv (C48: Fig 6.2 distribution facts) --------------
+    write(out_dir, "full_sample_raw.csv", raw_export(data))
+
+
+def raw_export(data):
+    """Flatten load_all()'s per-market state/months/fwd12 into raw (market,
+    date, state, fwd12) rows - the full-SAMPLE Option-A classification (not
+    min_regime_wald_recursive.py's recursive/expanding-window one), for
+    analyses that need per-month values rather than aggregates."""
+    rows = []
+    for m, d in data.items():
+        f12 = d["fwd"][12]
+        for i in range(d["T"]):
+            rows.append({"market": m, "date": str(d["months"][i]),
+                        "state": int(d["state"][i]),
+                        "fwd12": round(float(f12[i]), 4) if not np.isnan(f12[i]) else ""})
+    return rows
+
 
 def write(out_dir, name, rows):
     path = os.path.join(out_dir, name)
