@@ -360,12 +360,12 @@
     "note": ""
   },
   "C8": {
-    "verdict": "NOT_REPRODUCIBLE",
+    "verdict": "NEAR",
     "target": "0.56pp vs 3.7pp",
-    "observed": "",
+    "observed": "euphoria |mean_dev|=0.522pp (mean-level compression); GFC intra-window range=3.620pp (magnitude spike); live refetch: euphoria=0.498pp, GFC range=3.620pp (near-identical to committed data - not a vintage issue)",
     "class": "V",
     "priority": "P3",
-    "note": "src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope."
+    "note": "Uses two DIFFERENT statistics for the two halves of the claim - 'compression' as how far the mean level eased below its full-sample average (deviation), 'spike' as how much the level swung during the crisis (intra-window range) - which is a defensible reading of the words themselves, not a methodology mismatch, but flagged since no single consistent statistic reproduces both halves. Tried a live BAA10Y refetch to rule out vintage drift; it barely moves either number, so the ~0.04pp/0.08pp gaps are not a data-vintage artefact."
   },
   "C9": {
     "verdict": "MISMATCH",

@@ -107,6 +107,35 @@ def run_spec(spec, label):
     return opt, res, regime_df
 
 
+def episode_summary_stats(baa_series=None):
+    """C1/C8-style summary figures for the euphoria/GFC windows: mean-deviation
+    (mean level in the window minus the full-sample mean) and intra-window
+    range (max-min within the window), for both. Target (verification_manifest.md
+    C8): 0.56pp euphoria compression, 3.7pp GFC spike. baa_series lets a caller
+    substitute a freshly-fetched series in place of the committed daily_panel.csv
+    column, to test whether a vintage difference explains any gap."""
+    if baa_series is None:
+        panel = pd.read_csv(DAILY_PANEL_PATH, index_col="date", parse_dates=True)
+        baa_series = panel[TRIGGER].dropna()
+    else:
+        baa_series = baa_series.dropna()
+
+    full_mean = float(baa_series.mean())
+    windows = {"euphoria": ("2005-01", "2007-12"), "gfc": ("2008-01", "2009-12")}
+    rows = []
+    for name, (start, end) in windows.items():
+        w = baa_series.loc[start:end]
+        if len(w) == 0:
+            continue
+        rows.append({
+            "window": name, "start": start, "end": end, "n": len(w),
+            "mean_deviation_pp": round(float(w.mean()) - full_mean, 3),
+            "intra_window_range_pp": round(float(w.max() - w.min()), 3),
+            "full_sample_mean": round(full_mean, 3),
+        })
+    return rows
+
+
 if __name__ == "__main__":
     for spec, label in [(2, "constant drift"), (1, "switching drift"), (0, "no drift")]:
         run_spec(spec, label)

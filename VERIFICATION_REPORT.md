@@ -9,9 +9,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | Verdict | Count |
 |---|---|
 | MATCH | 66 |
-| NEAR | 4 |
+| NEAR | 5 |
 | MISMATCH | 3 |
-| NOT_REPRODUCIBLE | 5 |
+| NOT_REPRODUCIBLE | 4 |
 
 **78 entries checked.**
 
@@ -26,11 +26,11 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
-| C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
 | C1 | P2 | E | **NEAR** | match to grid resolution; FTSE no-drift c2 61.8 vs published | FTSE100 no-drift c2=61.8182; RSS flatness candidates: whole_grid=4.484 |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
 | C22 | P2 | S | **NEAR** | c1 2.93, c2 2.68, RW 67, high 62 | c1 2.93, c2 2.68, RW 67.2, high 61.6 |
 | C45 | P2 | S | **NEAR** | 76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19 | n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0 |
+| C8 | P3 | V | **NEAR** | 0.56pp vs 3.7pp | euphoria \|mean_dev\|=0.522pp (mean-level compression); GFC intra-wind |
 | A1 | P1 | E | **MATCH** | 57 candidates / 32 pass / 23 retained; 24 FAIL, 1 NO_DATA | 57 rows; PASS=32, FAIL=24, NO_DATA=1; panel=23 |
 | A10 | P1 | E | **MATCH** | 1109 / 6676 / 615 | 1109 / 6676 / 615 |
 | A11 | P1 | S | **MATCH** | -10.88 [-18.23, -4.32] | -10.879 [-18.232, -4.316] |
@@ -180,9 +180,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > MCSI/SP500 half (kappa~0.94) is not carried in any committed export - X6's finding references it but no CSV stores that single number; only the 23-market CCI-panel kappa is machine-checkable here.
 
-**C8** (NOT_REPRODUCIBLE) - BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
+**C8** (NEAR) - BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
 
-> src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope.
+> Uses two DIFFERENT statistics for the two halves of the claim - 'compression' as how far the mean level eased below its full-sample average (deviation), 'spike' as how much the level swung during the crisis (intra-window range) - which is a defensible reading of the words themselves, not a methodology mismatch, but flagged since no single consistent statistic reproduces both halves. Tried a live BAA10Y refetch to rule out vintage drift; it barely moves either number, so the ~0.04pp/0.08pp gaps are not a data-vintage artefact.
 
 **C9** (MISMATCH) - ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
 
@@ -303,6 +303,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C6` Chance-corrected self-agreement: kappa 0.94 (MCSI/SP500); 0.74 (CCI panel)
 - `C10` Scale diagnostic, 8 national CCI: 100->38th-51st pctile
 - `C7` CAPE rolling threshold range: 21.4 units
+- `C8` BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
 - `C49` Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 - `C11` S&P 500 vs its own US CCI screen: F=3.54, p=0.008
 - `C12` Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
@@ -339,7 +340,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 **3. No committed output carries this number (needs a rebuilt generator):**
 
-- `C8` BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
 - `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
 - `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000

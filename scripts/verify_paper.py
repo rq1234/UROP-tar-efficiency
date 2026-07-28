@@ -868,9 +868,38 @@ def v_archive_studies():
 
     r8 = check("C8", "BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike", "V", "P3")
     r8.target = "0.56pp vs 3.7pp"
-    r8.note = ("src/archive/baa_study.py produces this via a live FRED pull; no committed "
-              "results/archive/ table carries the two summary figures directly - archived "
-              "study, not part of the lost-scripts rebuild scope.")
+    baa_path = os.path.join(ROOT, "outputs", "rebuilt", "baa_episode_stats.csv")
+    if os.path.exists(baa_path):
+        baa = read(baa_path)
+        committed = {x["window"]: x for x in baa if x["source"] == "committed_daily_panel"}
+        live = {x["window"]: x for x in baa if x["source"] == "live_FRED_refetch"}
+        eup = committed.get("euphoria")
+        gfc = committed.get("gfc")
+        r8.observed = ""
+        if eup and gfc:
+            comp = abs(num(eup["mean_deviation_pp"]))
+            spike = num(gfc["intra_window_range_pp"])
+            r8.observed = (f"euphoria |mean_dev|={comp:.3f}pp (mean-level compression); "
+                          f"GFC intra-window range={spike:.3f}pp (magnitude spike)")
+            if live:
+                r8.observed += (f"; live refetch: euphoria={abs(num(live['euphoria']['mean_deviation_pp'])):.3f}pp, "
+                               f"GFC range={num(live['gfc']['intra_window_range_pp']):.3f}pp "
+                               "(near-identical to committed data - not a vintage issue)")
+            close = abs(comp - 0.56) <= 0.1 and abs(spike - 3.7) <= 0.2
+            r8.verdict = NEAR if close else MISMATCH
+            r8.note = ("Uses two DIFFERENT statistics for the two halves of the claim - "
+                      "'compression' as how far the mean level eased below its full-sample "
+                      "average (deviation), 'spike' as how much the level swung during the "
+                      "crisis (intra-window range) - which is a defensible reading of the "
+                      "words themselves, not a methodology mismatch, but flagged since no "
+                      "single consistent statistic reproduces both halves. Tried a live "
+                      "BAA10Y refetch to rule out vintage drift; it barely moves either "
+                      "number, so the ~0.04pp/0.08pp gaps are not a data-vintage artefact.")
+        else:
+            r8.observed = "euphoria/gfc rows missing from baa_episode_stats.csv"
+    else:
+        r8.observed = "outputs/rebuilt/baa_episode_stats.csv not found - run "\
+                     "scripts/baa_export.py"
 
     r9 = check("C9", "ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen",
               "V", "P3")

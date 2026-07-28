@@ -1,0 +1,5 @@
+window,start,end,n,mean_deviation_pp,intra_window_range_pp,full_sample_mean,source
+euphoria,2005-01,2007-12,731,-0.522,0.99,2.271,committed_daily_panel
+gfc,2008-01,2009-12,479,1.681,3.62,2.271,committed_daily_panel
+euphoria,2005-01,2007-12,751,-0.498,1.15,2.268,live_FRED_refetch
+gfc,2008-01,2009-12,501,1.632,3.62,2.268,live_FRED_refetch
