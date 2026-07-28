@@ -10,8 +10,8 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 |---|---|
 | MATCH | 66 |
 | NEAR | 4 |
-| MISMATCH | 2 |
-| NOT_REPRODUCIBLE | 6 |
+| MISMATCH | 3 |
+| NOT_REPRODUCIBLE | 5 |
 
 **78 entries checked.**
 
@@ -21,12 +21,12 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 |---|---|---|---|---|---|
 | E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
+| C9 | P3 | V | **MISMATCH** | 80-90% for European markets; 9 fail the screen | 54 markets estimated (all reachable, not just the 14 in the committed  |
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
-| C9 | P3 | V | **NOT_REPRODUCIBLE** | 80-90% for European markets; 9/n fail screen | 14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', |
 | C1 | P2 | E | **NEAR** | match to grid resolution; FTSE no-drift c2 61.8 vs published | FTSE100 no-drift c2=61.8182; RSS flatness candidates: whole_grid=4.484 |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
 | C22 | P2 | S | **NEAR** | c1 2.93, c2 2.68, RW 67, high 62 | c1 2.93, c2 2.68, RW 67.2, high 61.6 |
@@ -184,9 +184,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope.
 
-**C9** (NOT_REPRODUCIBLE) - ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
+**C9** (MISMATCH) - ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
 
-> results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review.
+> Mean European firing rate 47.1% (outside the 80-90% target range); 21 fail the screen (target 9). Individual European markets range widely (1.3% to 83.0%) - 'Europe' as a single mean may not be how the original 80-90% figure was computed (e.g. a specific sub-list of markets, not W./N./E. Europe by market_config's region tag).
 
 **C49** (MATCH) - Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 
@@ -335,11 +335,11 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 - `E2` 'Every estimated b_EXP is negative' vs Brazil b_EXP = 0.000
 - `E1` Sec 4.1: 'South Korea/Mexico UPPER threshold above cluster' vs table
+- `C9` ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
 
 **3. No committed output carries this number (needs a rebuilt generator):**
 
 - `C8` BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
-- `C9` ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
 - `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
 - `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000

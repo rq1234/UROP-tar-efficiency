@@ -874,16 +874,36 @@ def v_archive_studies():
 
     r9 = check("C9", "ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen",
               "V", "P3")
-    p9 = os.path.join(ARCHIVE_TABLES, "anfci_all_markets.csv")
-    if os.path.exists(p9):
-        rows = read(p9)
-        r9.target = "80-90% for European markets; 9/n fail screen"
-        fail_col = next((c for c in rows[0] if "fail" in c.lower() or "verdict" in c.lower()), None)
-        r9.observed = f"{len(rows)} markets; columns: {list(rows[0].keys())}"
-        r9.note = "results/archive/tables/anfci_all_markets.csv exists; not cross-checked " \
-                  "cell-by-cell against the 80-90%/9-fail claim - flagged for manual review."
+    r9.target = "80-90% for European markets; 9 fail the screen"
+    p9full = os.path.join(ROOT, "outputs", "rebuilt", "anfci_all_markets_full.csv")
+    if os.path.exists(p9full):
+        rows = read(p9full)
+        n_fail = sum(1 for x in rows if x["screen_gate"] == "FAIL")
+        sys.path.insert(0, os.path.join(ROOT, "src"))
+        from market_config import MARKETS as _ANFCI_MARKETS  # noqa: E402
+        europe = [x for x in rows
+                 if "Europe" in _ANFCI_MARKETS.get(x["market"], {}).get("region", "")]
+        eu_firing = [num(x["firing_rate_pct"]) for x in europe]
+        eu_mean = sum(eu_firing) / len(eu_firing) if eu_firing else None
+        r9.observed = (f"{len(rows)} markets estimated (all reachable, not just the 14 in "
+                       f"the committed anfci_all_markets.csv); {n_fail} fail the screen; "
+                       f"{len(europe)} European markets, mean firing rate "
+                       f"{eu_mean:.1f}%" if eu_mean is not None else "no European markets found")
+        ok = eu_mean is not None and 80 <= eu_mean <= 90 and n_fail == 9
+        if ok:
+            r9.ok()
+        else:
+            r9.verdict = NEAR if eu_mean is not None and 70 <= eu_mean <= 95 else MISMATCH
+            r9.note = (f"Mean European firing rate {eu_mean:.1f}% "
+                      f"({'within' if eu_mean and 80<=eu_mean<=90 else 'outside'} the 80-90% "
+                      f"target range); {n_fail} fail the screen (target 9). Individual "
+                      f"European markets range widely ({min(eu_firing):.1f}% to "
+                      f"{max(eu_firing):.1f}%) - 'Europe' as a single mean may not be how the "
+                      f"original 80-90% figure was computed (e.g. a specific sub-list of "
+                      f"markets, not W./N./E. Europe by market_config's region tag)."
+                      if eu_mean is not None else "no European markets found")
     else:
-        r9.observed = f"{p9} not found"
+        r9.observed = f"{p9full} not found - run scripts/anfci_export.py"
 
     r49 = check("C49", "Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised", "E", "P3")
     p49 = os.path.join(ARCHIVE_TABLES, "composite_all_markets.csv")

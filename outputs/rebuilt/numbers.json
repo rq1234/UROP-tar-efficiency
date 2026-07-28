@@ -368,12 +368,12 @@
     "note": "src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope."
   },
   "C9": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "80-90% for European markets; 9/n fail screen",
-    "observed": "14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', 'beta_ex', 'n_mr', 'n_rw', 'n_ex', 'verdict']",
+    "verdict": "MISMATCH",
+    "target": "80-90% for European markets; 9 fail the screen",
+    "observed": "54 markets estimated (all reachable, not just the 14 in the committed anfci_all_markets.csv); 21 fail the screen; 19 European markets, mean firing rate 47.1%",
     "class": "V",
     "priority": "P3",
-    "note": "results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review."
+    "note": "Mean European firing rate 47.1% (outside the 80-90% target range); 21 fail the screen (target 9). Individual European markets range widely (1.3% to 83.0%) - 'Europe' as a single mean may not be how the original 80-90% figure was computed (e.g. a specific sub-list of markets, not W./N./E. Europe by market_config's region tag)."
   },
   "C49": {
     "verdict": "MATCH",

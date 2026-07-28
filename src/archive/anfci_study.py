@@ -49,7 +49,7 @@ from bubble_now  import (
 )
 from rolling_thresholds import rolling_windows, WINDOW_MONTHS, STEP_MONTHS
 
-ANFCI_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment",
+ANFCI_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment",
                           "anfci_monthly.csv")
 START      = "1990-01"
 
@@ -169,6 +169,7 @@ def exogeneity_screen_anfci(n_lags=4, alpha=0.05):
     print("-" * 55)
 
     admissible = []
+    records = []
     for market, info in MARKETS.items():
         try:
             y, z, _ = load_anfci_pair(market, START, FULL_END)
@@ -181,12 +182,14 @@ def exogeneity_screen_anfci(n_lags=4, alpha=0.05):
             verdict = "PASS" if rev_p > alpha else "FAIL"
             if verdict == "PASS":
                 admissible.append(market)
+            records.append({"market": market, "F": float(rev_F), "p": float(rev_p),
+                            "gate": verdict})
             print(f"{market:<14} {info['country']:<18} {rev_F:>7.3f}  {rev_p:>7.4f}  {verdict}")
         except Exception as e:
             print(f"{market:<14} ERROR: {e}")
 
     print(f"\n{len(admissible)} of {len(MARKETS)} markets admissible.")
-    return admissible
+    return admissible, records
 
 
 # ---------------------------------------------------------------------------
@@ -465,7 +468,7 @@ def bubble_call(admissible=None):
 
 def run_all():
     inspect_anfci()
-    admissible = exogeneity_screen_anfci()
+    admissible, _ = exogeneity_screen_anfci()
     validate_us_anfci()
     rolling_anfci_stability()
     run_all_markets(admissible)
