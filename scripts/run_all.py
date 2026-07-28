@@ -31,13 +31,14 @@ STAGES = [
     ("round02_pool_optionAB.py", "R2/R3b pool exclusions, R4 Option A/B agreement", False),
     ("round03_episodes.py", "S1 country-CCI TAR (athex/bist100), S3 MR cluster count", False),
     ("round04_appendices.py", "T5 unrestricted band + Appendices A/B/C", False),
+    ("round04_placebo_stability.py", "T1 placebo B=50, T2 scale-adjusted rolling stability", False),
     ("round05_audit.py", "V1 reverse-Granger, V3 gCCI labels, V4 MCSI re-pull", False),
     ("round06_drift_fdr.py", "W1 drift table, W3/W4 Benjamini-Hochberg", False),
-    ("round07_dependence.py", "X1/X4/X6/X7/X8 dependence corrections", False),
+    ("round07_dependence.py", "X1/X2/X3/X4/X6/X7/X8 dependence corrections", False),
     ("round09_diagnostics.py", "P1/P2 regime-dynamics audit, two-metric efficiency", False),
     ("round10_rwband.py", "P3 RW-band validation at fixed thresholds", False),
     ("round10_remainder.py", "P2/P4.1/P4.3/P5/P8 min-regime, Wald, recursive, publag, scale", False),
-    ("round08_permutation.py", "Y2 circular-shift permutation, B=5000", True),
+    ("round08_permutation.py", "Y1/Y3/Y4 rank stability, Y2 permutation B=5000", True),
     ("round10_placebo.py", "P9 placebo, B=1000, iid and block nulls", True),
     ("round10_bootstrap.py", "P1 threshold + pooled bootstrap, B=1000", True),
 ]
@@ -64,9 +65,9 @@ def main():
 
     if args.list:
         for s, d, slow in STAGES:
-            print(f"  {'[slow] ' if slow else '       '}{s:<28}{d}")
+            print(f"  {'[slow] ' if slow else '       '}{s:<30}{d}")
         for s, d in FINAL:
-            print(f"          {s:<28}{d}")
+            print(f"          {s:<30}{d}")
         return 0
 
     stages = [s for s in STAGES if not (args.fast and s[2])]
