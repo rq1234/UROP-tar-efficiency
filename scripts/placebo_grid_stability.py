@@ -1,5 +1,5 @@
 """
-round04_placebo_stability.py - Round 4 T1 (placebo grid search, B=50) and
+placebo_grid_stability.py - Round 4 T1 (placebo grid search, B=50) and
 T2 (scale-adjusted rolling-threshold stability). T3 (China CCI) and T4
 (pre-1990 era) have no CSV target reachable here - T3 needs a live FRED pull
 (no API key configured; see ASSUMPTIONS.md A4.8) and T4 is a text finding
@@ -18,14 +18,14 @@ Key findings, from results/exports/README.md Round 4:
       is not: real markets' RSS improvement sits at a median 94th percentile
       of their placebo distributions (18/23 >= 90th). Seed=20260721, B=50 -
       this is the ORIGINAL run Round 10 P9 later superseded at B=1000 with a
-      block-resampled null (round10_placebo.py); reproduced here as run, not
+      block-resampled null (placebo_1000.py); reproduced here as run, not
       as the final word (see placebo_1000.csv / ASSUMPTIONS.md A3.3-style note).
   T2  Normalising rolling-threshold ranges by each trigger's sigma and span
       REMOVES the CCI's apparent stability advantage: c1 range/sigma global
       4.12 > MCSI 3.32 > US-CCI 2.84; range/span global 0.86 > MCSI 0.74 >
       US-CCI 0.65 - the raw "4.8 vs 46 units" comparison was a scale artefact.
 
-Usage:  python scripts/round04_placebo_stability.py [--B 50]
+Usage:  python scripts/placebo_grid_stability.py [--B 50]
 """
 
 import argparse
@@ -42,10 +42,10 @@ sys.path.insert(0, HERE)
 
 import config                                                   # noqa: E402
 from fastgrid import fast_grid_rss_parts, fit_spec1              # noqa: E402
-from round10_bootstrap import grid_bounds                        # noqa: E402
+from threshold_bootstrap import grid_bounds                        # noqa: E402
 
 # Real cluster bands, from GROUND_TRUTH section 6 / Round 4 T1 (same
-# constants round10_placebo.py uses for the B=1000 supersession).
+# constants placebo_1000.py uses for the B=1000 supersession).
 BAND_C1 = (97.02, 98.45)
 BAND_C2 = (101.19, 102.43)
 

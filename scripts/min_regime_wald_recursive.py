@@ -1,5 +1,5 @@
 """
-round10_remainder.py - Round 10 Priorities 2, 4.1, 4.3, 5, 8.
+min_regime_wald_recursive.py - Round 10 Priorities 2, 4.1, 4.3, 5, 8.
 
 Rebuilds:
   min_regime_trimming.csv   P2  - thresholds under six minimum-regime rules
@@ -24,7 +24,7 @@ Key findings, from results/exports/README.md Round 10:
 Driscoll-Kraay standard errors use statsmodels' `hac-groupsum` with 11 lags,
 per Round 1 note F5.
 
-Usage:  python scripts/round10_remainder.py
+Usage:  python scripts/min_regime_wald_recursive.py
 """
 
 import csv
@@ -39,8 +39,8 @@ sys.path.insert(0, HERE)
 
 import config                                          # noqa: E402
 from fastgrid import fast_grid_rss_parts               # noqa: E402
-from round01_horizon import load_all                   # noqa: E402
-from round10_bootstrap import grid_bounds, moving_block_indices  # noqa: E402
+from horizon_episodes import load_all                   # noqa: E402
+from threshold_bootstrap import grid_bounds, moving_block_indices  # noqa: E402
 
 
 def panel():

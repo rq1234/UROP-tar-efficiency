@@ -1,7 +1,7 @@
 """
-round03_episodes.py - Round 3 (S1, S3) plus Round 4 T3 (China CCI), which
+country_cci_episodes.py - Round 3 (S1, S3) plus Round 4 T3 (China CCI), which
 shares S1's output file. S2 (episodes_exp.csv) is already rebuilt by
-round01_horizon.py, which produces it byte-for-byte from the same
+horizon_episodes.py, which produces it byte-for-byte from the same
 MEMBERSHIP RULE this round's README section describes - not repeated here.
 
 Rebuilds:
@@ -31,7 +31,7 @@ Key findings, from results/exports/README.md Round 3-4:
       has such high amplitude that c2~104 is almost never breached.
       data/ is untouched: the fetch is saved only to outputs/rebuilt/.
 
-Usage:  python scripts/round03_episodes.py
+Usage:  python scripts/country_cci_episodes.py
 """
 
 import csv
@@ -45,7 +45,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                          # noqa: E402
-from round01_horizon import load_all   # noqa: E402
+from horizon_episodes import load_all   # noqa: E402
 
 
 def s1_localised_runs():

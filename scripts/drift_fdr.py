@@ -1,5 +1,5 @@
 """
-round06_drift_fdr.py - Round 6 (W1, W3, W4).
+drift_fdr.py - Round 6 (W1, W3, W4).
 
 Rebuilds:
   table4_drift.csv       W1 - the explosive-state drift that justifies the label
@@ -22,7 +22,7 @@ Spec, from results/exports/README.md Round 6:
 Everything reuses the surviving engine: src/estimate.standard_errors and
 src/exogeneity.granger_f_test.
 
-Usage:  python scripts/round06_drift_fdr.py
+Usage:  python scripts/drift_fdr.py
 """
 
 import csv

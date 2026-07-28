@@ -1,5 +1,5 @@
 """
-round09_diagnostics.py - Round 9 (P1, P2, P4, P6, P7, P8).
+regime_diagnostics.py - Round 9 (P1, P2, P4, P6, P7, P8).
 
 Rebuilds:
   regime_dynamics_audit.csv          P1 - state-conditional dynamics, rebasing-invariant
@@ -22,7 +22,7 @@ Key findings these support, from results/exports/README.md Round 9:
   P7b the 0.40 cutoff is a practical screening value, not a sharp threshold -
       TUR and CZE have overlapping 90% CIs.
 
-Usage:  python scripts/round09_diagnostics.py
+Usage:  python scripts/regime_diagnostics.py
 """
 
 import csv
@@ -37,8 +37,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                                          # noqa: E402
-from round01_horizon import load_all, spells, pooled    # noqa: E402
-from round10_bootstrap import grid_bounds              # noqa: E402
+from horizon_episodes import load_all, spells, pooled    # noqa: E402
+from threshold_bootstrap import grid_bounds              # noqa: E402
 
 Z90 = 1.6448536269514722
 Z95 = 1.959963984540054
@@ -314,7 +314,7 @@ def p7_correlation_diagnostics():
                "COVID_2020": ("2020-01", "2020-12"),
                "dotcom_2000_02": ("2000-01", "2002-12")}
     crisis = []
-    pan = {p["market"] for p in panel()}
+    pan = sorted({p["market"] for p in panel()})
     for mkt in pan:
         code = OECD_CCI_MARKETS.get(mkt)
         f = os.path.join(sent, f"oecd_cci_{code}.csv") if code else None

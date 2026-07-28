@@ -1,5 +1,5 @@
 """
-round10_rwband.py - Round 10 Priority 3: validate the imposed RW band.
+rw_band_validation.py - Round 10 Priority 3: validate the imposed RW band.
 
 Rebuilds `rw_band_validation.csv`.
 
@@ -20,7 +20,7 @@ FIXED at their Table 4.1 values. That is what distinguishes it from Round 4 T5
 regimes and reports 8/23. The two are different questions and the draft must not
 present them as the same check; see VERIFICATION_REPORT.md entry C20x.
 
-Usage:  python scripts/round10_rwband.py
+Usage:  python scripts/rw_band_validation.py
 """
 
 import csv
@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                                          # noqa: E402
-from round06_drift_fdr import benjamini_hochberg       # noqa: E402
+from drift_fdr import benjamini_hochberg       # noqa: E402
 
 
 def main():
@@ -70,7 +70,7 @@ def main():
         s2 = float(resid @ resid) / (n - 2)
         se = float(np.sqrt(s2 * n / D))
         t = beta / se
-        # large-sample normal, consistent with _sig_marker (see round06 notes)
+        # large-sample normal, consistent with _sig_marker (see drift_fdr.py notes)
         pv = 2.0 * sps.norm.sf(abs(t))
         half = 1.959963984540054 * se
 

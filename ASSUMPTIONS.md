@@ -37,8 +37,9 @@ edited, per the hard rule that manifests are never modified.
 **A0.6 — Round 9 vs Round 10 `P#` id collision.** The README warns that `P#` ids appear in two
 plans (Round 9 uses `P1_mr*`/`P2_metricB*`/`P4_*`/`P6`–`P8`; Round 10 uses
 `P1_boot*`/`P1_pooled*`/`P2_pct*`/`P3_bRW*`). Disambiguation is by each row's `description`
-field, as the README instructs. Rebuilt scripts are named `round09_*` / `round10_*` so the
-collision cannot propagate into filenames.
+field, as the README instructs. Scripts were originally named `round09_*` / `round10_*` so the
+collision couldn't propagate into filenames; they were later renamed by function (A5.1) - the
+disambiguation is now permanently anchored in `PHASE0_REPORT.md`'s round-to-file map instead.
 
 **A0.7 — Dependencies not declared.** `statsmodels` and `linearmodels` were used by the lost
 scripts (recovered from the settings.json allowlist; Round 1 note F5 confirms Driscoll–Kraay ran
@@ -201,7 +202,7 @@ structure is right — 30 episodes in the same 5 calendar-year clusters, 29 in 1
 gap is in how episodes are assigned to clusters or weighted. The exports remain the source for
 those three numbers, and `VERIFICATION_REPORT.md` records A14/C38 as MATCH against the export.
 
-**A4.6 — Round 10 remainder (`scripts/round10_remainder.py`), fixed vs residual gaps.**
+**A4.6 — Round 10 remainder (`scripts/min_regime_wald_recursive.py`), fixed vs residual gaps.**
 Three real bugs found and fixed against the surviving `results/exports/` ground truth (not
 tuned to a paper number — the export itself showed the correct shape):
 - `recursive_horserace.csv`'s `tar`/`pct` columns are 3-valued (0=RW/middle, 1=MR/low-tail,
@@ -231,8 +232,8 @@ Residual, unresolved, not chased further per the report-don't-repair rule:
   export/rebuilt vs the reported 42%→9%).
 
 **A4.7 — `appendixD_optionAB_agreement.csv` (Round 2, R4) inherits Round 7's Option-B gap.**
-`scripts/round02_pool_optionAB.py` reuses the frozen-threshold (Option B) method already in
-`scripts/round07_dependence.py`'s `x6_kappa` (in-sample fit to `INSAMPLE_END`, applied out of
+`scripts/pool_exclusions_optionab.py` reuses the frozen-threshold (Option B) method already in
+`scripts/dependence_corrections.py`'s `x6_kappa` (in-sample fit to `INSAMPLE_END`, applied out of
 sample via `optimal_from_parts`). Most markets reproduce the export within 1-4pp of agreement
 (precision-level noise). `nikkei225` and `psei` reproduce `kappa_stability.csv`'s own agreement
 figures for those markets EXACTLY (47.94%, 49.31%) but diverge sharply from
@@ -244,7 +245,7 @@ Round 7 scope and already flagged there via kappa_stability's own "mean kappa 0.
 gap; not re-derived. `horizon_test_exclusions.csv` (R2/R3b), by contrast, reproduces the export
 exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places).
 
-**A4.9 — Round 5 (`scripts/round05_audit.py`), reproduces closely; two documented gaps.**
+**A4.9 — Round 5 (`scripts/live_audit_2025_2026.py`), reproduces closely; two documented gaps.**
 - V1 (`reverse_granger_extra.csv`): F=3.5358, p=0.0075, gate=FAIL reproduce the export exactly.
   `T` is 409 here vs the export's 408 - most likely data-vintage drift (this repo's committed
   `data/sentiment/global_cci_monthly.csv` now runs through 2026-05, one month later than when
@@ -266,7 +267,7 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   committed vintage. No `FRED_API_KEY` is configured in this environment, so that month is
   reported as missing rather than filled in from the export's own number.
 
-**A4.10 — Round 7 X2/X3, and X5 deferred (`scripts/round07_dependence.py`).**
+**A4.10 — Round 7 X2/X3, and X5 deferred (`scripts/dependence_corrections.py`).**
 - X2 (`oos_exp_dep_corrected.csv`) needed a real fix, not just noise-tolerance: the panel's
   Option A (full-sample) thresholds give almost no post-2015 EXP months at all (only ibex35 has
   any, per `expn_check.csv`'s `last_EXP_month` column - every other non-Japan market's last-ever
@@ -292,7 +293,7 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   requires a live FRED pull with no `FRED_API_KEY` configured here - the same blocker as T3
   (China CCI, A4.8) and V4's twelfth month (A4.9).
 
-**A4.11 — Round 4 T1/T2 (`scripts/round04_placebo_stability.py`).**
+**A4.11 — Round 4 T1/T2 (`scripts/placebo_grid_stability.py`).**
 - T1 (`placebo_summary.csv`, `placebo_thresholds.csv`): every deterministic ("real") value -
   `real_c1`, `real_c2`, `real_rss_impr_pct` for all 23 markets - reproduces the export exactly
   (verified by market, since row order differs from the export's). The aggregate finding matches
@@ -302,7 +303,7 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   `placebo_thresholds.csv`'s individual `sim` rows) do not reproduce bit-for-bit - expected for a
   seeded simulation where the original RNG call order is unknown (the same limitation already
   noted for the B=1000 supersession in `placebo_1000.csv` and the B=1000/5000 bootstraps
-  elsewhere). `round10_placebo.py`'s already-committed `BAND_C1`/`BAND_C2` constants and
+  elsewhere). `placebo_1000.py`'s already-committed `BAND_C1`/`BAND_C2` constants and
   iid-generation method were reused unchanged, so this is the same simulation design at B=50.
 - T2 (`stability_scale_adjusted.csv`): MCSI and global_CCI rows are near-exact (`c1_range_over_span`
   0.74/0.864 match the export's 0.74/0.864 to 3 decimals). US_CCI is off by more
@@ -314,15 +315,15 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
 **A4.12 — the three FRED-API-key blockers (A4.8, A4.9's V4 twelfth month, A4.10's X5) are
 resolved.** A `FRED_API_KEY` was supplied and stored in a project-root `.env` (gitignored, never
 committed - see `.gitignore`). All three now reproduce their exports exactly, not approximately:
-- T3 (China CCI): `scripts/round03_episodes.py` fetches `CSCICP03CNM665S` live and gets 408 obs,
+- T3 (China CCI): `scripts/country_cci_episodes.py` fetches `CSCICP03CNM665S` live and gets 408 obs,
   1990-01..2023-12 - byte-identical to `results/exports/cci_CHN_fetched.csv`. The series really is
   discontinued in FRED after 2023-12; that was never a vintage-drift artefact. Shanghai and SZSE's
   `localised_runs.csv` rows now match the export exactly (T, c1, c2, MR/RW/EXP all `IDENTICAL` per
   `compare_rebuilt.py`).
-- X5 (Turkey real return): `scripts/round07_dependence.py` fetches `TURCPIALLMINMEI` live and
+- X5 (Turkey real return): `scripts/dependence_corrections.py` fetches `TURCPIALLMINMEI` live and
   deflates bist100's log price by log(CPI). Both rows of `turkey_real_return.csv` (real_CPI and
   the nominal baseline) reproduce exactly.
-- V4 (`mcsi_2025_2026.csv` twelfth month): `scripts/round05_audit.py` fetches `UMCSENT` live when
+- V4 (`mcsi_2025_2026.csv` twelfth month): `scripts/live_audit_2025_2026.py` fetches `UMCSENT` live when
   the committed `data/` vintage doesn't reach the target month; got `2026-05 = 44.8`, matching the
   export exactly (all 12 rows now `IDENTICAL`).
 
@@ -331,7 +332,7 @@ saved only to `outputs/rebuilt/` (T3's `cci_CHN_fetched.csv`). All three functio
 gracefully (print a clear skip message, return no rows) if `FRED_API_KEY` is absent, so the
 scripts still run cleanly in an environment without the key.
 
-**A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
+**A4.8 — Round 3 (`scripts/country_cci_episodes.py`) reproduces exactly; China rows (Round 4 T3)
 deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
 and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the
 README's own boundary list exactly, date for date. The export's other two rows (shanghai/szse,
@@ -340,3 +341,56 @@ tagged `cci_CHN`) belong to Round 4's T3 ("China CCI fetched fresh from FRED
 configured in this environment (checked: no `.env`, no matching shell env var) and `data/` may
 not be modified to work around that. `write()` merges by `market` rather than overwriting the
 file, so a future Round 4 T3 script can append those two rows without disturbing these.
+
+---
+
+## Phase 5 - renamed by function
+
+**A5.1 - Scripts renamed from `roundNN_*` to descriptive names, 1:1, no splitting.** The
+referee-round numbering (`round01_...round10_...`) reflected *when* each analysis was
+reconstructed, not what it does, and had become actively confusing once multiple functionally
+unrelated things landed in the same round (e.g. `round07_dependence.py` mixed episode
+dependence, matched-window localisation, kappa-stability, and Fisher-z CIs) while functionally
+related things were split across rounds (e.g. all three placebo/permutation analyses -
+`round04`'s T1, `round08`'s Y2, `round10`'s P9 - lived in three differently-numbered files).
+Renamed by dominant function, one new name per old file, no internal code moved or split:
+
+| old | new |
+|---|---|
+| `round01_data.py` | `raw_data_exports.py` |
+| `round01_horizon.py` | `horizon_episodes.py` |
+| `round02_pool_optionAB.py` | `pool_exclusions_optionab.py` |
+| `round03_episodes.py` | `country_cci_episodes.py` |
+| `round04_appendices.py` | `granger_appendices.py` |
+| `round04_placebo_stability.py` | `placebo_grid_stability.py` |
+| `round05_audit.py` | `live_audit_2025_2026.py` |
+| `round06_drift_fdr.py` | `drift_fdr.py` |
+| `round07_dependence.py` | `dependence_corrections.py` |
+| `round08_permutation.py` | `rank_stability_permutation.py` |
+| `round09_diagnostics.py` | `regime_diagnostics.py` |
+| `round10_bootstrap.py` | `threshold_bootstrap.py` |
+| `round10_placebo.py` | `placebo_1000.py` |
+| `round10_remainder.py` | `min_regime_wald_recursive.py` |
+| `round10_rwband.py` | `rw_band_validation.py` |
+
+Done via `git mv` (history preserved), followed by fixing every cross-file import, every
+self-referential "Usage:" line, and every prose mention of another script's old name. All
+14 non-slow stages re-ran clean end to end (`run_all.py --fast`) after the rename with zero
+import errors; every rebuilt CSV came out byte-identical to its pre-rename version except
+`crisis_window_rho.csv`, whose row order changed - see A5.2, a real pre-existing bug the
+rename incidentally surfaced, not something the rename caused. `run_all.py`, `README.md`,
+`PHASE0_REPORT.md`'s recovered-script table, and this file were updated to the new names; earlier
+entries in this file (A0-A4) were NOT rewritten to use the new names, since they are a log of
+what was true at the time each entry was made.
+
+**A5.2 - Second instance of the set-iteration-order bug (A4.6), found by the rename's
+re-run.** `regime_diagnostics.py`'s `p7_correlation_diagnostics` (P7c, `crisis_window_rho.csv`)
+built its market list with `pan = {p["market"] for p in panel()}` - a bare `set`, whose iteration
+order is hash-randomised per Python process. Re-running the (otherwise unchanged) pipeline after
+the rename produced the same 8 rows in a different order, which is how this surfaced. Fixed the
+same way as A4.6: `sorted(...)`. Confirmed deterministic across two consecutive runs before and
+after the fix. Not a rename artefact - the bug predates it and would have surfaced on any
+re-run; grepped the rest of `scripts/` for the same pattern (bare `{expr for x in y}` feeding
+output row order or RNG draw order) and found no other instances - the remaining set/dict
+comprehensions either preserve deterministic dict-insertion order or are used only for
+membership/counting, where order doesn't matter.

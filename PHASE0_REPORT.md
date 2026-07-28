@@ -134,16 +134,22 @@ individually approved. The mapping to rounds is near 1:1:
 |---|---|---|
 | **`fastgrid.py`** | **Round 10 fast grid — keystone; everything B≥1000 depends on it** | `scripts/fastgrid.py` |
 | `build_R.py` | Round 2, R1–R4d | `scripts/round02_pool_and_optionAB.py` |
-| `build_S.py` | Round 3, S1–S3 | `scripts/round03_episodes.py` |
+| `build_S.py` | Round 3, S1–S3 | `scripts/country_cci_episodes.py` |
 | `build_T1.py` | Round 4, T1 placebo (seed 20260721) | `scripts/round04_placebo.py` |
 | `build_T2345.py` | Round 4, T2–T5 | `scripts/round04_stability_china_b2.py` |
-| `build_V.py` | Round 5, V1–V5 | `scripts/round05_audit.py` |
-| `build_W.py` | Round 6, W1–W5 (BH FDR) | `scripts/round06_drift_fdr.py` |
-| `build_X.py` | Round 7, X1–X8 | `scripts/round07_dependence.py` |
+| `build_V.py` | Round 5, V1–V5 | `scripts/live_audit_2025_2026.py` |
+| `build_W.py` | Round 6, W1–W5 (BH FDR) | `scripts/drift_fdr.py` |
+| `build_X.py` | Round 7, X1–X8 | `scripts/dependence_corrections.py` |
 | `build_Y.py`, `build_Y4.py` | Round 8, Y1–Y3 / Y4 | `scripts/round08_rank_permutation.py` |
 | `build_P12.py`, `build_P4.py`, `build_P678.py`, `build_P43.py` | Round 9, P1/P2, P4, P6–P8, P4.3 | `scripts/round09_*.py` |
 | `build_P23.py`, `build_P41_P5.py`, `build_P8_P9.py` | Round 10, P2/P3, P4.1/P5, P8/P9 | `scripts/round10_*.py` |
 | `make_exports.py`, `build_manifest.py`, `build_figures.py` | Round 1 exports, manifest, figures | `scripts/round01_*.py` |
+
+*("Rebuild as" is this report's original Phase-0 plan, not what was ultimately built or its
+final name - several proposed names above were never used, and every script that was built,
+including the ones proposed here, was later renamed by function rather than by round number.
+See `ASSUMPTIONS.md` A5.1 for the definitive old-name -> new-name table and A0.2 for how blocks
+map to files.)*
 
 **Also recovered:** the runs used `../.venv/Scripts/python.exe`, and the allowlist records
 import checks for **`statsmodels`** and **`linearmodels`** — the latter is how the

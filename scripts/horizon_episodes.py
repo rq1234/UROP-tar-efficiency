@@ -1,5 +1,5 @@
 """
-round01_horizon.py - the horizon and episode layer.
+horizon_episodes.py - the horizon and episode layer.
 
 Rebuilds:
   horizon_test.csv            Table 6.1 - pooled forward returns by band  (A9, A10, B2)
@@ -27,7 +27,7 @@ The p-values here are RAW. Forward windows overlap month to month, so the
 effective N is smaller than the nominal n; treat them as directional. The
 dependence-corrected versions are Round 7 (X1, X2) and Round 10 (P5).
 
-Usage:  python scripts/round01_horizon.py
+Usage:  python scripts/horizon_episodes.py
 """
 
 import csv

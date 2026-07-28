@@ -1,5 +1,5 @@
 """
-round07_dependence.py - Round 7 (X1-X4, X6-X8) and the episode dependence tests.
+dependence_corrections.py - Round 7 (X1-X4, X6-X8) and the episode dependence tests.
 X5 is deferred - see the note by main().
 
 Rebuilds:
@@ -35,7 +35,7 @@ Why these matter, from results/exports/README.md Round 7:
   X8  Turkey rho=0.376 [0.26,0.48] and Czechia 0.415 [0.32,0.50] OVERLAP, so the
       0.04 "gap" behind the 0.40 screening cutoff is within sampling error.
 
-Usage:  python scripts/round07_dependence.py
+Usage:  python scripts/dependence_corrections.py
 """
 
 import csv
@@ -50,8 +50,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                                          # noqa: E402
-from round01_horizon import load_all, spells           # noqa: E402
-from round10_bootstrap import grid_bounds              # noqa: E402
+from horizon_episodes import load_all, spells           # noqa: E402
+from threshold_bootstrap import grid_bounds              # noqa: E402
 
 
 def x1_episode_dep_corrected():
@@ -290,7 +290,7 @@ def _pooled_optionB():
     from estimate import _assign_states                # noqa: E402
     from fastgrid import optimal_from_parts             # noqa: E402
     from global_cci_study import load_global_cci_pair   # noqa: E402
-    from round10_bootstrap import grid_bounds            # noqa: E402
+    from threshold_bootstrap import grid_bounds            # noqa: E402
 
     with open(config.PANEL_CSV, encoding="utf-8-sig", newline="") as fh:
         panel = list(csv.DictReader(fh))
@@ -321,15 +321,15 @@ def x2_oos_exp_dep_corrected():
     """OOS (post-INSAMPLE_END) EXP-RW gap under Option B, dependence-corrected.
 
     Uses frozen (Option B) thresholds, matching R4d's OOS classification
-    (round02_pool_optionAB.py), not the panel's Option A full-sample c1/c2 -
+    (pool_exclusions_optionab.py), not the panel's Option A full-sample c1/c2 -
     the full-sample thresholds give almost no post-2015 EXP months at all,
     since most markets' last-ever EXP month is ~2000-2001 (expn_check.csv).
     No EXCLUDED_EXP_MARKETS zeroing here: nikkei225's Option B thresholds are
     not degenerate the way its Option A ones are, and get 0 post-2015 EXP
     months on their own.
     """
-    from round10_bootstrap import moving_block_indices  # noqa: E402
-    from round10_remainder import dk_ols                # noqa: E402
+    from threshold_bootstrap import moving_block_indices  # noqa: E402
+    from min_regime_wald_recursive import dk_ols                # noqa: E402
     from scipy import stats as sps                      # noqa: E402
 
     data, cut = _pooled_optionB()
@@ -390,7 +390,7 @@ def x3_horserace_label_vs_trailing():
     """Does the regime label carry information beyond the trailing 12m return?
     Four DK regressions of pooled fwd12: (a) regime dummies only, (b) trailing
     only, (c) both, (c2) continuous CCI level (standardised) + trailing."""
-    from round10_remainder import dk_ols  # noqa: E402
+    from min_regime_wald_recursive import dk_ols  # noqa: E402
 
     data = _pooled_with_trailing()
     ys, mrs, exps, trails, zs, ts = [], [], [], [], [], []
@@ -454,7 +454,7 @@ def x3_horserace_label_vs_trailing():
 
 def x5_turkey_real_return():
     """Deflate bist100 by Turkish CPI (FRED TURCPIALLMINMEI) and re-run the
-    same standalone country-CCI TAR as S1 (round03_episodes.py), on the real
+    same standalone country-CCI TAR as S1 (country_cci_episodes.py), on the real
     series. data/ is untouched - the fetched CPI is used in memory only."""
     import pandas as pd
 

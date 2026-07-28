@@ -1,5 +1,5 @@
 """
-round01_data.py - the raw-data exports and the efficiency ranking.
+raw_data_exports.py - the raw-data exports and the efficiency ranking.
 
 Rebuilds:
   prices_monthly.csv            Item 1 - long-format month-end closes, all markets
@@ -9,7 +9,7 @@ Rebuilds:
 
 All deterministic reshapes or sorts of committed data. No estimation.
 
-Usage:  python scripts/round01_data.py
+Usage:  python scripts/raw_data_exports.py
 """
 
 import csv

@@ -105,22 +105,38 @@ to 1e-9 on all 23 markets, the run aborts rather than producing quietly wrong nu
 |---|---|
 | `config.py` | every seed and constant, with provenance |
 | `fastgrid.py` | vectorised spec=1 grid search, ~300× faster, self-validating |
-| `round01_horizon.py` | horizon table, per-market pool, EXP phase, F6, episodes, expn check |
-| `round04_appendices.py` | T5 unrestricted band, Appendices A / B / C |
-| `round06_drift_fdr.py` | W1 drift table, W3 / W4 Benjamini-Hochberg |
-| `round07_dependence.py` | X1 / X4 / X6 / X7 / X8 dependence corrections |
-| `round08_permutation.py` | Y2 circular-shift permutation, B=5000 |
-| `round10_bootstrap.py` | P1 threshold + pooled bootstrap, B=1000 |
-| `round10_placebo.py` | P9 placebo, B=1000, iid and block nulls |
-| `round10_rwband.py` | P3 RW-band validation |
+| `raw_data_exports.py` | prices/CCI reshapes, efficiency ranking, country-CCI T screen |
+| `horizon_episodes.py` | horizon table, per-market pool, EXP phase, F6, episodes, expn check |
+| `pool_exclusions_optionab.py` | R2/R3b pool-exclusion robustness, R4 Option A/B agreement |
+| `country_cci_episodes.py` | S1/T3 standalone country-CCI TAR (Greece/Turkey/Shanghai/SZSE), S3 MR clusters |
+| `granger_appendices.py` | T5 unrestricted band, Appendices A / B / C |
+| `placebo_grid_stability.py` | T1 placebo grid search (B=50), T2 scale-adjusted rolling-threshold stability |
+| `live_audit_2025_2026.py` | V1 reverse-Granger, V3 gCCI 2025-26 labels, V4 MCSI re-pull |
+| `drift_fdr.py` | W1 drift table, W3 / W4 Benjamini-Hochberg |
+| `dependence_corrections.py` | X1-X8 dependence corrections and horse races |
+| `regime_diagnostics.py` | P1/P2/P6/P7/P8 regime-dynamics audit, comparability, crisis co-movement |
+| `rw_band_validation.py` | P3 RW-band validation |
+| `min_regime_wald_recursive.py` | P2/P4.1/P4.3/P5/P8 min-regime trimming, Wald test, recursive horse race |
+| `rank_stability_permutation.py` | Y1/Y3/Y4 rank stability under drift specs, Y2 permutation (B=5000) |
+| `placebo_1000.py` | P9 placebo, B=1000, iid and block nulls |
+| `threshold_bootstrap.py` | P1 threshold + pooled bootstrap, B=1000 |
 | `compare_rebuilt.py` | diffs every rebuilt output against its export |
 | `verify_paper.py` | verdict per paper number → `VERIFICATION_REPORT.md` |
 
-**Status:** 23 outputs rebuilt — 14 reproduce their export exactly or to floating-point noise,
-5 are close, 4 differ (the B≥1000 resampling stages, plus `kappa_stability`). Deterministic
-analyses match; seeded ones cannot match bit-for-bit because reproducing a bootstrap needs the
-original RNG *call order*, not just the seed. For those the test is whether the paper's claim
-survives — and it does. See `ASSUMPTIONS.md` §A3.3.
+Scripts were originally named by referee round (`round01_...round10_...`); renamed by function
+(1:1, no splitting) once the round grouping stopped tracking what each file actually does. See
+`ASSUMPTIONS.md` A5.1 for the old-name -> new-name table.
+
+**Status:** 59 of the 60 CSVs in `results/exports/` now have a rebuilt counterpart in
+`outputs/rebuilt/` (the one exception, `paper_numbers_manifest.csv`, is the target list itself,
+not a generated output). Most reproduce their export exactly or to floating-point noise; a
+handful are close but not exact, and the B≥1000/5000 resampling stages plus a few frozen-threshold
+(Option B) fits cannot match bit-for-bit — reproducing a seeded bootstrap needs the original RNG
+*call order*, not just the seed, and that was lost with the original scripts. For those the test
+is whether the paper's qualitative claim survives — it does, in every case checked. Every
+individual gap and its cause is logged in `ASSUMPTIONS.md` (search for the round number or export
+filename); nothing is silently approximated. The paper's 5 figures (`results/exports/figures/`)
+are not rebuilt - regenerating plots was always lower priority than verifying the numbers.
 
 ## Why `results/exports/` and `src/archive/` are not deleted
 

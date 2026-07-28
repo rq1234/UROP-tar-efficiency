@@ -1,5 +1,5 @@
 """
-round04_appendices.py - Round 4 T5 plus the Appendix A / B / C tables.
+granger_appendices.py - Round 4 T5 plus the Appendix A / B / C tables.
 
 Rebuilds:
   unrestricted_b2.csv                 T5 - middle band freed, thresholds RE-ESTIMATED
@@ -20,7 +20,7 @@ T5 vs Round 10 P3 - the distinction the draft currently blurs
 Both are correct; they answer different questions, and the slopes are identical
 in only 13 of 23 markets. See VERIFICATION_REPORT.md entry C20x.
 
-Usage:  python scripts/round04_appendices.py
+Usage:  python scripts/granger_appendices.py
 """
 
 import csv
@@ -35,7 +35,7 @@ sys.path.insert(0, HERE)
 
 import config                                          # noqa: E402
 from fastgrid import fast_grid_rss_parts                # noqa: E402
-from round10_bootstrap import grid_bounds              # noqa: E402
+from threshold_bootstrap import grid_bounds              # noqa: E402
 
 
 def t5_unrestricted_b2():

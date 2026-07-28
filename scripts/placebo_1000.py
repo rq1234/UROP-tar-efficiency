@@ -1,5 +1,5 @@
 """
-round10_placebo.py - Round 10 Priority 9: placebo at B=1000 with a vol-clustering null.
+placebo_1000.py - Round 10 Priority 9: placebo at B=1000 with a vol-clustering null.
 
 Rebuilds `placebo_1000.csv`.
 
@@ -41,7 +41,7 @@ one), the real value's percentile in the null, and the share of placebo
 
 Seed: config.SEED_PLACEBO_T1 (20260721), the seed recorded for the placebo work.
 
-Usage:  python scripts/round10_placebo.py [--B 1000] [--markets a,b]
+Usage:  python scripts/placebo_1000.py [--B 1000] [--markets a,b]
 """
 
 import argparse
@@ -58,7 +58,7 @@ sys.path.insert(0, HERE)
 
 import config                                                   # noqa: E402
 from fastgrid import fast_grid_rss_parts                        # noqa: E402
-from round10_bootstrap import grid_bounds, moving_block_indices  # noqa: E402
+from threshold_bootstrap import grid_bounds, moving_block_indices  # noqa: E402
 
 # Real cluster bands, from GROUND_TRUTH section 6 / Round 4 T1.
 BAND_C1 = (97.02, 98.45)

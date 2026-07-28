@@ -1,12 +1,12 @@
 """
-round02_pool_optionAB.py - Round 2 (Robustness round 2, R2-R4d).
+pool_exclusions_optionab.py - Round 2 (Robustness round 2, R2-R4d).
 
 Rebuilds:
   horizon_test_exclusions.csv     R2/R3b - pooled 12m means under market-exclusion rules
   appendixD_optionAB_agreement.csv R4    - per-market Option A (full-sample) vs
                                             Option B (frozen at INSAMPLE_END) agreement
 
-R1 (expn_check.csv) is already rebuilt by round01_horizon.py - the export note
+R1 (expn_check.csv) is already rebuilt by horizon_episodes.py - the export note
 that every EXP month has a full 12m forward window is confirmed there, so it is
 not repeated here.
 
@@ -24,7 +24,7 @@ Key findings, from results/exports/README.md Robustness round 2:
        cutoff 2015-06, not 2015-12). Of the disagreeing months, 38.8% sit within
        0.25 CCI units of a threshold - the "boundary months" figure.
 
-Usage:  python scripts/round02_pool_optionAB.py
+Usage:  python scripts/pool_exclusions_optionab.py
 """
 
 import csv
@@ -38,12 +38,12 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                              # noqa: E402
-from round01_horizon import load_all       # noqa: E402
-from round10_bootstrap import grid_bounds  # noqa: E402
+from horizon_episodes import load_all       # noqa: E402
+from threshold_bootstrap import grid_bounds  # noqa: E402
 
 
 def pooled_custom(data, h, full_excl, exp_only_excl):
-    """Same pooling rule as round01_horizon.pooled, with a configurable
+    """Same pooling rule as horizon_episodes.pooled, with a configurable
     full-market exclusion (dropped from every band) on top of the usual
     EXP-only exclusion (dropped from the pooled EXP cell only)."""
     buckets = {0: [], 1: [], 2: []}

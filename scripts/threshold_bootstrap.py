@@ -1,5 +1,5 @@
 """
-round10_bootstrap.py - Round 10 Priority 1: full-pipeline threshold uncertainty.
+threshold_bootstrap.py - Round 10 Priority 1: full-pipeline threshold uncertainty.
 
 Rebuilds `threshold_bootstrap.csv` and `pooled_bootstrap_gaps.csv`.
 
@@ -30,7 +30,7 @@ reference implementation.
 
 Outputs go to outputs/rebuilt/. results/exports/ is never touched.
 
-Usage:  python scripts/round10_bootstrap.py [--B 1000] [--markets a,b,c]
+Usage:  python scripts/threshold_bootstrap.py [--B 1000] [--markets a,b,c]
 """
 
 import argparse

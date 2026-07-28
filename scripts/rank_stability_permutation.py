@@ -1,5 +1,5 @@
 """
-round08_permutation.py - Round 8, all of Y1-Y4.
+rank_stability_permutation.py - Round 8, all of Y1-Y4.
 
 Rebuilds `rank_stability_drift.csv` (Y1, and Y4's extra columns) and
 `permutation_exp.csv` (Y2). Y3 has no CSV target of its own - it is a
@@ -31,7 +31,7 @@ Spec, from results/exports/README.md Round 8:
   Y3 (MR horse-race, symmetry with X3) - confirmed: MR coef +3.31 (p=0.42)
    without trailing return -> +2.66 (p=0.45) with trailing; both
    insignificant under DK. Same numbers as X3's a_regime_only/c_both MR
-   rows (round07_dependence.py) - not re-estimated here.
+   rows (dependence_corrections.py) - not re-estimated here.
 
 DESIGN
 ------
@@ -49,7 +49,7 @@ Two statistics, both recomputed under every shift:
 
 Japan is excluded from the EXP side throughout (config.EXCLUDED_EXP_MARKETS).
 
-Usage:  python scripts/round08_permutation.py [--B 5000]
+Usage:  python scripts/rank_stability_permutation.py [--B 5000]
 """
 
 import argparse
@@ -169,10 +169,10 @@ def y1_y4_rank_stability():
 
 
 def y3_mr_horserace_check():
-    """No CSV target - Y3 is X3's MR row, reproduced in round07_dependence.py."""
+    """No CSV target - Y3 is X3's MR row, reproduced in dependence_corrections.py."""
     path = os.path.join(config.REBUILT, "horserace_label_vs_trailing.csv")
     if not os.path.exists(path):
-        print("  Y3: skipped - run round07_dependence.py first to build "
+        print("  Y3: skipped - run dependence_corrections.py first to build "
               "horserace_label_vs_trailing.csv (X3), which Y3 reuses.")
         return
     with open(path, encoding="utf-8-sig", newline="") as fh:

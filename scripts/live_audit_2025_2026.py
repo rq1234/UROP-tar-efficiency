@@ -1,5 +1,5 @@
 """
-round05_audit.py - Round 5 (21-July audit verification), V1/V3/V4.
+live_audit_2025_2026.py - Round 5 (21-July audit verification), V1/V3/V4.
 
 Rebuilds:
   reverse_granger_extra.csv   V1 - S&P 500 return -> d(US CCI), the audit A3 check
@@ -23,7 +23,7 @@ Key findings, from results/exports/README.md Round 5:
       MCSI stays below c1 every month Aug 2025 - May 2026; minimum 44.8
       (May 2026).
 
-Usage:  python scripts/round05_audit.py
+Usage:  python scripts/live_audit_2025_2026.py
 """
 
 import csv
@@ -37,7 +37,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(HERE), "src"))
 sys.path.insert(0, HERE)
 
 import config                          # noqa: E402
-from round01_horizon import load_all   # noqa: E402
+from horizon_episodes import load_all   # noqa: E402
 
 
 def v1_reverse_granger():
@@ -68,7 +68,7 @@ def v3_gcci_labels():
     from estimate import _assign_states                # noqa: E402
     from fastgrid import optimal_from_parts             # noqa: E402
     from global_cci_study import load_global_cci_pair   # noqa: E402
-    from round10_bootstrap import grid_bounds            # noqa: E402
+    from threshold_bootstrap import grid_bounds            # noqa: E402
     import pandas as pd
 
     y, z, dates = load_global_cci_pair("sp500", config.START, None)
