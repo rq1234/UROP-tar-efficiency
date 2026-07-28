@@ -244,6 +244,28 @@ Round 7 scope and already flagged there via kappa_stability's own "mean kappa 0.
 gap; not re-derived. `horizon_test_exclusions.csv` (R2/R3b), by contrast, reproduces the export
 exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places).
 
+**A4.9 — Round 5 (`scripts/round05_audit.py`), reproduces closely; two documented gaps.**
+- V1 (`reverse_granger_extra.csv`): F=3.5358, p=0.0075, gate=FAIL reproduce the export exactly.
+  `T` is 409 here vs the export's 408 - most likely data-vintage drift (this repo's committed
+  `data/sentiment/global_cci_monthly.csv` now runs through 2026-05, one month later than when
+  V1 was presumably first generated) rather than a code difference, since the appendix-A screen
+  this reuses already verifies as MATCH with the identical `T = len(y)` convention.
+- V3 (`gcci_labels_2025_2026.csv`): Option A (97.668/101.934) and Option B (97.567/101.972)
+  reproduce the export's stated 97.67/101.93 and 97.53/101.93 closely - the same few-hundredths
+  precision gap as A4.7's Option-B fits elsewhere. All 10 rows' `gcci_value` match exactly, and
+  9 of 10 label pairs match exactly, but it flips the headline finding for the boundary month:
+  the export has 2026-05 as `label_optionA=MR, label_optionB=RW` (MR appears "only under Option
+  A"); this rebuild's slightly higher Option-B `c1` (97.567 vs the export's implied ~97.526)
+  puts the same 97.552 reading just inside the MR side under both options. `compare_rebuilt.py`
+  does not flag this - it only diffs numeric columns, not the label strings - so it is recorded
+  here instead.
+- V4 (`mcsi_2025_2026.csv`): the frozen SP500-MCSI Option-B `c1=59.677` matches the export's
+  stated 59.677 exactly, as does `below_c1_flag` for all 11 months this rebuild can reach. The
+  export's twelfth month, 2026-05 (umcsent=44.8), is not in `data/sentiment/mcsi_monthly.csv` or
+  `data/combined/monthly_panel.csv` (both stop at 2026-04) - a live FRED re-pull beyond the
+  committed vintage. No `FRED_API_KEY` is configured in this environment, so that month is
+  reported as missing rather than filled in from the export's own number.
+
 **A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
 deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
 and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the
