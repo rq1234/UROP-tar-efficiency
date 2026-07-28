@@ -51,8 +51,9 @@ def numeric(v):
 KEY_COMBOS = (
     ("market", "scheme"), ("market", "coef"), ("market", "dgp"),
     ("market", "method"), ("market", "rule"), ("market", "trigger"),
+    ("market", "norm"), ("market", "date"),
     ("market",), ("stat",), ("statistic",), ("rule",), ("method",), ("id",),
-    ("country",), ("horizon_m",), ("scheme",), ("dgp",),
+    ("country",), ("horizon_m",), ("scheme",), ("dgp",), ("code",),
 )
 
 

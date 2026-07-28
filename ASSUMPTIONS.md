@@ -200,3 +200,32 @@ different. `config.EPISODES_COVERAGE` and `config.EPISODES_VERDICT` now carry bo
 structure is right — 30 episodes in the same 5 calendar-year clusters, 29 in 1997–2000 — so the
 gap is in how episodes are assigned to clusters or weighted. The exports remain the source for
 those three numbers, and `VERIFICATION_REPORT.md` records A14/C38 as MATCH against the export.
+
+**A4.6 — Round 10 remainder (`scripts/round10_remainder.py`), fixed vs residual gaps.**
+Three real bugs found and fixed against the surviving `results/exports/` ground truth (not
+tuned to a paper number — the export itself showed the correct shape):
+- `recursive_horserace.csv`'s `tar`/`pct` columns are 3-valued (0=RW/middle, 1=MR/low-tail,
+  2=EXP/high-tail), matching the state-code convention used everywhere else. The script had them
+  as binary flags. Cut mismatched cells from 1771/5847 to 323/5847 once corrected.
+- `nikkei225` (`config.EXCLUDED_EXP_MARKETS`) was not excluded from the EXP/high-tail band in
+  the recursive labelling, unlike every other round script. Relabelling its would-be EXP months
+  to RW (never dropping MR/RW, per the existing convention) moved the pooled TAR-high mean from
+  −7.01 to −16.42 against the export's −16.93.
+- `wald_tar_vs_fixed.csv`'s `cov_EXP_above` column read `V[1,2]` (cov(TAR_MR, TAR_EXP)) instead
+  of `V[2,4]` (cov(TAR_EXP, above-P90)) — an indexing bug against the script's own documented
+  column layout. Did not affect the Wald statistic itself, which already used the right indices.
+
+Residual, unresolved, not chased further per the report-don't-repair rule:
+- `recursive_horserace.csv` still carries 323/5847 (5.5%) `pct` mismatches (mostly single-cell,
+  boundary-adjacent) and 57 extra `nikkei225` rows the export doesn't have at all (their absence
+  isn't explained by the EXP exclusion above — likely a feasibility condition specific to how
+  the original handled nikkei225's degenerate threshold that skipped those months outright).
+- `wald_tar_vs_fixed.csv`: b_EXP −9.44 vs export −11.28, b_above90 −6.05 vs −4.36 — the qualitative
+  conclusion (Wald fails to reject equality; DK p=0.75 vs export's 0.52, both ≫0.05) survives, but
+  the point estimates differ by more than floating-point noise. Cause not identified; a plausible
+  candidate is how `statsmodels`' `hac-groupsum` expects the panel sorted/grouped, but this was
+  not confirmed.
+- `normalized_local_runs.csv` / `common_level_scale.csv`: within 0.01–3.7 points of the export
+  depending on cell — `compare_rebuilt.py` tags these seed/precision-sensitive; the headline P8b
+  claim (Turkey RW share collapsing under percentile normalisation) reproduces closely (8.8%/9.2%
+  export/rebuilt vs the reported 42%→9%).

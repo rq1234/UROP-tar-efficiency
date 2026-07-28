@@ -1,0 +1,7 @@
+market,norm,c1,c2,MR_pct,RW_pct,EXP_pct
+athex,amplitude_raw,99.084,101.595,43.5,31.2,25.2
+athex,zscore,-0.091,1.909,43.5,56.5,0.0
+athex,percentile,44.037,75.528,44.2,31.5,24.3
+bist100,amplitude_raw,95.168,100.853,6.7,45.4,47.9
+bist100,zscore,-1.722,0.272,4.2,47.9,47.9
+bist100,percentile,9.097,17.844,8.8,9.2,82.1
