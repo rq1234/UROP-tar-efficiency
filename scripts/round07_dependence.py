@@ -1,8 +1,11 @@
 """
-round07_dependence.py - Round 7 (X1, X4, X6, X7, X8) and the episode dependence tests.
+round07_dependence.py - Round 7 (X1-X4, X6-X8) and the episode dependence tests.
+X5 is deferred - see the note by main().
 
 Rebuilds:
   episode_dep_corrected.csv        X1 - the episode test under three dependence corrections
+  oos_exp_dep_corrected.csv        X2 - post-2015 OOS EXP-RW gap, dependence-corrected
+  horserace_label_vs_trailing.csv  X3 - does the label add info beyond trailing 12m return?
   matched_window_localisation.csv  X4 - Greece and Turkey on MATCHED windows
   kappa_stability.csv              X6 - chance-corrected Option A vs B agreement
   drift_variance_ratio.csv         X7 - drift-to-volatility ratio by regime
@@ -14,6 +17,13 @@ Why these matter, from results/exports/README.md Round 7:
       1997-2000). Even the most conservative correction - collapsing to those 5
       years - keeps the discount significant: mean -18.31pp, t=-3.16, p=0.034.
       "This is the robust inference for the explosive discount."
+  X2  The 76 post-2015 EXP months come from only 4 years and 4 markets. Gap
+      -9.84pp, but moving-block bootstrap p=0.22, DK p=0.19 - the post-2015
+      OOS result does NOT survive dependence correction; report as suggestive.
+  X3  DECISIVE horse race: EXP coef -14.07(a) -> -14.06(c) when trailing 12m
+      return is added [ratio 1.00]; trailing itself is insignificant (p=0.55).
+      CAVEAT: under DK the pooled monthly EXP effect is only marginal (p=0.057)
+      with or without trailing - contribution 3 should rest on X1, not this.
   X4  On the SAME 240-month window as the country run, Turkey's global and
       country splits are nearly identical (6/38/56 vs 7/45/48), so the paper's
       Turkey localisation claim is mostly a WINDOW effect. Greece is different
@@ -242,6 +252,206 @@ def x8_rho_cis():
     return rows
 
 
+def _pooled_with_trailing():
+    """Per-market state, 12m forward return, 12m trailing (past) return, global
+    CCI trigger level and month ordinal, aligned - the common input to X2/X3."""
+    import pandas as pd
+
+    from estimate import _assign_states                # noqa: E402
+    from global_cci_study import load_global_cci_pair  # noqa: E402
+
+    with open(config.PANEL_CSV, encoding="utf-8-sig", newline="") as fh:
+        panel = list(csv.DictReader(fh))
+
+    data = {}
+    for p in panel:
+        mkt = p["market"]
+        y, z, dates = load_global_cci_pair(mkt, config.START, None)
+        state = _assign_states(z[1:], float(p["c1"]), float(p["c2"]))
+        logp = y[1:]
+        zt = z[1:]
+        months = pd.to_datetime(dates[1:]).to_period("M")
+        h = 12
+        fwd = np.full(len(state), np.nan)
+        fwd[:-h] = 100.0 * (logp[h:] - logp[:-h])
+        trail = np.full(len(state), np.nan)
+        trail[h:] = 100.0 * (logp[h:] - logp[:-h])
+        data[mkt] = {"state": state, "fwd12": fwd, "trail12": trail, "z": zt,
+                     "months": months, "t": np.asarray([m.ordinal for m in months])}
+    return data
+
+
+def _pooled_optionB():
+    """Per-market Option B (frozen at INSAMPLE_END) state, 12m forward return
+    and month, for the whole sample - X2/R4d both classify the post-2015 OOS
+    window this way, not with the panel's Option A (full-sample) thresholds."""
+    import pandas as pd
+
+    from estimate import _assign_states                # noqa: E402
+    from fastgrid import optimal_from_parts             # noqa: E402
+    from global_cci_study import load_global_cci_pair   # noqa: E402
+    from round10_bootstrap import grid_bounds            # noqa: E402
+
+    with open(config.PANEL_CSV, encoding="utf-8-sig", newline="") as fh:
+        panel = list(csv.DictReader(fh))
+
+    cut = pd.Period(config.INSAMPLE_END, "M")
+    data = {}
+    for p in panel:
+        mkt = p["market"]
+        y, z, dates = load_global_cci_pair(mkt, config.START, None)
+        months = pd.to_datetime(dates).to_period("M")
+        insample = np.asarray(months <= cut)
+        yb, zb = y[insample], z[insample]
+        zmin, zmax, mg = grid_bounds(zb)
+        c1b, c2b = optimal_from_parts(np.diff(yb), yb[:-1], zb[1:], zmin, zmax,
+                                      config.GRID_LENGTH, mg)
+        state = _assign_states(z[1:], c1b, c2b)
+        logp = y[1:]
+        mm = months[1:]
+        h = 12
+        fwd = np.full(len(state), np.nan)
+        fwd[:-h] = 100.0 * (logp[h:] - logp[:-h])
+        data[mkt] = {"state": state, "fwd12": fwd, "months": mm,
+                     "t": np.asarray([m.ordinal for m in mm])}
+    return data, cut
+
+
+def x2_oos_exp_dep_corrected():
+    """OOS (post-INSAMPLE_END) EXP-RW gap under Option B, dependence-corrected.
+
+    Uses frozen (Option B) thresholds, matching R4d's OOS classification
+    (round02_pool_optionAB.py), not the panel's Option A full-sample c1/c2 -
+    the full-sample thresholds give almost no post-2015 EXP months at all,
+    since most markets' last-ever EXP month is ~2000-2001 (expn_check.csv).
+    No EXCLUDED_EXP_MARKETS zeroing here: nikkei225's Option B thresholds are
+    not degenerate the way its Option A ones are, and get 0 post-2015 EXP
+    months on their own.
+    """
+    from round10_bootstrap import moving_block_indices  # noqa: E402
+    from round10_remainder import dk_ols                # noqa: E402
+    from scipy import stats as sps                      # noqa: E402
+
+    data, cut = _pooled_optionB()
+
+    ys, Xs, ts, years, mkts_exp = [], [], [], set(), set()
+    n_exp = n_rw = 0
+    for mkt, d in data.items():
+        post = d["months"] > cut
+        st, f, ok_t = d["state"][post], d["fwd12"][post], d["t"][post]
+        mm = d["months"][post]
+        ok = ~np.isnan(f)
+        exp = (st == 2).astype(float)
+        n_exp += int(exp[ok].sum())
+        n_rw += int((ok & (st == 0)).sum())
+        years |= {int(str(m)[:4]) for m, e in zip(mm[ok], exp[ok]) if e}
+        if exp[ok].sum():
+            mkts_exp.add(mkt)
+        keep = ok & ((st == 0) | (st == 2))
+        ys.append(f[keep])
+        Xs.append(np.column_stack([np.ones(keep.sum()), exp[keep]]))
+        ts.append(ok_t[keep])
+
+    y, X, t = np.concatenate(ys), np.vstack(Xs), np.concatenate(ts)
+    gap = float(y[X[:, 1] == 1].mean() - y[X[:, 1] == 0].mean())
+    m = dk_ols(y, X, t)
+    dk_coef, dk_p = float(m.params[1]), float(m.pvalues[1])
+
+    rng = np.random.default_rng(config.SEED_ROUND_8_10)
+    months = np.unique(t)
+    ests = []
+    for _ in range(500):
+        idx = moving_block_indices(len(months), 24, rng)
+        keep = np.isin(t, months[idx])
+        if keep.sum() < 30 or X[keep, 1].std() == 0:
+            continue
+        ests.append(float(np.linalg.lstsq(X[keep], y[keep], rcond=None)[0][1]))
+    a = np.asarray(ests)
+    block_se = float(a.std(ddof=1)) if a.size > 2 else float("nan")
+    block_p = float(2 * sps.norm.sf(abs(gap) / block_se)) if block_se and np.isfinite(block_se) else ""
+
+    print(f"  X2: OOS gap {gap:+.3f}pp  DK p={dk_p:.4f}  block SE={block_se:.3f} "
+          f"p={block_p if block_p == '' else round(block_p, 4)}  "
+          f"({n_exp} EXP obs, {len(years)} years, {len(mkts_exp)} markets)")
+    return [
+        {"stat": "gap_pp", "value": round(gap, 3)},
+        {"stat": "DK_EXP_coef", "value": round(dk_coef, 3)},
+        {"stat": "DK_p", "value": round(dk_p, 4)},
+        {"stat": "block_boot_SE", "value": round(block_se, 3) if np.isfinite(block_se) else ""},
+        {"stat": "block_boot_p", "value": round(block_p, 4) if block_p != "" else ""},
+        {"stat": "n_EXP", "value": float(n_exp)},
+        {"stat": "n_RW", "value": float(n_rw)},
+        {"stat": "years", "value": float(len(years))},
+        {"stat": "markets", "value": float(len(mkts_exp))},
+    ]
+
+
+def x3_horserace_label_vs_trailing():
+    """Does the regime label carry information beyond the trailing 12m return?
+    Four DK regressions of pooled fwd12: (a) regime dummies only, (b) trailing
+    only, (c) both, (c2) continuous CCI level (standardised) + trailing."""
+    from round10_remainder import dk_ols  # noqa: E402
+
+    data = _pooled_with_trailing()
+    ys, mrs, exps, trails, zs, ts = [], [], [], [], [], []
+    for mkt, d in data.items():
+        f, tr, st, z, t = d["fwd12"], d["trail12"], d["state"], d["z"], d["t"]
+        ok = ~np.isnan(f) & ~np.isnan(tr)
+        exp = (st[ok] == 2).astype(float)
+        if mkt in config.EXCLUDED_EXP_MARKETS:
+            exp[:] = 0.0
+        ys.append(f[ok]); mrs.append((st[ok] == 1).astype(float)); exps.append(exp)
+        trails.append(tr[ok]); zs.append(z[ok]); ts.append(t[ok])
+
+    y = np.concatenate(ys); mr = np.concatenate(mrs); ex = np.concatenate(exps)
+    trail = np.concatenate(trails); z = np.concatenate(zs); t = np.concatenate(ts)
+    zlev = (z - z.mean()) / z.std(ddof=1)
+    ones = np.ones(len(y))
+
+    def r2(m, yv):
+        rss = float((m.resid ** 2).sum())
+        tss = float(((yv - yv.mean()) ** 2).sum())
+        return 1.0 - rss / tss if tss else float("nan")
+
+    rows = []
+    Xa = np.column_stack([ones, mr, ex])
+    ma = dk_ols(y, Xa, t)
+    ra = round(r2(ma, y), 4)
+    for term, i in (("MR", 1), ("EXP", 2)):
+        rows.append({"model": "a_regime_only", "term": term,
+                     "coef": round(float(ma.params[i]), 4),
+                     "dk_p": round(float(ma.pvalues[i]), 4), "R2": ra})
+
+    Xb = np.column_stack([ones, trail])
+    mb = dk_ols(y, Xb, t)
+    rows.append({"model": "b_trailing_only", "term": "trail12",
+                 "coef": round(float(mb.params[1]), 4),
+                 "dk_p": round(float(mb.pvalues[1]), 4), "R2": round(r2(mb, y), 4)})
+
+    Xc = np.column_stack([ones, mr, ex, trail])
+    mc = dk_ols(y, Xc, t)
+    rc = round(r2(mc, y), 4)
+    for term, i in (("MR", 1), ("EXP", 2), ("trail12", 3)):
+        rows.append({"model": "c_both", "term": term,
+                     "coef": round(float(mc.params[i]), 4),
+                     "dk_p": round(float(mc.pvalues[i]), 4), "R2": rc})
+
+    Xc2 = np.column_stack([ones, zlev, trail])
+    mc2 = dk_ols(y, Xc2, t)
+    rc2 = round(r2(mc2, y), 4)
+    for term, i in (("zlev", 1), ("trail12", 2)):
+        rows.append({"model": "c2_cci_level", "term": term,
+                     "coef": round(float(mc2.params[i]), 4),
+                     "dk_p": round(float(mc2.pvalues[i]), 4), "R2": rc2})
+
+    a_exp = next(r for r in rows if r["model"] == "a_regime_only" and r["term"] == "EXP")
+    c_exp = next(r for r in rows if r["model"] == "c_both" and r["term"] == "EXP")
+    print(f"  X3: EXP coef {a_exp['coef']:+.2f} (a) -> {c_exp['coef']:+.2f} (c) "
+          f"when trailing added [ratio {c_exp['coef'] / a_exp['coef']:.2f}]; "
+          f"trailing p={next(r for r in rows if r['model']=='b_trailing_only')['dk_p']}")
+    return rows
+
+
 def write(name, rows):
     path = os.path.join(config.ensure_rebuilt_dir(), name)
     with open(path, "w", encoding="utf-8", newline="") as fh:
@@ -254,7 +464,12 @@ def write(name, rows):
 def main():
     print("Round 7 dependence corrections\n")
     write("episode_dep_corrected.csv", x1_episode_dep_corrected())
+    write("oos_exp_dep_corrected.csv", x2_oos_exp_dep_corrected())
+    write("horserace_label_vs_trailing.csv", x3_horserace_label_vs_trailing())
     write("matched_window_localisation.csv", x4_matched_window())
+    print("  X5: skipped - turkey_real_return.csv needs Turkish CPI "
+          "(FRED TURCPIALLMINMEI), not in data/ and no FRED_API_KEY here. "
+          "See ASSUMPTIONS.md.")
     write("kappa_stability.csv", x6_kappa())
     write("drift_variance_ratio.csv", x7_drift_variance())
     write("rho_confidence_intervals.csv", x8_rho_cis())

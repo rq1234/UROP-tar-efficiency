@@ -266,6 +266,32 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   committed vintage. No `FRED_API_KEY` is configured in this environment, so that month is
   reported as missing rather than filled in from the export's own number.
 
+**A4.10 — Round 7 X2/X3, and X5 deferred (`scripts/round07_dependence.py`).**
+- X2 (`oos_exp_dep_corrected.csv`) needed a real fix, not just noise-tolerance: the panel's
+  Option A (full-sample) thresholds give almost no post-2015 EXP months at all (only ibex35 has
+  any, per `expn_check.csv`'s `last_EXP_month` column - every other non-Japan market's last-ever
+  EXP month is ~2000-2001). The export's `n_EXP=76`/`n_RW=2141` match Round 2's R4d exactly
+  (`appendixD_optionAB_agreement.csv`'s Option B / frozen-threshold OOS classification), so X2 was
+  rewritten to classify the post-2015 window with Option B thresholds, computed inline the same
+  way as `x6_kappa`. That fix is structural (confirmed by R4d's numbers), not tuning. What remains
+  is count drift consistent with the same data-vintage pattern as A4.9's V1/V4: this rebuild gets
+  `n_EXP=86` (vs 76), `n_RW=2330` (vs 2141), 6 markets/5 years (vs 4/4) - proportionally larger
+  across the board, as expected if the committed data now runs further past 2015 than when the
+  export was generated. The gap (`-8.33pp` vs `-9.84pp`) and both p-values (`DK 0.21` vs `0.19`;
+  block-bootstrap `0.21` vs `0.22`) land close enough that the qualitative verdict is unchanged:
+  the post-2015 OOS result does not survive dependence correction either way.
+- X3 (`horserace_label_vs_trailing.csv`) reproduces closely (`CLOSE (seed-sensitive)`, max
+  coefficient difference 0.87 on coefficients of magnitude ~14, e.g. EXP `-13.66` vs the export's
+  `-14.07`) using the standard Option A / panel-threshold membership rule, no exclusion changes
+  needed. The `c2_cci_level` model (continuous standardised CCI level `zlev` + trailing return)
+  is not described in prose in `results/exports/README.md`, only inferred from the export's
+  column names; included for completeness but its exact construction (which sample the
+  standardisation uses) is a guess, not a spec.
+- X5 (`turkey_real_return.csv`) is not built: it needs Turkish CPI (`TURCPIALLMINMEI`) deflating
+  bist100, and that series is not in `data/sentiment/` (only a US `cpi_monthly.csv` exists) and
+  requires a live FRED pull with no `FRED_API_KEY` configured here - the same blocker as T3
+  (China CCI, A4.8) and V4's twelfth month (A4.9).
+
 **A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
 deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
 and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the
