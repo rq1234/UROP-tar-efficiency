@@ -20,7 +20,7 @@ Usage:
 import os
 import pandas as pd
 
-SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 SOURCE_PATH   = os.path.join(SENTIMENT_DIR, "oecd_bci.csv")
 BCI_PATH      = os.path.join(SENTIMENT_DIR, "bci_monthly.csv")
 

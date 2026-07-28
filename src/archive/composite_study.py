@@ -51,11 +51,11 @@ from replicate          import PANEL_PATH
 from bubble_now         import FIGURES_DIR, TABLES_DIR, FULL_END, INSAMPLE_END
 from rolling_thresholds import rolling_windows, WINDOW_MONTHS, STEP_MONTHS
 
-SENTIMENT_DIR      = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR      = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 GLOBAL_CCI_PATH    = os.path.join(SENTIMENT_DIR, "global_cci_monthly.csv")
 VIX_DAILY_PATH     = os.path.join(SENTIMENT_DIR, "vix_daily.csv")
 BAA_DAILY_PATH     = os.path.join(SENTIMENT_DIR, "baa_spread_daily.csv")
-GLOBAL_CCI_RESULTS = os.path.join(os.path.dirname(__file__), "..", "results", "tables",
+GLOBAL_CCI_RESULTS = os.path.join(os.path.dirname(__file__), "..", "..", "results", "tables",
                                    "global_cci_all_markets.csv")
 BCI_PATH           = os.path.join(SENTIMENT_DIR, "bci_monthly.csv")
 ANFCI_PATH         = os.path.join(SENTIMENT_DIR, "anfci_monthly.csv")

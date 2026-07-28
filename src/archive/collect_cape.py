@@ -22,7 +22,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 CAPE_PATH     = os.path.join(SENTIMENT_DIR, "cape_monthly.csv")
 URL           = "http://www.econ.yale.edu/~shiller/data/ie_data.xls"
 

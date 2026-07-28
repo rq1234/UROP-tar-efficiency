@@ -51,7 +51,7 @@ from bubble_now  import (
 )
 from rolling_thresholds import rolling_windows, WINDOW_MONTHS, STEP_MONTHS
 
-CAPE_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment",
+CAPE_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment",
                          "cape_monthly.csv")
 START     = "1990-01"
 

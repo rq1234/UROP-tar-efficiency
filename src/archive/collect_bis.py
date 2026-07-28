@@ -19,7 +19,7 @@ import os
 import sys
 import pandas as pd
 
-SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 BIS_PATH      = os.path.join(SENTIMENT_DIR, "bis.csv")
 
 COUNTRY_MAP = {

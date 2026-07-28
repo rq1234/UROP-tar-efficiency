@@ -29,7 +29,7 @@ from replicate   import PANEL_PATH
 from market_config import MARKETS
 from bubble_now  import TABLES_DIR
 
-BIS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment", "bis.csv")
+BIS_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment", "bis.csv")
 
 # Map BIS country names -> equity market IDs
 COUNTRY_MAP = {

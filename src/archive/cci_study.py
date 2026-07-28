@@ -26,8 +26,8 @@ from estimate import find_optimal_thresholds, standard_errors, _assign_states
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
-SENTIMENT_DIR  = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
-FIGURES_DIR    = os.path.join(os.path.dirname(__file__), "..", "results", "figures")
+SENTIMENT_DIR  = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
+FIGURES_DIR    = os.path.join(os.path.dirname(__file__), "..", "..", "results", "figures")
 COVERAGE_PATH  = os.path.join(SENTIMENT_DIR, "oecd_cci_coverage.csv")
 
 # Analysis window

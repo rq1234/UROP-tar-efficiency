@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from market_config import MARKETS
 from exogeneity import _load_returns
 
-DAILY_PANEL = os.path.join(os.path.dirname(__file__), "..", "data", "combined", "daily_panel.csv")
+DAILY_PANEL = os.path.join(os.path.dirname(__file__), "..", "..", "data", "combined", "daily_panel.csv")
 
 # Analysis window â€” matches Table 8 / VIX coverage
 START = "1990-02"

@@ -27,7 +27,7 @@ load_dotenv()
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from collect_data import fetch_fred
 
-SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 ANFCI_PATH    = os.path.join(SENTIMENT_DIR, "anfci_monthly.csv")
 
 

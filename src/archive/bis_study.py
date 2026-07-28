@@ -61,7 +61,7 @@ from bubble_now  import (
 )
 from rolling_thresholds import rolling_windows, WINDOW_MONTHS, STEP_MONTHS
 
-SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "sentiment")
+SENTIMENT_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "sentiment")
 START = "1990-01"
 
 ADMISSIBLE = [
