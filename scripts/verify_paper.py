@@ -363,11 +363,19 @@ def v_bootstrap():
 def v_episodes():
     ep = read(os.path.join(EXPORTS, "episodes_exp.csv"))
     r = check("C37", "30 spells ex-Japan; mean length 20.5mo; excess -15.0; 26/30 neg", "E", "P1")
-    r.target = "30 episodes, 26 negative"
+    r.target = "30 episodes, mean length 20.5mo, mean excess -15.0, 26 negative"
     col = next((c for c in ep[0] if "excess" in c.lower()), None)
+    lcol = next((c for c in ep[0] if "length" in c.lower()), None)
     neg = sum(1 for x in ep if col and num(x[col]) is not None and num(x[col]) < 0)
-    r.observed = f"{len(ep)} episodes, {neg} negative (col '{col}')"
-    r.ok() if (len(ep) == 30 and neg == 26) else r.fail("episode count or sign split differs")
+    mean_len = sum(num(x[lcol]) for x in ep) / len(ep) if lcol else None
+    mean_excess = sum(num(x[col]) for x in ep) / len(ep) if col else None
+    r.observed = (f"{len(ep)} episodes, mean length {round(mean_len, 1) if mean_len is not None else None}, "
+                  f"mean excess {round(mean_excess, 2) if mean_excess is not None else None}, "
+                  f"{neg} negative (col '{col}')")
+    ok = (len(ep) == 30 and neg == 26
+          and mean_len is not None and abs(mean_len - 20.5) <= 0.05
+          and mean_excess is not None and abs(mean_excess - -15.0) <= 0.1)
+    r.ok() if ok else r.fail("episode count, mean length, mean excess, or sign split differs")
 
     r13 = check("A13", "29 of 30 high spells fall in 1997-2000", "E", "P1")
     dcol = next((c for c in ep[0] if "start" in c.lower() or "date" in c.lower()), None)
@@ -1177,11 +1185,19 @@ def v_wald_and_recursive():
                      and x["mean_RW_pct"] and num(x["n_EXP"]) > 0
                      and num(x["mean_EXP_pct"]) < num(x["mean_RW_pct"]))
     n_high = sum(1 for x in f6 if x["market"] != "nikkei225" and num(x["n_EXP"]) > 0)
-    r29 = check("C29", "Sign consistency: low>RW 19/23; high<RW 20/21 ex-Japan", "E", "P1")
-    r29.target = "19/23 low>RW; 20/21 high<RW"
-    r29.observed = f"{low_gt_rw}/{len(f6)} low>RW; {high_lt_rw}/{n_high} high<RW"
-    r29.ok() if low_gt_rw == 19 and high_lt_rw == 20 and n_high == 21 else \
-        r29.fail("sign-consistency counts differ")
+    from scipy.stats import binomtest                          # noqa: E402
+    p_low = binomtest(low_gt_rw, len(f6), 0.5).pvalue
+    p_high = binomtest(high_lt_rw, n_high, 0.5).pvalue
+    r29 = check("C29", "Sign consistency: low>RW 19/23 (p=0.0026); high<RW 20/21 ex-Japan (p<0.0001)",
+               "E", "P1")
+    r29.target = "19/23 low>RW p=0.0026; 20/21 high<RW p<0.0001"
+    r29.observed = (f"{low_gt_rw}/{len(f6)} low>RW (binomtest p={p_low:.4f}); "
+                    f"{high_lt_rw}/{n_high} high<RW (binomtest p={p_high:.6f})")
+    r29.note = ("p-values from scipy.stats.binomtest(k, n, 0.5), two-sided, on the sign counts "
+                "in F6_within_market_means.csv - the footnote for Table 6.1.")
+    ok = (low_gt_rw == 19 and high_lt_rw == 20 and n_high == 21
+          and abs(p_low - 0.0026) <= 0.0005 and p_high < 0.0001)
+    r29.ok() if ok else r29.fail("sign-consistency counts or binomial p-values differ")
 
     wald = read(os.path.join(EXPORTS, "wald_tar_vs_fixed.csv"))
     w = wald[0] if wald else None
@@ -1293,12 +1309,13 @@ def v_permutation_and_horserace():
     r40 = check("C40", "Trailing-return control: EXP -14.07 -> -14.06; trailing p=0.55, DK p=0.06",
                "E", "P2")
     if a_exp and c_exp and b_trail:
-        r40.target = "-14.07 -> -14.06; trailing p=0.55"
+        r40.target = "-14.07 -> -14.06; trailing p=0.55; DK p (c_both EXP) = 0.06"
         r40.observed = (f"a={a_exp['coef']} -> c={c_exp['coef']}; "
-                        f"trailing_p={b_trail['dk_p']}")
+                        f"trailing_p={b_trail['dk_p']}; c_exp_dk_p={c_exp['dk_p']}")
         ok = (abs(num(a_exp["coef"]) - -14.07) <= 1.0 and abs(num(c_exp["coef"]) - -14.06) <= 1.0
-              and abs(num(b_trail["dk_p"]) - 0.55) <= 0.1)
-        r40.ok() if ok else r40.fail("EXP coefficients or trailing p differ materially")
+              and abs(num(b_trail["dk_p"]) - 0.55) <= 0.1
+              and abs(num(c_exp["dk_p"]) - 0.06) <= 0.01)
+        r40.ok() if ok else r40.fail("EXP coefficients, trailing p, or DK p differ materially")
 
 
 # ===========================================================================
@@ -1307,11 +1324,19 @@ def v_permutation_and_horserace():
 def v_episode_variants():
     hr = {x["variant"]: x for x in read(os.path.join(EXPORTS, "horizon_test_rebuilt.csv"))}
     excl = hr.get("excl_AFC_onset")
-    r41 = check("C41", "Asian-crisis exclusion: mean -11.45; unclustered p=0.017", "E", "P2")
+    r41 = check("C41", "Asian-crisis exclusion: mean -11.45 (excl.), -26.8 (excluded spells); "
+                "unclustered p=0.017", "E", "P2")
+    afc = read(os.path.join(EXPORTS, "episodes_exp_ex_afc.csv"))
+    afc_col = next((c for c in afc[0] if "excess" in c.lower()), None) if afc else None
+    afc_mean = sum(num(x[afc_col]) for x in afc) / len(afc) if afc_col and afc else None
     if excl:
-        r41.target, r41.observed = "-11.45, p=0.017", f"{excl['episode_mean']}, p={excl['episode_p']}"
+        r41.target = "-11.45 (with exclusion), -26.8 (mean of excluded spells), p=0.017"
+        r41.observed = (f"{excl['episode_mean']}, p={excl['episode_p']}; "
+                        f"excluded-spells mean={afc_mean} (n={len(afc) if afc else 0})")
         r41.cmp(-11.45, num(excl["episode_mean"]), 0.3, "mean")
         r41.cmp(0.017, num(excl["episode_p"]), 0.01, "p")
+        if afc_mean is not None:
+            r41.cmp(-26.8, afc_mean, 0.5, "excluded_spells_mean")
 
     one = hr.get("one_index_per_country")
     r42 = check("C42", "One index per country: mean -14.9; unclustered p=0.006", "E", "P2")

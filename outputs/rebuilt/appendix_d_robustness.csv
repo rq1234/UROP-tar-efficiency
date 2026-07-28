@@ -1,0 +1,10 @@
+id,item,verdict,target,reproduced
+A12,Fixed-tail percentile cuts vs TAR spread (22.14 / 22.09pp),MATCH,"cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp | +22.09pp",cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp
+A14,Five calendar-year clusters (year-collapsed test),MATCH,"t=-3.16, p=0.034, 5 clusters","year_collapsed t=-3.155, p=0.0343, clusters=5"
+C37,"Episode spells (30 ex-Japan): count, mean length, mean excess, negative count",MATCH,"30 episodes, mean length 20.5mo, mean excess -15.0, 26 negative","30 episodes, mean length 20.5, mean excess -15.04, 26 negative (col 'excess_pp')"
+C39,"Circular-shift permutation (5,000 draws)",MATCH,"0/5000, p<0.0002","perm_p_le_obs=0.0, B=5000"
+C40,Trailing-return control (label vs trailing 12m return horse race),MATCH,-14.07 -> -14.06; trailing p=0.55; DK p (c_both EXP) = 0.06,a=-14.0682 -> c=-14.0647; trailing_p=0.5052; c_exp_dk_p=0.057
+C41,Asian-crisis (AFC) exclusion,MATCH,"-11.45 (with exclusion), -26.8 (mean of excluded spells), p=0.017","-11.45, p=0.017; excluded-spells mean=-26.843 (n=7)"
+C42,One index per country,MATCH,"-14.9, p=0.006","-14.93, p=0.0062"
+C43,Japan reinstated in pooled 12m mean,MATCH,-7.5 (ex-Japan) -> -6.1 (with Japan),-7.49 (n=615) -> -6.08 (n=879)
+C45,Frozen-threshold (post-2015 out-of-sample) test,NEAR,"76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19","n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0.2176"

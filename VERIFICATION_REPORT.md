@@ -50,8 +50,8 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C24 | P1 | E | **MATCH** | HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1. | HK (87.38532110091744, 10.091743119266056, 2.522935779816514); Japan ( |
 | C25 | P1 | E | **MATCH** | 88.4% full; 83% matched | 88.4% full; 83.0% matched |
 | C26 | P1 | E | **MATCH** | 94.2 full; 56 high/38 RW matched | 94.2 full; matched global RW=38.3 EXP=55.8 |
-| C29 | P1 | E | **MATCH** | 19/23 low>RW; 20/21 high<RW | 19/23 low>RW; 20/21 high<RW |
-| C37 | P1 | E | **MATCH** | 30 episodes, 26 negative | 30 episodes, 26 negative (col 'excess_pp') |
+| C29 | P1 | E | **MATCH** | 19/23 low>RW p=0.0026; 20/21 high<RW p<0.0001 | 19/23 low>RW (binomtest p=0.0026); 20/21 high<RW (binomtest p=0.000021 |
+| C37 | P1 | E | **MATCH** | 30 episodes, mean length 20.5mo, mean excess -15.0, 26 negat | 30 episodes, mean length 20.5, mean excess -15.04, 26 negative (col 'e |
 | C38 | P1 | E | **MATCH** | t=-3.16, p=0.034, 5 clusters | year_collapsed t=-3.155, p=0.0343, clusters=5 |
 | E3 | P1 | E | **MATCH** | reproduce all 23 tail_coverage labels; identify whether any  | two-threshold rule (low>2.0%, high>1.0%): 0/23 mismatches |
 | A2 | P2 | E | **MATCH** | most of 23 in each cluster | 17/23 c1 in [97.0,98.5]; 20/23 c2 in [101.2,102.4] |
@@ -79,8 +79,8 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C35 | P2 | S | **MATCH** | -15.5pp; block p 0.083/0.049/0.026; DK p~=0.040 (11 lags) | coef=-15.091pp, DK_p=0.0446, block_p=0.0909/0.0567/0.0367 |
 | C36 | P2 | S | **MATCH** | +8.18 [+2.52,+15.41] and -10.88 [-18.23,-4.32] | MR-RW 8.178 [2.515, 15.408]; EXP-RW -10.879 [-18.232, -4.316] |
 | C39 | P2 | S | **MATCH** | 0/5000, p<0.0002 | perm_p_le_obs=0.0, B=5000 |
-| C40 | P2 | E | **MATCH** | -14.07 -> -14.06; trailing p=0.55 | a=-14.0682 -> c=-14.0647; trailing_p=0.5052 |
-| C41 | P2 | E | **MATCH** | -11.45, p=0.017 | -11.45, p=0.017 |
+| C40 | P2 | E | **MATCH** | -14.07 -> -14.06; trailing p=0.55; DK p (c_both EXP) = 0.06 | a=-14.0682 -> c=-14.0647; trailing_p=0.5052; c_exp_dk_p=0.057 |
+| C41 | P2 | E | **MATCH** | -11.45 (with exclusion), -26.8 (mean of excluded spells), p= | -11.45, p=0.017; excluded-spells mean=-26.843 (n=7) |
 | C42 | P2 | E | **MATCH** | -14.9, p=0.006 | -14.93, p=0.0062 |
 | C43 | P2 | E | **MATCH** | -7.5 (ex-Japan) -> -6.1 (with Japan) | -7.49 (n=615) -> -6.08 (n=879) |
 | C44 | P2 | E | **MATCH** | -13.2/-7.7/-5.1 and -12.6/-8.8/-7.7 | [-13.21, -7.7, -5.12, -12.59, -8.82, -7.73] |
@@ -216,6 +216,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > all 6 rules feasible for all 23 markets: True
 
+**C29** (MATCH) - Sign consistency: low>RW 19/23 (p=0.0026); high<RW 20/21 ex-Japan (p<0.0001)
+
+> p-values from scipy.stats.binomtest(k, n, 0.5), two-sided, on the sign counts in F6_within_market_means.csv - the footnote for Table 6.1.
+
 **C31** (MATCH) - Joint regression: TAR high -11.28 (p=0.019); fixed above-90 -4.36 (p=0.59)
 
 > class S-like sensitivity (Option-B/joint-fit precision, see ASSUMPTIONS A4.6)
@@ -315,7 +319,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C22` 24-mo block bootstrap median widths: c1 2.93, c2 2.68, RW 67pp, high 62pp
 - `C23` Min-regime rank correlations: 0.836 (20-obs) down to 0.247 (15%)
 - `C44` Minimum-regime gaps: -13.2/-7.7/-5.1 (5/10/15%); -12.6/-8.8/-7.7 (20/30/40 obs)
-- `C29` Sign consistency: low>RW 19/23; high<RW 20/21 ex-Japan
+- `C29` Sign consistency: low>RW 19/23 (p=0.0026); high<RW 20/21 ex-Japan (p<0.0001)
 - `C31` Joint regression: TAR high -11.28 (p=0.019); fixed above-90 -4.36 (p=0.59)
 - `C32` Coefficient-equality Wald: DK p=0.516; 24-mo block p=0.618
 - `C33` Recursive means: TAR high -16.93; fixed tail -21.92
@@ -323,7 +327,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C35` Fixed-label MBB, high-RW: -15.5pp; p=0.083/0.049/0.026; DK p=0.040 (11 lags), B=1000
 - `C39` Circular-shift permutation: 0 of 5000 draws reproduce discount; p<0.0002
 - `C40` Trailing-return control: EXP -14.07 -> -14.06; trailing p=0.55, DK p=0.06
-- `C41` Asian-crisis exclusion: mean -11.45; unclustered p=0.017
+- `C41` Asian-crisis exclusion: mean -11.45 (excl.), -26.8 (excluded spells); unclustered p=0.017
 - `C42` One index per country: mean -14.9; unclustered p=0.006
 - `C43` Japan reinstated in pooled 12m mean: -7.5 -> -6.1
 - `C45` Post-2015 frozen test: 76 high-months, 4 years, 4 indices; gap -9.8; bootstrap p=0.22; DK p=0.19

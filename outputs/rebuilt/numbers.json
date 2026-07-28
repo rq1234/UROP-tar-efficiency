@@ -121,8 +121,8 @@
   },
   "C37": {
     "verdict": "MATCH",
-    "target": "30 episodes, 26 negative",
-    "observed": "30 episodes, 26 negative (col 'excess_pp')",
+    "target": "30 episodes, mean length 20.5mo, mean excess -15.0, 26 negative",
+    "observed": "30 episodes, mean length 20.5, mean excess -15.04, 26 negative (col 'excess_pp')",
     "class": "E",
     "priority": "P1",
     "note": ""
@@ -473,11 +473,11 @@
   },
   "C29": {
     "verdict": "MATCH",
-    "target": "19/23 low>RW; 20/21 high<RW",
-    "observed": "19/23 low>RW; 20/21 high<RW",
+    "target": "19/23 low>RW p=0.0026; 20/21 high<RW p<0.0001",
+    "observed": "19/23 low>RW (binomtest p=0.0026); 20/21 high<RW (binomtest p=0.000021)",
     "class": "E",
     "priority": "P1",
-    "note": ""
+    "note": "p-values from scipy.stats.binomtest(k, n, 0.5), two-sided, on the sign counts in F6_within_market_means.csv - the footnote for Table 6.1."
   },
   "C31": {
     "verdict": "MATCH",
@@ -529,16 +529,16 @@
   },
   "C40": {
     "verdict": "MATCH",
-    "target": "-14.07 -> -14.06; trailing p=0.55",
-    "observed": "a=-14.0682 -> c=-14.0647; trailing_p=0.5052",
+    "target": "-14.07 -> -14.06; trailing p=0.55; DK p (c_both EXP) = 0.06",
+    "observed": "a=-14.0682 -> c=-14.0647; trailing_p=0.5052; c_exp_dk_p=0.057",
     "class": "E",
     "priority": "P2",
     "note": ""
   },
   "C41": {
     "verdict": "MATCH",
-    "target": "-11.45, p=0.017",
-    "observed": "-11.45, p=0.017",
+    "target": "-11.45 (with exclusion), -26.8 (mean of excluded spells), p=0.017",
+    "observed": "-11.45, p=0.017; excluded-spells mean=-26.843 (n=7)",
     "class": "E",
     "priority": "P2",
     "note": ""
