@@ -243,3 +243,13 @@ degenerate, threshold pair for these two markets than whatever the original proc
 Round 7 scope and already flagged there via kappa_stability's own "mean kappa 0.694 vs 0.740"
 gap; not re-derived. `horizon_test_exclusions.csv` (R2/R3b), by contrast, reproduces the export
 exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places).
+
+**A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
+deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
+and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the
+README's own boundary list exactly, date for date. The export's other two rows (shanghai/szse,
+tagged `cci_CHN`) belong to Round 4's T3 ("China CCI fetched fresh from FRED
+`CSCICP03CNM665S`... `data/` untouched") — not written here, since no `FRED_API_KEY` is
+configured in this environment (checked: no `.env`, no matching shell env var) and `data/` may
+not be modified to work around that. `write()` merges by `market` rather than overwriting the
+file, so a future Round 4 T3 script can append those two rows without disturbing these.
