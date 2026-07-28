@@ -307,8 +307,9 @@ USA,528,1980-01 to 2024-01,0.808
 | C42 | One index per country | mean -14.9; unclustered p = 0.006 | E | P2 |
 | C43 | Japan reinstated in pooled 12-mo mean | -7.5 -> -6.1 | E | P2 |
 | C44 | Minimum-regime gaps | -13.2 / -7.7 / -5.1 (5/10/15%); -12.6 / -8.8 / -7.7 (20/30/40 obs); range quoted as -5.12 to -13.21 | E | P2 |
-| C45 | Post-2015 frozen-threshold test | 76 high index-months, 4 calendar years, 4 indices; gap -9.8; bootstrap p = 0.22; DK p = 0.19 | E/S | P2 |
+| C45 | Post-2015 frozen-threshold test | 76 high index-months, 4 calendar years, 4 indices; gap -9.8; bootstrap p = 0.22; DK p = 0.19. ROUNDING: -9.8 above is the paper's own printed figure (target column only); the reproduced value from `results/exports/oos_exp_dep_corrected.csv` is **-9.839** exactly (that file's own stored precision, not re-rounded) - use -9.839 everywhere this is cited as "the reproduced gap," never -9.8 or -9.84. | E/S | P2 |
 | C46 | Publication-lag re-estimation | lag 0: -16.17 (DK 0.020; blocks 0.046/0.017/0.008); lag 1: -15.90 (DK 0.025; blocks 0.055/0.044/0.025); lag 2: -12.26 (DK 0.049; blocks 0.103/0.093/0.077) | E/S | P2 |
+| C53 | Section 4.2's four heuristic groups (G1 global-stress-aligned, G2 structural-mismatch, G3 Mexico/Brazil, G4 Korea/Philippines) - dominant-regime membership stability | `scripts/group_membership_stability.py`: 16 of 17 named markets keep the SAME dominant regime (RW for G1/G3/G4 and Shanghai/SZSE, EXP for Japan) across all six min-regime rules plus a fresh constant-drift (spec=2) refit - 7/7 agreement. The one exception is Japan: EXP stays dominant under only 3/7 alt specs (flips to RW-dominant under pct10/pct15/obs30/obs40), consistent with Japan's already-documented degenerate-threshold caveat (`config.EXCLUDED_EXP_MARKETS`) rather than a new problem. Does NOT test the finer G2-vs-G3-vs-G4 boundary (episode-timing evidence, not regime shares) - see the script's docstring caveat. | E | P3 |
 | C47 | Low-sentiment calendar clusters | 9 clusters | E | P2 |
 | C48 | Distribution facts (Fig 6.2) | low-band mode near +5% vs mean +14.6; tail months mostly 2008-09 and 2022; COVID months nearly absent | E | P2 |
 
