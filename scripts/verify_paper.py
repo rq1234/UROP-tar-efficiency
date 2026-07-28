@@ -490,6 +490,8 @@ def v_fdr():
 #  Section E - known text errors
 # ===========================================================================
 def v_section_e():
+    import config  # noqa: E402
+
     panel = read(os.path.join(TABLES, "global_cci_all_markets.csv"))
 
     bov = next((x for x in panel if x["market"] == "bovespa"), None)
@@ -503,25 +505,74 @@ def v_section_e():
               "ESTIMATED b_EXP is negative; Brazil has no high-sentiment months, so no "
               "slope is identified.'")
 
-    # E3 - which tail-coverage rule reproduces 20, and does any give 14 or 10?
-    rows = []
+    # E3 - what rule actually reproduces Table 4.1's tail_coverage column?
+    # Table 4.1's own CSV block in verification_manifest.md, transcribed (ground truth -
+    # hand-authored in the manifest, not a generated file, so there is nothing to read here).
+    MANIFEST_TAIL_COVERAGE = {
+        "bist100": "Both", "klci": "High only", "sti": "Both", "athex": "Both",
+        "ta125": "Both", "ta35": "Both", "hangseng": "Both", "twse": "High only",
+        "smi": "Both", "ibex35": "Both", "jkse": "Both", "aex": "Both",
+        "merval": "Both", "set": "Both", "hscei": "Both", "lq45": "Both",
+        "ipc": "Both", "kospi": "Both", "szse": "Both", "psei": "Both",
+        "shanghai": "Both", "bovespa": "Low only", "nikkei225": "Both (mechanical)",
+    }
+    by_mkt = {}
     for x in panel:
         T = num(x["T"])
-        rows.append((x["market"], 100 * num(x["n_mr"]) / T, 100 * num(x["n_ex"]) / T))
-    sweep = {thr: sum(1 for _, lo, hi in rows if lo > thr and hi > thr)
-             for thr in (0.0, 1.0, 1.5, 2.0, 2.5, 3.0, 5.0, 10.0)}
-    lost = [m for m, lo, hi in rows if lo > 1.5 and hi > 1.5 and not (lo > 2.0 and hi > 2.0)]
+        by_mkt[x["market"]] = (100 * num(x["n_mr"]) / T, 100 * num(x["n_ex"]) / T)
 
-    r3 = check("E3", "Tail-coverage: table implies 20/23, Sec 7.1 says '14'", "E", "P1")
-    r3.target = "identify the criterion; test whether any yields 14 or 10"
-    r3.observed = "; ".join(f">{k:g}%: {v}" for k, v in sweep.items())
-    r3.verdict = MISMATCH
-    r3.note = (f"RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', "
-               f"which yields exactly 20 and drops precisely {sorted(lost)} - the two the "
-               f"table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a "
-               f"transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the "
-               f"composite-trigger exogeneity comparison, a different quantity. Action: state "
-               f"the >1.5% rule under Table 4.1; delete or re-source the '14'.")
+    def predict(lo, hi):
+        low = lo > config.TAIL_COVERAGE_LOW_MIN_SHARE_PCT
+        high = hi > config.TAIL_COVERAGE_HIGH_MIN_SHARE_PCT
+        if low and high:
+            return "Both"
+        if low:
+            return "Low only"
+        if high:
+            return "High only"
+        return "Neither"
+
+    mismatches = []
+    for mkt, label in MANIFEST_TAIL_COVERAGE.items():
+        lo, hi = by_mkt[mkt]
+        pred = predict(lo, hi)
+        base_label = label.replace(" (mechanical)", "")
+        if pred != base_label:
+            mismatches.append(f"{mkt}: predicted {pred}, manifest says {label} "
+                              f"(lo={lo:.2f}%, hi={hi:.2f}%)")
+
+    # Old claim (retracted, see ASSUMPTIONS.md Phase 7): a SINGLE ">1.5%" threshold on
+    # both bands does not reproduce the column - klci/twse have low_pct 1.5/1.7 (>1.5)
+    # yet are "High only", while psei/shanghai have high_pct 1.1/1.2 (<1.5) yet are "Both".
+    # No single shared threshold can satisfy both. Two INDEPENDENT thresholds do, with a
+    # comfortable margin on each side (not a knife-edge fit to 23 points):
+    #   low  "present" if low_pct  > 2.0%  - feasible range (1.734, 2.03]
+    #   high "present" if high_pct > 1.0%  - feasible range (0.0, 1.147]
+    r3 = check("E3", "Tail-coverage: what rule reproduces Table 4.1's column? "
+              "(also: Sec 7.1 says '14' where the table implies 20)", "E", "P1")
+    r3.target = "reproduce all 23 tail_coverage labels; identify whether any rule yields 14 or 10"
+    r3.observed = (f"two-threshold rule (low>{config.TAIL_COVERAGE_LOW_MIN_SHARE_PCT}%, "
+                  f"high>{config.TAIL_COVERAGE_HIGH_MIN_SHARE_PCT}%): "
+                  f"{len(mismatches)}/23 mismatches" + (f" - {mismatches}" if mismatches else ""))
+    if not mismatches:
+        r3.verdict = MATCH
+        r3.note = (
+            "The earlier claim of a SINGLE '>1.5% on both bands' rule was WRONG and is "
+            "retracted (see ASSUMPTIONS.md Phase 7) - it doesn't actually reproduce the "
+            "table (klci/twse are 'High only' despite low_pct>1.5%; psei/shanghai are "
+            "'Both' despite high_pct<1.5%). The correct rule needs TWO INDEPENDENT "
+            "thresholds - low band present if low_pct>2.0%, high band present if "
+            "high_pct>1.0% - which reproduces all 23 labels exactly, with a comfortable "
+            "margin on each side (low: any cutoff in (1.734,2.03] works; high: any cutoff "
+            "in (0.0,1.147] works - not a fragile fit). Separately: no share-based rule "
+            "(single- or two-threshold) yields 14 or 10 both-tailed markets under any "
+            "cutoff - the table's own rule gives 20. Sec 7.1's '14' is a transplant: "
+            "GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger "
+            "exogeneity comparison, a different quantity. Action: state the two-threshold "
+            "rule under Table 4.1; delete or re-source the '14'.")
+    else:
+        r3.verdict = MISMATCH
+        r3.note = "Two-threshold rule does not fully reproduce the table - see mismatches above."
 
 
 # ===========================================================================

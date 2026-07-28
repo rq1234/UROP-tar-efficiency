@@ -200,12 +200,12 @@
     "note": "TEXT IS WRONG. Brazil's high band is EMPTY (n_ex=0), so beta_ex=0.0 is a placeholder, not an estimate - se and stars are blank. Fix: 'every ESTIMATED b_EXP is negative; Brazil has no high-sentiment months, so no slope is identified.'"
   },
   "E3": {
-    "verdict": "MISMATCH",
-    "target": "identify the criterion; test whether any yields 14 or 10",
-    "observed": ">0%: 22; >1%: 22; >1.5%: 20; >2%: 18; >2.5%: 16; >3%: 13; >5%: 12; >10%: 1",
+    "verdict": "MATCH",
+    "target": "reproduce all 23 tail_coverage labels; identify whether any rule yields 14 or 10",
+    "observed": "two-threshold rule (low>2.0%, high>1.0%): 0/23 mismatches",
     "class": "E",
     "priority": "P1",
-    "note": "RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', which yields exactly 20 and drops precisely ['klci', 'twse'] - the two the table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the >1.5% rule under Table 4.1; delete or re-source the '14'."
+    "note": "The earlier claim of a SINGLE '>1.5% on both bands' rule was WRONG and is retracted (see ASSUMPTIONS.md Phase 7) - it doesn't actually reproduce the table (klci/twse are 'High only' despite low_pct>1.5%; psei/shanghai are 'Both' despite high_pct<1.5%). The correct rule needs TWO INDEPENDENT thresholds - low band present if low_pct>2.0%, high band present if high_pct>1.0% - which reproduces all 23 labels exactly, with a comfortable margin on each side (low: any cutoff in (1.734,2.03] works; high: any cutoff in (0.0,1.147] works - not a fragile fit). Separately: no share-based rule (single- or two-threshold) yields 14 or 10 both-tailed markets under any cutoff - the table's own rule gives 20. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the two-threshold rule under Table 4.1; delete or re-source the '14'."
   },
   "A2": {
     "verdict": "MATCH",

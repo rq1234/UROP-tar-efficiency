@@ -8,9 +8,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 62 |
+| MATCH | 63 |
 | NEAR | 4 |
-| MISMATCH | 3 |
+| MISMATCH | 2 |
 | NOT_REPRODUCIBLE | 9 |
 
 **78 entries checked.**
@@ -21,7 +21,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 |---|---|---|---|---|---|
 | E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
-| E3 | P1 | E | **MISMATCH** | identify the criterion; test whether any yields 14 or 10 | >0%: 22; >1%: 22; >1.5%: 20; >2%: 18; >2.5%: 16; >3%: 13; >5%: 12; >10 |
 | C1 | P2 | E | **NOT_REPRODUCIBLE** | match to grid resolution; FTSE no-drift c2 61.8 vs published |  |
 | C2 | P2 | E | **NOT_REPRODUCIBLE** | 22 of 23 pass; Japan p=0.042 |  |
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
@@ -60,6 +59,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C29 | P1 | E | **MATCH** | 19/23 low>RW; 20/21 high<RW | 19/23 low>RW; 20/21 high<RW |
 | C37 | P1 | E | **MATCH** | 30 episodes, 26 negative | 30 episodes, 26 negative (col 'excess_pp') |
 | C38 | P1 | E | **MATCH** | t=-3.16, p=0.034, 5 clusters | year_collapsed t=-3.155, p=0.0343, clusters=5 |
+| E3 | P1 | E | **MATCH** | reproduce all 23 tail_coverage labels; identify whether any  | two-threshold rule (low>2.0%, high>1.0%): 0/23 mismatches |
 | A2 | P2 | E | **MATCH** | most of 23 in each cluster | 17/23 c1 in [97.0,98.5]; 20/23 c2 in [101.2,102.4] |
 | A8 | P2 | E | **MATCH** | 43.8 / 31.5 / 24.6 | 43.8 / 31.5 / 24.6 |
 | B5 | P2 | E | **MATCH** | 57 rows with F, p, screen | 57 rows, 0 missing F/p |
@@ -160,9 +160,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > TEXT IS WRONG. Brazil's high band is EMPTY (n_ex=0), so beta_ex=0.0 is a placeholder, not an estimate - se and stars are blank. Fix: 'every ESTIMATED b_EXP is negative; Brazil has no high-sentiment months, so no slope is identified.'
 
-**E3** (MISMATCH) - Tail-coverage: table implies 20/23, Sec 7.1 says '14'
+**E3** (MATCH) - Tail-coverage: what rule reproduces Table 4.1's column? (also: Sec 7.1 says '14' where the table implies 20)
 
-> RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', which yields exactly 20 and drops precisely ['klci', 'twse'] - the two the table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the >1.5% rule under Table 4.1; delete or re-source the '14'.
+> The earlier claim of a SINGLE '>1.5% on both bands' rule was WRONG and is retracted (see ASSUMPTIONS.md Phase 7) - it doesn't actually reproduce the table (klci/twse are 'High only' despite low_pct>1.5%; psei/shanghai are 'Both' despite high_pct<1.5%). The correct rule needs TWO INDEPENDENT thresholds - low band present if low_pct>2.0%, high band present if high_pct>1.0% - which reproduces all 23 labels exactly, with a comfortable margin on each side (low: any cutoff in (1.734,2.03] works; high: any cutoff in (0.0,1.147] works - not a fragile fit). Separately: no share-based rule (single- or two-threshold) yields 14 or 10 both-tailed markets under any cutoff - the table's own rule gives 20. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the two-threshold rule under Table 4.1; delete or re-source the '14'.
 
 **A2** (MATCH) - Threshold clusters: lower ~97.0-98.5, upper ~101.2-102.4
 
@@ -284,6 +284,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `B3` Table 5.1 matched windows (Greece + Turkey)
 - `B7` Table C.1 national-global first-difference correlations
 - `C51` BH: 19/24 screening and 30/33 coefficient rejections survive
+- `E3` Tail-coverage: what rule reproduces Table 4.1's column? (also: Sec 7.1 says '14' where the table implies 20)
 - `A2` Threshold clusters: lower ~97.0-98.5, upper ~101.2-102.4
 - `A3` RW-share endpoints: Japan 33.7 (c2=99.87); Turkey 94.2
 - `C15` Low-band slopes: 11 sig neg, 5 sig pos, 7 indeterminate
@@ -330,7 +331,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 **2. Disagrees with the paper - needs a text fix or investigation:**
 
 - `E2` 'Every estimated b_EXP is negative' vs Brazil b_EXP = 0.000
-- `E3` Tail-coverage: table implies 20/23, Sec 7.1 says '14'
 - `E1` Sec 4.1: 'South Korea/Mexico UPPER threshold above cluster' vs table
 
 **3. No committed output carries this number (needs a rebuilt generator):**

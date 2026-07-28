@@ -107,10 +107,17 @@ EPISODES_COVERAGE = {
 
 EPISODES = EPISODES_VERDICT   # backwards-compatible alias
 
-# Tail-coverage rule behind Table 4.1's tail_coverage column. Recovered in
-# Phase 0 by sweeping candidate rules: >1.5% yields exactly 20 both-tailed and
-# drops precisely twse (1.7%) and klci (1.5%). See VERIFICATION_REPORT.md E3.
-TAIL_COVERAGE_MIN_SHARE_PCT = 1.5
+# Tail-coverage rule behind Table 4.1's tail_coverage column (Both/Low only/
+# High only). The Phase 0 guess of a single ">1.5% on both bands" threshold
+# was WRONG - retracted, see ASSUMPTIONS.md Phase 7. The correct rule needs
+# two INDEPENDENT thresholds, verified against all 23 markets with a
+# comfortable margin on each side (not a knife-edge fit):
+#   low band "present"  if low_pct  > TAIL_COVERAGE_LOW_MIN_SHARE_PCT
+#     feasible range (1.734, 2.03]: twse=1.734% (absent) < ibex35=2.03% (present)
+#   high band "present" if high_pct > TAIL_COVERAGE_HIGH_MIN_SHARE_PCT
+#     feasible range (0.0, 1.147]: bovespa=0.0% (absent) < psei=1.147% (present)
+TAIL_COVERAGE_LOW_MIN_SHARE_PCT = 2.0
+TAIL_COVERAGE_HIGH_MIN_SHARE_PCT = 1.0
 
 
 def ensure_rebuilt_dir():

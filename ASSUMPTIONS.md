@@ -450,3 +450,39 @@ rebuilding.** They survived; their outputs are committed separately under `resul
   `appendixC_dcci_correlations.csv` (25 rows, not 26 - already known, B7). Computed it fresh from
   `outputs/rebuilt/cci_CHN_fetched.csv` (Round 4 T3) against `data/sentiment/global_cci_monthly.csv`
   inside the checker, rather than leaving it unverifiable.
+
+---
+
+## Phase 7 - a false claim, caught and retracted
+
+**A7.1 - E3's "RESOLVED... band share > 1.5%" claim (A6, Phase 6) was wrong.** An external
+review of `VERIFICATION_REPORT.md` proved it by construction: Table 4.1 labels KLCI (low_pct=1.54%)
+and TWSE (low_pct=1.73%) as "High only" even though both exceed 1.5% on the low band; it labels
+PSEI (high_pct=1.15%) and SHANGHAI (high_pct=1.16%) as "Both" even though both are *below* 1.5% on
+the high band. No single threshold, applied to both bands, can satisfy both constraints - the
+prior claim conflated "the count of markets excluded reaches 20 at threshold=1.5%" (true, but by
+excluding bovespa/shanghai/psei via `high_pct`) with "threshold=1.5% drops precisely klci/twse"
+(false - those two are never the ones excluded by that sweep). Two different things, coincidentally
+matching on the *count* alone. Retracted in full, not softened.
+
+**A7.2 - The real rule needs two independent thresholds, and it's not a fragile fit.** Verified
+by hand against all 23 markets in `global_cci_all_markets.csv`, then coded into
+`scripts/verify_paper.py`'s E3 check: a market's low band counts as "present" iff
+`low_pct > TAIL_COVERAGE_LOW_MIN_SHARE_PCT` (`config.py`, now 2.0); its high band counts as
+"present" iff `high_pct > TAIL_COVERAGE_HIGH_MIN_SHARE_PCT` (now 1.0). This reproduces Table 4.1's
+`tail_coverage` column exactly for all 23 markets (0/23 mismatches) - and with real margin, not a
+coincidence: the low-band cutoff can be anywhere in `(1.734, 2.03]` (twse, the highest "absent"
+value, to ibex35, the lowest "present" one) and the high-band cutoff anywhere in `(0.0, 1.147]`
+(bovespa to psei) and it still reproduces every label. A 2-parameter rule fit to 23 binary
+outcomes with no margin would be a red flag for overfitting; one with a combined margin this wide
+on both axes is a discovered rule, not a tuned one. `config.py`'s comment records the exact
+feasible intervals and which two markets bound each one, so the reasoning is checkable without
+rererunning the sweep.
+
+**A7.3 - Sec 7.1's "14" remains unexplained by any share-based rule, single- or two-threshold.**
+No cutoff (or pair of cutoffs) on `low_pct`/`high_pct` yields a both-tailed count of 14 or 10 -
+the table's own rule gives 20 (confirmed under both the retracted and the corrected rule).
+`GROUND_TRUTH.md` §1c's identification of "14 of 23" as the composite-trigger exogeneity
+comparison (a different quantity entirely) still stands as the most likely explanation for the
+transplant - this part of the original A6/Phase-6 finding was never in question, only the "which
+rule reproduces 20" half was wrong.
