@@ -292,6 +292,25 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   requires a live FRED pull with no `FRED_API_KEY` configured here - the same blocker as T3
   (China CCI, A4.8) and V4's twelfth month (A4.9).
 
+**A4.11 — Round 4 T1/T2 (`scripts/round04_placebo_stability.py`).**
+- T1 (`placebo_summary.csv`, `placebo_thresholds.csv`): every deterministic ("real") value -
+  `real_c1`, `real_c2`, `real_rss_impr_pct` for all 23 markets - reproduces the export exactly
+  (verified by market, since row order differs from the export's). The aggregate finding matches
+  closely: median real RSS percentile 92 here vs the export's 94, 14/23 markets >=90th vs 18/23,
+  band share 24.0% vs 25.5% - same conclusion (location is partly mechanical, the fit is not).
+  The 50-per-market simulated placebo draws themselves (`plac_c1_p*`, `real_*_pctile`,
+  `placebo_thresholds.csv`'s individual `sim` rows) do not reproduce bit-for-bit - expected for a
+  seeded simulation where the original RNG call order is unknown (the same limitation already
+  noted for the B=1000 supersession in `placebo_1000.csv` and the B=1000/5000 bootstraps
+  elsewhere). `round10_placebo.py`'s already-committed `BAND_C1`/`BAND_C2` constants and
+  iid-generation method were reused unchanged, so this is the same simulation design at B=50.
+- T2 (`stability_scale_adjusted.csv`): MCSI and global_CCI rows are near-exact (`c1_range_over_span`
+  0.74/0.864 match the export's 0.74/0.864 to 3 decimals). US_CCI is off by more
+  (`c1_range_over_sigma` 2.48 vs the export's 2.84) - most likely `data/sentiment/oecd_cci_USA.csv`
+  starting later or differently-aligned than whatever window the original rolling analysis used;
+  not investigated further. The cross-trigger ORDERING the finding rests on - global CCI >
+  MCSI > US-CCI on both `range_over_sigma` and `range_over_span` - reproduces correctly.
+
 **A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
 deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
 and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the
