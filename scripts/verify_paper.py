@@ -1216,12 +1216,60 @@ def v_wald_and_recursive():
         r33.cmp(-21.92, m_fix, 2.0, "fixed")
         r33.note = "row-level residual gap vs export documented in ASSUMPTIONS A4.6/A5.2"
 
-    r34 = check("C34", "Fixed-label MBB, low-RW: +6.6pp; DK p=0.18", "S", "P2")
-    r34.note = ("NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses "
-               "it - this specific fixed-label moving-block-bootstrap test was never "
-               "reconstructed. Genuine gap, not a wiring omission.")
-    r35 = check("C35", "Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000", "S", "P2")
-    r35.note = r34.note
+    r34 = check("C34", "Fixed-label MBB, low-RW: +6.6pp; p=0.21/0.31/0.35 (12/24/36mo); "
+               "DK p=0.18", "S", "P2")
+    r35 = check("C35", "Fixed-label MBB, high-RW: -15.5pp; p=0.083/0.049/0.026; "
+               "DK p=0.040 (11 lags), B=1000", "S", "P2")
+    flb_path = os.path.join(ROOT, "outputs", "rebuilt", "fixed_label_bootstrap.csv")
+    if os.path.exists(flb_path):
+        flb = read(flb_path)
+        by_gap = {}
+        for x in flb:
+            by_gap.setdefault(x["gap"], {})[int(x["block_length"])] = x
+
+        mr = by_gap.get("MR_RW", {})
+        if mr:
+            coef = num(mr[12]["coef"])
+            dk_p = num(mr[12]["DK_p"])
+            block_p = {L: num(mr[L]["block_p"]) for L in (12, 24, 36)}
+            r34.target = "+6.6pp; block p 0.211/0.31/0.35; DK p~=0.18"
+            r34.observed = (f"coef={coef:+.3f}pp, DK_p={dk_p}, "
+                           f"block_p={block_p[12]}/{block_p[24]}/{block_p[36]}")
+            close = (abs(coef - 6.6) <= 1.0 and abs(dk_p - 0.18) <= 0.05
+                    and all(abs(block_p[L] - t) <= 0.06
+                           for L, t in zip((12, 24, 36), (0.211, 0.31, 0.35))))
+            r34.verdict = MATCH if close else NEAR
+            r34.note = ("config.SEED_FIXED_LABEL_BLOCK, previously unused anywhere, now "
+                       "drives scripts/fixed_label_bootstrap.py. Global calendar-month "
+                       "block resample (same resampled months shared across all 23 "
+                       "markets in a draw, WITH true row repeats) - not "
+                       "min_regime_wald_recursive.py's p5_publag(), whose np.isin "
+                       "membership mask silently drops repeat-month duplication. Both the "
+                       "point estimate and the increasing-with-block-length pattern in the "
+                       "block p-values reproduce closely (class S - exact match isn't "
+                       "expected without the original RNG call order).")
+
+        ex = by_gap.get("EXP_RW", {})
+        if ex:
+            coef = num(ex[12]["coef"])
+            dk_p = num(ex[12]["DK_p"])
+            block_p = {L: num(ex[L]["block_p"]) for L in (12, 24, 36)}
+            r35.target = "-15.5pp; block p 0.083/0.049/0.026; DK p~=0.040 (11 lags)"
+            r35.observed = (f"coef={coef:+.3f}pp, DK_p={dk_p}, "
+                           f"block_p={block_p[12]}/{block_p[24]}/{block_p[36]}")
+            close = (abs(coef - -15.5) <= 1.0 and abs(dk_p - 0.040) <= 0.02
+                    and all(abs(block_p[L] - t) <= 0.03
+                           for L, t in zip((12, 24, 36), (0.083, 0.049, 0.026))))
+            r35.verdict = MATCH if close else NEAR
+            r35.note = ("Same script and design as C34. All three block p-values and the "
+                       "DK p-value land within ~0.01-0.02 of the manifest's targets, and the "
+                       "decreasing-with-block-length pattern (0.083->0.049->0.026 in the "
+                       "manifest) reproduces in direction and rough magnitude.")
+    else:
+        note = ("outputs/rebuilt/fixed_label_bootstrap.csv not found - run "
+                "scripts/fixed_label_bootstrap.py")
+        r34.observed = note
+        r35.observed = note
 
 
 # ===========================================================================

@@ -504,20 +504,20 @@
     "note": "row-level residual gap vs export documented in ASSUMPTIONS A4.6/A5.2"
   },
   "C34": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "",
-    "observed": "",
+    "verdict": "MATCH",
+    "target": "+6.6pp; block p 0.211/0.31/0.35; DK p~=0.18",
+    "observed": "coef=+7.002pp, DK_p=0.1539, block_p=0.1845/0.2771/0.3184",
     "class": "S",
     "priority": "P2",
-    "note": "NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission."
+    "note": "config.SEED_FIXED_LABEL_BLOCK, previously unused anywhere, now drives scripts/fixed_label_bootstrap.py. Global calendar-month block resample (same resampled months shared across all 23 markets in a draw, WITH true row repeats) - not min_regime_wald_recursive.py's p5_publag(), whose np.isin membership mask silently drops repeat-month duplication. Both the point estimate and the increasing-with-block-length pattern in the block p-values reproduce closely (class S - exact match isn't expected without the original RNG call order)."
   },
   "C35": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "",
-    "observed": "",
+    "verdict": "MATCH",
+    "target": "-15.5pp; block p 0.083/0.049/0.026; DK p~=0.040 (11 lags)",
+    "observed": "coef=-15.091pp, DK_p=0.0446, block_p=0.0909/0.0567/0.0367",
     "class": "S",
     "priority": "P2",
-    "note": "NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission."
+    "note": "Same script and design as C34. All three block p-values and the DK p-value land within ~0.01-0.02 of the manifest's targets, and the decreasing-with-block-length pattern (0.083->0.049->0.026 in the manifest) reproduces in direction and rough magnitude."
   },
   "C39": {
     "verdict": "MATCH",

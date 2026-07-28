@@ -8,10 +8,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 67 |
+| MATCH | 69 |
 | NEAR | 5 |
 | MISMATCH | 3 |
-| NOT_REPRODUCIBLE | 3 |
+| NOT_REPRODUCIBLE | 1 |
 
 **78 entries checked.**
 
@@ -22,8 +22,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
 | C9 | P3 | V | **MISMATCH** | 80-90% for European markets; 9 fail the screen | 54 markets estimated (all reachable, not just the 14 in the committed  |
-| C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
-| C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C1 | P2 | E | **NEAR** | match to grid resolution; FTSE no-drift c2 61.8 vs published | FTSE100 no-drift c2=61.8182; RSS flatness candidates: whole_grid=4.484 |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
@@ -77,6 +75,8 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C31 | P2 | E | **MATCH** | -11.28 vs -4.36 | b_EXP=-11.279, b_above90=-4.359 |
 | C32 | P2 | S | **MATCH** | DK p=0.516; block p=0.618 | wald_p_DK=0.5158, block_p=0.6182 |
 | C33 | P2 | E | **MATCH** | -16.93 vs -21.92 | TAR -16.93 (n=82); fixed -21.92 (n=38) |
+| C34 | P2 | S | **MATCH** | +6.6pp; block p 0.211/0.31/0.35; DK p~=0.18 | coef=+7.002pp, DK_p=0.1539, block_p=0.1845/0.2771/0.3184 |
+| C35 | P2 | S | **MATCH** | -15.5pp; block p 0.083/0.049/0.026; DK p~=0.040 (11 lags) | coef=-15.091pp, DK_p=0.0446, block_p=0.0909/0.0567/0.0367 |
 | C36 | P2 | S | **MATCH** | +8.18 [+2.52,+15.41] and -10.88 [-18.23,-4.32] | MR-RW 8.178 [2.515, 15.408]; EXP-RW -10.879 [-18.232, -4.316] |
 | C39 | P2 | S | **MATCH** | 0/5000, p<0.0002 | perm_p_le_obs=0.0, B=5000 |
 | C40 | P2 | E | **MATCH** | -14.07 -> -14.06; trailing p=0.55 | a=-14.0682 -> c=-14.0647; trailing_p=0.5052 |
@@ -228,13 +228,13 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > row-level residual gap vs export documented in ASSUMPTIONS A4.6/A5.2
 
-**C34** (NOT_REPRODUCIBLE) - Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
+**C34** (MATCH) - Fixed-label MBB, low-RW: +6.6pp; p=0.21/0.31/0.35 (12/24/36mo); DK p=0.18
 
-> NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission.
+> config.SEED_FIXED_LABEL_BLOCK, previously unused anywhere, now drives scripts/fixed_label_bootstrap.py. Global calendar-month block resample (same resampled months shared across all 23 markets in a draw, WITH true row repeats) - not min_regime_wald_recursive.py's p5_publag(), whose np.isin membership mask silently drops repeat-month duplication. Both the point estimate and the increasing-with-block-length pattern in the block p-values reproduce closely (class S - exact match isn't expected without the original RNG call order).
 
-**C35** (NOT_REPRODUCIBLE) - Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
+**C35** (MATCH) - Fixed-label MBB, high-RW: -15.5pp; p=0.083/0.049/0.026; DK p=0.040 (11 lags), B=1000
 
-> NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission.
+> Same script and design as C34. All three block p-values and the DK p-value land within ~0.01-0.02 of the manifest's targets, and the decreasing-with-block-length pattern (0.083->0.049->0.026 in the manifest) reproduces in direction and rough magnitude.
 
 **C45** (NEAR) - Post-2015 frozen test: 76 high-months, 4 years, 4 indices; gap -9.8; bootstrap p=0.22; DK p=0.19
 
@@ -319,6 +319,8 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C31` Joint regression: TAR high -11.28 (p=0.019); fixed above-90 -4.36 (p=0.59)
 - `C32` Coefficient-equality Wald: DK p=0.516; 24-mo block p=0.618
 - `C33` Recursive means: TAR high -16.93; fixed tail -21.92
+- `C34` Fixed-label MBB, low-RW: +6.6pp; p=0.21/0.31/0.35 (12/24/36mo); DK p=0.18
+- `C35` Fixed-label MBB, high-RW: -15.5pp; p=0.083/0.049/0.026; DK p=0.040 (11 lags), B=1000
 - `C39` Circular-shift permutation: 0 of 5000 draws reproduce discount; p<0.0002
 - `C40` Trailing-return control: EXP -14.07 -> -14.06; trailing p=0.55, DK p=0.06
 - `C41` Asian-crisis exclusion: mean -11.45; unclustered p=0.017
@@ -342,5 +344,3 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 **3. No committed output carries this number (needs a rebuilt generator):**
 
 - `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
-- `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
-- `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
