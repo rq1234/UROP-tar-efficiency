@@ -229,3 +229,17 @@ Residual, unresolved, not chased further per the report-don't-repair rule:
   depending on cell — `compare_rebuilt.py` tags these seed/precision-sensitive; the headline P8b
   claim (Turkey RW share collapsing under percentile normalisation) reproduces closely (8.8%/9.2%
   export/rebuilt vs the reported 42%→9%).
+
+**A4.7 — `appendixD_optionAB_agreement.csv` (Round 2, R4) inherits Round 7's Option-B gap.**
+`scripts/round02_pool_optionAB.py` reuses the frozen-threshold (Option B) method already in
+`scripts/round07_dependence.py`'s `x6_kappa` (in-sample fit to `INSAMPLE_END`, applied out of
+sample via `optimal_from_parts`). Most markets reproduce the export within 1-4pp of agreement
+(precision-level noise). `nikkei225` and `psei` reproduce `kappa_stability.csv`'s own agreement
+figures for those markets EXACTLY (47.94%, 49.31%) but diverge sharply from
+`appendixD_optionAB_agreement.csv`'s own figures for the same two markets (97.48%, 51.61%) — the
+gap is consistent across both exports built on the same method, not a new bug introduced here.
+The shared root cause (the in-sample-only grid search evidently lands on a different, likely
+degenerate, threshold pair for these two markets than whatever the original process used) is
+Round 7 scope and already flagged there via kappa_stability's own "mean kappa 0.694 vs 0.740"
+gap; not re-derived. `horizon_test_exclusions.csv` (R2/R3b), by contrast, reproduces the export
+exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places).

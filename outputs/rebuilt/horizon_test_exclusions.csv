@@ -1,0 +1,5 @@
+run,note,MR,RW,EXP,nMR,nRW,nEXP,pMRRW,pEXRW,nmk
+R2a_12m,"exclude Greece+Turkey (21 mkts, Japan-EXP still excluded)",13.7696,7.6967,-6.5542,1083,6069,581,4e-06,0.0,21
+R2b_12m,also exclude Japan entirely (20 mkts),13.7828,7.6782,-6.5542,1060,5932,581,6e-06,0.0,20
+R2c_12m,also exclude Spain (19 mkts),13.7314,7.847,-7.3878,1052,5605,534,1.5e-05,0.0,19
+R3b_12m,exclude Turkey+Argentina,12.4528,6.2595,-5.9422,1080,6080,563,1e-06,0.0,21
