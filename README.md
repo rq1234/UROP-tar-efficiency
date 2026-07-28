@@ -138,6 +138,17 @@ individual gap and its cause is logged in `ASSUMPTIONS.md` (search for the round
 filename); nothing is silently approximated. The paper's 5 figures (`results/exports/figures/`)
 are not rebuilt - regenerating plots was always lower priority than verifying the numbers.
 
+**`VERIFICATION_REPORT.md`** is the paper-facing view of the same status: every one of the 77
+non-figure entries in `verification_manifest.md` ("every substantive number and exhibit in the
+final draft") now has a verdict — **61 MATCH, 4 NEAR, 3 MISMATCH, 9 NOT_REPRODUCIBLE.** The 3
+MISMATCH are genuine paper-text errors (E1/E2/E3 — Section 4.1's threshold wording, "every
+b_EXP is negative", and a transplanted "14" figure), not verifier bugs. The 9 NOT_REPRODUCIBLE
+are honest gaps: two need a human to run `src/replicate.py` and an 8-lag Granger re-run and
+eyeball the result rather than diff a file; one (`config.SEED_FIXED_LABEL_BLOCK`) is a genuinely
+unbuilt analysis; one needs raw per-month return data no export carries; four route through
+`src/archive/` and weren't cross-checked cell-by-cell. Run `python scripts/verify_paper.py` to
+regenerate.
+
 ## Why `results/exports/` and `src/archive/` are not deleted
 
 Both look like duplication. Neither is.

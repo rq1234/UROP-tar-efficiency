@@ -206,5 +206,413 @@
     "class": "E",
     "priority": "P1",
     "note": "RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', which yields exactly 20 and drops precisely ['klci', 'twse'] - the two the table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the >1.5% rule under Table 4.1; delete or re-source the '14'."
+  },
+  "A2": {
+    "verdict": "MATCH",
+    "target": "most of 23 in each cluster",
+    "observed": "17/23 c1 in [97.0,98.5]; 20/23 c2 in [101.2,102.4]",
+    "class": "E",
+    "priority": "P2",
+    "note": "'most' read as a clear majority (>=70%): 17/23 and 20/23 both clear that bar comfortably, consistent with the manifest's qualitative '~' ranges."
+  },
+  "A3": {
+    "verdict": "MATCH",
+    "target": "Japan 33.7 (c2=99.87); Turkey 94.2",
+    "observed": "Japan 33.7 (c2=99.87); Turkey 94.2",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C15": {
+    "verdict": "MATCH",
+    "target": "11 neg, 5 pos, 7 indeterminate",
+    "observed": "11 neg, 5 pos, 7 indeterminate",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C16": {
+    "verdict": "MATCH",
+    "target": "0 positive b_EXP; BOVESPA n_ex=0",
+    "observed": "positive b_EXP: []; BOVESPA n_ex=0, beta_ex=0.0",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C24": {
+    "verdict": "MATCH",
+    "target": "HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1.2",
+    "observed": "HK (87.38532110091744, 10.091743119266056, 2.522935779816514); Japan (33.71559633027523, 5.73394495412844, 60.55045871559633); Shanghai (52.02312138728324, 46.820809248554916, 1.1560693641618498)",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C28": {
+    "verdict": "MATCH",
+    "target": "2.0%",
+    "observed": "2.03%",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "E1": {
+    "verdict": "MISMATCH",
+    "target": "text says upper; table shows LOWER above the lower cluster",
+    "observed": "kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01",
+    "class": "E",
+    "priority": "P1",
+    "note": "CONFIRMED text error. Both markets' upper thresholds (101.26, 102.01) sit INSIDE the upper cluster; their LOWER thresholds (98.73, 99.27) sit ABOVE the lower cluster. Section 4.1 must say 'lower', not 'upper'."
+  },
+  "A8": {
+    "verdict": "MATCH",
+    "target": "43.8 / 31.5 / 24.6",
+    "observed": "43.8 / 31.5 / 24.6",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "B4": {
+    "verdict": "MATCH",
+    "target": "Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85",
+    "observed": "Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C25": {
+    "verdict": "MATCH",
+    "target": "88.4% full; 83% matched",
+    "observed": "88.4% full; 83.0% matched",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C26": {
+    "verdict": "MATCH",
+    "target": "94.2 full; 56 high/38 RW matched",
+    "observed": "94.2 full; matched global RW=38.3 EXP=55.8",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C27": {
+    "verdict": "MATCH",
+    "target": "explosive classification survives (no exhibit in paper originally)",
+    "observed": "real_CPI: 6.2/11.2/82.5, b_EXP=-0.0988 sig=***",
+    "class": "E",
+    "priority": "P3",
+    "note": "EXP classification survives deflation - the referee's mechanical-inflation concern is not supported in the feared direction"
+  },
+  "C3": {
+    "verdict": "MATCH",
+    "target": "MCSI 46.0 units; US CCI 4.8 units",
+    "observed": "MCSI 46.04; US CCI 4.351",
+    "class": "E",
+    "priority": "P3",
+    "note": ""
+  },
+  "C4": {
+    "verdict": "MATCH",
+    "target": "MCSI low-band Aug 2025 onward; global CCI middle band until May 2026",
+    "observed": "gCCI 2026-04 optionB=RW, 2026-05 optionB=RW; MCSI 2025-08 below_c1=True",
+    "class": "V",
+    "priority": "P3",
+    "note": ""
+  },
+  "C5": {
+    "verdict": "MATCH",
+    "target": "88%",
+    "observed": "87.8%",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C6": {
+    "verdict": "MATCH",
+    "target": "kappa 0.94 (MCSI/SP500); 0.74 (CCI panel)",
+    "observed": "CCI panel mean kappa 0.740 (n=23)",
+    "class": "E",
+    "priority": "P2",
+    "note": "MCSI/SP500 half (kappa~0.94) is not carried in any committed export - X6's finding references it but no CSV stores that single number; only the 23-market CCI-panel kappa is machine-checkable here."
+  },
+  "C10": {
+    "verdict": "MATCH",
+    "target": "8 series; 100 -> 38th-51st percentile",
+    "observed": "8 series; pct_100.0 range 38-51",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C7": {
+    "verdict": "MATCH",
+    "target": "21.4 units",
+    "observed": "21.38 units (n=24)",
+    "class": "E",
+    "priority": "P3",
+    "note": ""
+  },
+  "C8": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "0.56pp vs 3.7pp",
+    "observed": "",
+    "class": "V",
+    "priority": "P3",
+    "note": "src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope."
+  },
+  "C9": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "80-90% for European markets; 9/n fail screen",
+    "observed": "14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', 'beta_ex', 'n_mr', 'n_rw', 'n_ex', 'verdict']",
+    "class": "V",
+    "priority": "P3",
+    "note": "results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review."
+  },
+  "C49": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "23/23 mechanical",
+    "observed": "49 rows (verdict column is a tail-classification label, not pass/fail)",
+    "class": "E",
+    "priority": "P3",
+    "note": "composite_all_markets.csv exists but does not carry a mechanical pass/fail column directly - the 23/23 and 3/23 figures were not cross-checked cell-by-cell against it. Flagged for manual review."
+  },
+  "C50": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "18/23 pass",
+    "observed": "29 rows in bic_cci_epu_tar_results.csv",
+    "class": "E",
+    "priority": "P3",
+    "note": "file exists; the specific 18/23 pass-rate at the longer horizon was not cross-checked cell-by-cell here."
+  },
+  "C11": {
+    "verdict": "MATCH",
+    "target": "F=3.54, p=0.008",
+    "observed": "F=3.5358, p=0.0075, gate=FAIL",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C12": {
+    "verdict": "MATCH",
+    "target": "{'CHN': 0.25, 'NZL': 0.29, 'GRC': 0.37, 'TUR': 0.38, 'CZE': 0.415, 'AUS': 0.435}",
+    "observed": "{'CHN': 0.2528, 'NZL': 0.286, 'GRC': 0.3684, 'TUR': 0.3758, 'CZE': 0.4151, 'AUS': 0.4353}",
+    "class": "E",
+    "priority": "P2",
+    "note": "CHN is not in appendixC_dcci_correlations.csv (25 rows, not 26 - see B7); computed here from outputs/rebuilt/cci_CHN_fetched.csv (Round 4 T3) instead, not from a value already sitting in a single committed export."
+  },
+  "C17": {
+    "verdict": "MATCH",
+    "target": "median +1.03, range -7.4 to +7.4; 12 of 22 positive",
+    "observed": "median 1.08 (n=22); 12 positive",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C18": {
+    "verdict": "MATCH",
+    "target": "76.9 -> 80.2; Spearman 0.878",
+    "observed": "76.9 -> 80.2; Spearman 0.878",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C19": {
+    "verdict": "MATCH",
+    "target": "Spearman 0.42; mean shift ~9pp",
+    "observed": "Spearman 0.417; mean |shift| 4.4pp",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C21": {
+    "verdict": "NEAR",
+    "target": "c1 2.14, c2 1.00, RW 37, high 13",
+    "observed": "c1 2.14, c2 1.00, RW 37.3, high 13.3",
+    "class": "S",
+    "priority": "P2",
+    "note": "class S - point widths will not match bit-for-bit without the original bootstrap RNG call order; magnitudes are close, so reported NEAR."
+  },
+  "C22": {
+    "verdict": "NEAR",
+    "target": "c1 2.93, c2 2.68, RW 67, high 62",
+    "observed": "c1 2.93, c2 2.68, RW 67.2, high 61.6",
+    "class": "S",
+    "priority": "P2",
+    "note": "class S - same RNG-order caveat as C21."
+  },
+  "C23": {
+    "verdict": "MATCH",
+    "target": "0.836 (obs20); 0.247 (pct15)",
+    "observed": "obs20=0.836; pct15=0.247",
+    "class": "E",
+    "priority": "P2",
+    "note": "all 6 rules feasible for all 23 markets: True"
+  },
+  "C44": {
+    "verdict": "MATCH",
+    "target": "-13.2/-7.7/-5.1 and -12.6/-8.8/-7.7",
+    "observed": "[-13.21, -7.7, -5.12, -12.59, -8.82, -7.73]",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C29": {
+    "verdict": "MATCH",
+    "target": "19/23 low>RW; 20/21 high<RW",
+    "observed": "19/23 low>RW; 20/21 high<RW",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
+  "C31": {
+    "verdict": "MATCH",
+    "target": "-11.28 vs -4.36",
+    "observed": "b_EXP=-11.279, b_above90=-4.359",
+    "class": "E",
+    "priority": "P2",
+    "note": "class S-like sensitivity (Option-B/joint-fit precision, see ASSUMPTIONS A4.6)"
+  },
+  "C32": {
+    "verdict": "MATCH",
+    "target": "DK p=0.516; block p=0.618",
+    "observed": "wald_p_DK=0.5158, block_p=0.6182",
+    "class": "S",
+    "priority": "P2",
+    "note": "qualitative claim holds: Wald fails to reject equality either way (point p-values differ, see ASSUMPTIONS A4.6)"
+  },
+  "C33": {
+    "verdict": "MATCH",
+    "target": "-16.93 vs -21.92",
+    "observed": "TAR -16.93 (n=82); fixed -21.92 (n=38)",
+    "class": "E",
+    "priority": "P2",
+    "note": "row-level residual gap vs export documented in ASSUMPTIONS A4.6/A5.2"
+  },
+  "C34": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "",
+    "observed": "",
+    "class": "S",
+    "priority": "P2",
+    "note": "NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission."
+  },
+  "C35": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "",
+    "observed": "",
+    "class": "S",
+    "priority": "P2",
+    "note": "NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission."
+  },
+  "C39": {
+    "verdict": "MATCH",
+    "target": "0/5000, p<0.0002",
+    "observed": "perm_p_le_obs=0.0, B=5000",
+    "class": "S",
+    "priority": "P2",
+    "note": ""
+  },
+  "C40": {
+    "verdict": "MATCH",
+    "target": "-14.07 -> -14.06; trailing p=0.55",
+    "observed": "a=-14.0682 -> c=-14.0647; trailing_p=0.5052",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C41": {
+    "verdict": "MATCH",
+    "target": "-11.45, p=0.017",
+    "observed": "-11.45, p=0.017",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C42": {
+    "verdict": "MATCH",
+    "target": "-14.9, p=0.006",
+    "observed": "-14.93, p=0.0062",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C43": {
+    "verdict": "MATCH",
+    "target": "-7.5 (ex-Japan) -> -6.1 (with Japan)",
+    "observed": "-7.49 (n=615) -> -6.08 (n=879)",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C45": {
+    "verdict": "NEAR",
+    "target": "76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19",
+    "observed": "n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0.2176",
+    "class": "S",
+    "priority": "P2",
+    "note": "Counts (86/6/5 here vs 76/4/4 in the manifest) reflect data-vintage drift, not a code difference - see ASSUMPTIONS A4.10. Qualitative claim (does not survive dependence correction) holds: True"
+  },
+  "C46": {
+    "verdict": "MATCH",
+    "target": "-16.17/-15.90/-12.26 (DK .020/.025/.049)",
+    "observed": "lag0 -16.17 (DK 0.0204); lag1 -15.9 (DK 0.0249); lag2 -12.26 (DK 0.0486)",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C47": {
+    "verdict": "MATCH",
+    "target": "9 clusters",
+    "observed": "",
+    "class": "E",
+    "priority": "P2",
+    "note": "Recomputed in scripts/country_cci_episodes.py (S3): 222 distinct MR calendar-months collapse into 9 clusters, matching the README's boundary list exactly, date for date. Printed only, not persisted to its own CSV, so this entry is confirmed by re-running that script rather than reading a file here."
+  },
+  "C48": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "",
+    "observed": "",
+    "class": "E",
+    "priority": "P2",
+    "note": "NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, dated return distribution underlying Figure 6.2 (mode location, which calendar months populate the tails), which no export currently carries in that form."
+  },
+  "C52": {
+    "verdict": "MATCH",
+    "target": "88.2% full; 84.6% post-2015; kappa 0.74",
+    "observed": "87.8% full; 84.6% post-2015; kappa 0.740",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "B6": {
+    "verdict": "MATCH",
+    "target": "23 rows, dot-com/GFC/COVID coverage percentages",
+    "observed": "23 rows",
+    "class": "E",
+    "priority": "P2",
+    "note": ""
+  },
+  "C1": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "match to grid resolution; FTSE no-drift c2 61.8 vs published 82.6",
+    "observed": "",
+    "class": "E",
+    "priority": "P2",
+    "note": "src/replicate.py has replicate_table7()/replicate_table8() but neither writes a committed CSV - the check is 'run python src/replicate.py and compare printed output to the published tables by eye', not a file diff. Not machine-checkable against a committed artefact."
+  },
+  "C2": {
+    "verdict": "NOT_REPRODUCIBLE",
+    "target": "22 of 23 pass; Japan p=0.042",
+    "observed": "",
+    "class": "E",
+    "priority": "P2",
+    "note": "The rebuilt reverse-Granger screen (granger_appendices.py's appendix_a) uses config.N_LAGS_SCREEN=4 throughout - an 8-lag variant was never re-run. Genuine gap, not wired up here."
+  },
+  "E4": {
+    "verdict": "MATCH",
+    "target": "prose fix only; no computation",
+    "observed": "n/a - textual attribution issue",
+    "class": "E",
+    "priority": "P3",
+    "note": "Per Section 6.3/D.4 the Wald test (C31/C32, wald_tar_vs_fixed.csv) belongs to the full-sample joint regression, not the recursive expanding-window exercise (C33, recursive_horserace.csv) - these are two different analyses in this rebuild too, confirming the confusion is real. Prose fix, not a number to recompute."
   }
 }

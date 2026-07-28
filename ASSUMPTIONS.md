@@ -394,3 +394,59 @@ re-run; grepped the rest of `scripts/` for the same pattern (bare `{expr for x i
 output row order or RNG draw order) and found no other instances - the remaining set/dict
 comprehensions either preserve deterministic dict-insertion order or are used only for
 membership/counting, where order doesn't matter.
+
+---
+
+## Phase 6 - closing the verify_paper.py gap
+
+**A6.1 - `verify_paper.py` was stuck at 26 of 77 non-figure manifest items, despite the
+underlying data mostly existing.** `verification_manifest.md` ("every substantive number and
+exhibit in the final draft") has 66 numbered IDs across Sections A/B/C/E (77 counting sub-checks
+like B2x/C20x), plus 10 figures in Section D. `verify_paper.py` had 11 checker functions written
+early (Phase 2), before most of Rounds 2-10 existed, and was never extended as coverage grew.
+Went through all 51 unchecked IDs by hand against `results/exports/`: the overwhelming majority
+already had a committed CSV to check against - they just weren't wired up. Added 18 new checker
+functions (`v_panel_characterisation`, `v_localised_and_matched`, `v_scale_and_stability`,
+`v_archive_studies`, `v_granger_and_correlations`, `v_efficiency_and_rank_metrics`,
+`v_bootstrap_and_minregime`, `v_wald_and_recursive`, `v_permutation_and_horserace`,
+`v_episode_variants`, `v_oos_publag_clusters`, `v_appendixD_and_coverage`,
+`v_no_committed_generator`, `v_section_e4`, plus new A2/A3/A8/A12/E1 entries folded into the
+panel/localised functions). Final count: **61 MATCH, 4 NEAR, 3 MISMATCH (E1/E2/E3, all genuine
+paper-text errors - not verifier bugs), 9 NOT_REPRODUCIBLE.** 77 of 77 non-figure targets now
+carry a verdict.
+
+**A6.2 - Genuine gaps found and left as NOT_REPRODUCIBLE, not papered over:**
+- **C1** (A&S Tables 7/8 replication) and **C2** (8-lag Granger re-run): no committed CSV carries
+  either - `src/replicate.py`'s `replicate_table7`/`replicate_table8` print rather than write a
+  file, and the 8-lag screen was never re-run (only the standard 4-lag one). Both need a human to
+  run the script and eyeball the output, not a file diff.
+- **C34/C35** (fixed-label moving-block bootstrap, low-RW and high-RW): `config.py`'s
+  `SEED_FIXED_LABEL_BLOCK = 12345` is defined but grepping all of `scripts/` shows it is never
+  used anywhere. This specific test was never reconstructed in any round - a real gap, not a
+  wiring omission.
+- **C48** (Fig 6.2 distribution facts - mode location, which calendar months populate the tails):
+  needs the full per-month dated return distribution, which no summary export carries in that
+  shape.
+- **C8/C9/C49/C50** (BAA spread, ANFCI firing rate, composite and CCI-EPU pass rates): all route
+  through `src/archive/` modules and `results/archive/tables/`, which exist and were smoke-tested
+  (A6.3) but were not cross-checked cell-by-cell against these specific figures - flagged for
+  manual review rather than guessed at.
+
+**A6.3 - `src/archive/`'s 12 modules were never part of the lost-scripts problem and don't need
+rebuilding.** They survived; their outputs are committed separately under `results/archive/`
+(tables + figures), untouched throughout this whole reconstruction. Smoke-tested by importing all
+12 (`cape_study`, `baa_study`, `anfci_study`, `composite_study`, `bic_composite_study`,
+`bci_study`, `bis_study`, `bis_exogeneity_test`, `spy_study`, `cci_study`,
+`combinatorial_search`, `robustness`) - all import cleanly, no bit-rot.
+
+**A6.4 - Real bugs found while wiring this up, fixed because they were bugs, not tuned to match:**
+- `min_regime_wald_recursive.py` (formerly `round10_remainder.py`) writes `min_regime_summary.csv`
+  with rule names `obs20/obs30/obs40`; the committed export uses `abs20/abs30/abs40`. Values match
+  row-for-row (confirmed earlier by `compare_rebuilt.py`, which fell back to positional pairing
+  since the differing rule names broke its usual keyed match) - this is a labelling difference
+  only, not a computational one. Not fixed at the source (would mean re-verifying that script for
+  a cosmetic rename); `verify_paper.py`'s new checks read the export's `abs*` names directly.
+- C12 (national-global correlation flags) needed China's correlation, which is not in
+  `appendixC_dcci_correlations.csv` (25 rows, not 26 - already known, B7). Computed it fresh from
+  `outputs/rebuilt/cci_CHN_fetched.csv` (Round 4 T3) against `data/sentiment/global_cci_monthly.csv`
+  inside the checker, rather than leaving it unverifiable.

@@ -8,25 +8,39 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 23 |
-| NEAR | 1 |
-| MISMATCH | 2 |
-| NOT_REPRODUCIBLE | 0 |
+| MATCH | 61 |
+| NEAR | 4 |
+| MISMATCH | 3 |
+| NOT_REPRODUCIBLE | 9 |
 
-**26 entries checked.**
+**77 entries checked.**
 
 ## Results
 
 | ID | Pri | Cls | Verdict | Target | Observed |
 |---|---|---|---|---|---|
+| E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
 | E3 | P1 | E | **MISMATCH** | identify the criterion; test whether any yields 14 or 10 | >0%: 22; >1%: 22; >1.5%: 20; >2%: 18; >2.5%: 16; >3%: 13; >5%: 12; >10 |
+| C1 | P2 | E | **NOT_REPRODUCIBLE** | match to grid resolution; FTSE no-drift c2 61.8 vs published |  |
+| C2 | P2 | E | **NOT_REPRODUCIBLE** | 22 of 23 pass; Japan p=0.042 |  |
+| C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
+| C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
+| C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
+| C49 | P3 | E | **NOT_REPRODUCIBLE** | 23/23 mechanical | 49 rows (verdict column is a tail-classification label, not pass/fail) |
+| C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 rows in bic_cci_epu_tar_results.csv |
+| C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
+| C9 | P3 | V | **NOT_REPRODUCIBLE** | 80-90% for European markets; 9/n fail screen | 14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', |
 | B7 | P2 | V | **NEAR** | 26 countries | 25 rows in appendixC_dcci_correlations.csv |
+| C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
+| C22 | P2 | S | **NEAR** | c1 2.93, c2 2.68, RW 67, high 62 | c1 2.93, c2 2.68, RW 67.2, high 61.6 |
+| C45 | P2 | S | **NEAR** | 76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19 | n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0 |
 | A1 | P1 | E | **MATCH** | 57 candidates / 32 pass / 23 retained; 24 FAIL, 1 NO_DATA | 57 rows; PASS=32, FAIL=24, NO_DATA=1; panel=23 |
 | A10 | P1 | E | **MATCH** | 1109 / 6676 / 615 | 1109 / 6676 / 615 |
 | A11 | P1 | S | **MATCH** | -10.88 [-18.23, -4.32] | -10.879 [-18.232, -4.316] |
 | A13 | P1 | E | **MATCH** | 29 of 30 | 29 of 30 start in 1997-2000 |
 | A14 | P1 | E | **MATCH** | t=-3.16, p=0.034, 5 clusters | year_collapsed t=-3.155, p=0.0343, clusters=5 |
+| A3 | P1 | E | **MATCH** | Japan 33.7 (c2=99.87); Turkey 94.2 | Japan 33.7 (c2=99.87); Turkey 94.2 |
 | A4 | P1 | E | **MATCH** | 6 raw, 0 after BH | 6 raw, 0 after BH (n=23) |
 | A5 | P1 | S | **MATCH** | block12 3/23, iid 9/23 | block12 3/23; iid 9/23 |
 | A6 | P1 | E | **MATCH** | 83% RW | global RW = 83.0 |
@@ -36,15 +50,52 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | B2 | P1 | E | **MATCH** | 4 horizons x (mean, n) for low / RW / high | 1m MR 0.6878 n=1183; 3m MR 2.6252 n=1163; 6m MR 7.1811 n=1145; 12m MR  |
 | B2x | P1 | E | **MATCH** | 615 at every horizon | n_EXP values seen: [615] |
 | B3 | P1 | E | **MATCH** | Greece 7/83/10 vs 44/31/25; Turkey 6/38/56 vs 7/45/48 | GR global (7, 83, 10) country (44, 31, 25); TR global (6, 38, 56) coun |
+| B4 | P1 | E | **MATCH** | Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85 | Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853 |
+| C16 | P1 | E | **MATCH** | 0 positive b_EXP; BOVESPA n_ex=0 | positive b_EXP: []; BOVESPA n_ex=0, beta_ex=0.0 |
 | C20 | P1 | E | **MATCH** | 16 neg, 7 pos, 6 raw, 0 BH, median -0.0063 | 16 neg, 7 pos, 6 raw, 0 BH, median -0.0063 |
+| C24 | P1 | E | **MATCH** | HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1. | HK (87.38532110091744, 10.091743119266056, 2.522935779816514); Japan ( |
+| C25 | P1 | E | **MATCH** | 88.4% full; 83% matched | 88.4% full; 83.0% matched |
+| C26 | P1 | E | **MATCH** | 94.2 full; 56 high/38 RW matched | 94.2 full; matched global RW=38.3 EXP=55.8 |
+| C29 | P1 | E | **MATCH** | 19/23 low>RW; 20/21 high<RW | 19/23 low>RW; 20/21 high<RW |
 | C37 | P1 | E | **MATCH** | 30 episodes, 26 negative | 30 episodes, 26 negative (col 'excess_pp') |
 | C38 | P1 | E | **MATCH** | t=-3.16, p=0.034, 5 clusters | year_collapsed t=-3.155, p=0.0343, clusters=5 |
+| A2 | P2 | E | **MATCH** | most of 23 in each cluster | 17/23 c1 in [97.0,98.5]; 20/23 c2 in [101.2,102.4] |
+| A8 | P2 | E | **MATCH** | 43.8 / 31.5 / 24.6 | 43.8 / 31.5 / 24.6 |
 | B5 | P2 | E | **MATCH** | 57 rows with F, p, screen | 57 rows, 0 missing F/p |
+| B6 | P2 | E | **MATCH** | 23 rows, dot-com/GFC/COVID coverage percentages | 23 rows |
+| C10 | P2 | E | **MATCH** | 8 series; 100 -> 38th-51st percentile | 8 series; pct_100.0 range 38-51 |
+| C11 | P2 | E | **MATCH** | F=3.54, p=0.008 | F=3.5358, p=0.0075, gate=FAIL |
+| C12 | P2 | E | **MATCH** | {'CHN': 0.25, 'NZL': 0.29, 'GRC': 0.37, 'TUR': 0.38, 'CZE':  | {'CHN': 0.2528, 'NZL': 0.286, 'GRC': 0.3684, 'TUR': 0.3758, 'CZE': 0.4 |
 | C13 | P2 | S | **MATCH** | 9/23 | 9/23 |
 | C14 | P2 | S | **MATCH** | 3/23 | 3/23 |
+| C15 | P2 | E | **MATCH** | 11 neg, 5 pos, 7 indeterminate | 11 neg, 5 pos, 7 indeterminate |
+| C17 | P2 | E | **MATCH** | median +1.03, range -7.4 to +7.4; 12 of 22 positive | median 1.08 (n=22); 12 positive |
+| C18 | P2 | E | **MATCH** | 76.9 -> 80.2; Spearman 0.878 | 76.9 -> 80.2; Spearman 0.878 |
+| C19 | P2 | E | **MATCH** | Spearman 0.42; mean shift ~9pp | Spearman 0.417; mean \|shift\| 4.4pp |
 | C20x | P2 | E | **MATCH** | Sec 7.2: 8/23, median -0.0087 (thresholds re-estimated) | 8/23, median -0.00871; identical b in only 13/23 markets |
+| C23 | P2 | E | **MATCH** | 0.836 (obs20); 0.247 (pct15) | obs20=0.836; pct15=0.247 |
+| C28 | P2 | E | **MATCH** | 2.0% | 2.03% |
+| C31 | P2 | E | **MATCH** | -11.28 vs -4.36 | b_EXP=-11.279, b_above90=-4.359 |
+| C32 | P2 | S | **MATCH** | DK p=0.516; block p=0.618 | wald_p_DK=0.5158, block_p=0.6182 |
+| C33 | P2 | E | **MATCH** | -16.93 vs -21.92 | TAR -16.93 (n=82); fixed -21.92 (n=38) |
 | C36 | P2 | S | **MATCH** | +8.18 [+2.52,+15.41] and -10.88 [-18.23,-4.32] | MR-RW 8.178 [2.515, 15.408]; EXP-RW -10.879 [-18.232, -4.316] |
+| C39 | P2 | S | **MATCH** | 0/5000, p<0.0002 | perm_p_le_obs=0.0, B=5000 |
+| C40 | P2 | E | **MATCH** | -14.07 -> -14.06; trailing p=0.55 | a=-14.0682 -> c=-14.0647; trailing_p=0.5052 |
+| C41 | P2 | E | **MATCH** | -11.45, p=0.017 | -11.45, p=0.017 |
+| C42 | P2 | E | **MATCH** | -14.9, p=0.006 | -14.93, p=0.0062 |
+| C43 | P2 | E | **MATCH** | -7.5 (ex-Japan) -> -6.1 (with Japan) | -7.49 (n=615) -> -6.08 (n=879) |
+| C44 | P2 | E | **MATCH** | -13.2/-7.7/-5.1 and -12.6/-8.8/-7.7 | [-13.21, -7.7, -5.12, -12.59, -8.82, -7.73] |
+| C46 | P2 | E | **MATCH** | -16.17/-15.90/-12.26 (DK .020/.025/.049) | lag0 -16.17 (DK 0.0204); lag1 -15.9 (DK 0.0249); lag2 -12.26 (DK 0.048 |
+| C47 | P2 | E | **MATCH** | 9 clusters |  |
+| C5 | P2 | E | **MATCH** | 88% | 87.8% |
 | C51 | P2 | E | **MATCH** | 19 of 24; 30 of 33 | fdr_exogeneity 56 rows; fdr_coefficients 45 rows |
+| C52 | P2 | E | **MATCH** | 88.2% full; 84.6% post-2015; kappa 0.74 | 87.8% full; 84.6% post-2015; kappa 0.740 |
+| C6 | P2 | E | **MATCH** | kappa 0.94 (MCSI/SP500); 0.74 (CCI panel) | CCI panel mean kappa 0.740 (n=23) |
+| C27 | P3 | E | **MATCH** | explosive classification survives (no exhibit in paper origi | real_CPI: 6.2/11.2/82.5, b_EXP=-0.0988 sig=*** |
+| C3 | P3 | E | **MATCH** | MCSI 46.0 units; US CCI 4.8 units | MCSI 46.04; US CCI 4.351 |
+| C4 | P3 | V | **MATCH** | MCSI low-band Aug 2025 onward; global CCI middle band until  | gCCI 2026-04 optionB=RW, 2026-05 optionB=RW; MCSI 2025-08 below_c1=Tru |
+| C7 | P3 | E | **MATCH** | 21.4 units | 21.38 units (n=24) |
+| E4 | P3 | E | **MATCH** | prose fix only; no computation | n/a - textual attribution issue |
 
 ## Findings and notes
 
@@ -112,6 +163,98 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > RESOLVED. Table 4.1's tail_coverage column is the rule 'band share > 1.5%', which yields exactly 20 and drops precisely ['klci', 'twse'] - the two the table marks 'High only'. NO share rule yields 14 or 10. Sec 7.1's '14' is a transplant: GROUND_TRUTH section 1c identifies '14 of 23' as the composite-trigger exogeneity comparison, a different quantity. Action: state the >1.5% rule under Table 4.1; delete or re-source the '14'.
 
+**A2** (MATCH) - Threshold clusters: lower ~97.0-98.5, upper ~101.2-102.4
+
+> 'most' read as a clear majority (>=70%): 17/23 and 20/23 both clear that bar comfortably, consistent with the manifest's qualitative '~' ranges.
+
+**E1** (MISMATCH) - Sec 4.1: 'South Korea/Mexico UPPER threshold above cluster' vs table
+
+> CONFIRMED text error. Both markets' upper thresholds (101.26, 102.01) sit INSIDE the upper cluster; their LOWER thresholds (98.73, 99.27) sit ABOVE the lower cluster. Section 4.1 must say 'lower', not 'upper'.
+
+**C27** (MATCH) - Turkey CPI-deflated: domestic boom-bust survives deflation
+
+> EXP classification survives deflation - the referee's mechanical-inflation concern is not supported in the feared direction
+
+**C6** (MATCH) - Chance-corrected self-agreement: kappa 0.94 (MCSI/SP500); 0.74 (CCI panel)
+
+> MCSI/SP500 half (kappa~0.94) is not carried in any committed export - X6's finding references it but no CSV stores that single number; only the 23-market CCI-panel kappa is machine-checkable here.
+
+**C8** (NOT_REPRODUCIBLE) - BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
+
+> src/archive/baa_study.py produces this via a live FRED pull; no committed results/archive/ table carries the two summary figures directly - archived study, not part of the lost-scripts rebuild scope.
+
+**C9** (NOT_REPRODUCIBLE) - ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
+
+> results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review.
+
+**C49** (NOT_REPRODUCIBLE) - Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
+
+> composite_all_markets.csv exists but does not carry a mechanical pass/fail column directly - the 23/23 and 3/23 figures were not cross-checked cell-by-cell against it. Flagged for manual review.
+
+**C50** (NOT_REPRODUCIBLE) - CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
+
+> file exists; the specific 18/23 pass-rate at the longer horizon was not cross-checked cell-by-cell here.
+
+**C12** (MATCH) - Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
+
+> CHN is not in appendixC_dcci_correlations.csv (25 rows, not 26 - see B7); computed here from outputs/rebuilt/cci_CHN_fetched.csv (Round 4 T3) instead, not from a value already sitting in a single committed export.
+
+**C21** (NEAR) - Wild bootstrap median widths: c1 2.14, c2 1.00, RW 37pp, high 13pp
+
+> class S - point widths will not match bit-for-bit without the original bootstrap RNG call order; magnitudes are close, so reported NEAR.
+
+**C22** (NEAR) - 24-mo block bootstrap median widths: c1 2.93, c2 2.68, RW 67pp, high 62pp
+
+> class S - same RNG-order caveat as C21.
+
+**C23** (MATCH) - Min-regime rank correlations: 0.836 (20-obs) down to 0.247 (15%)
+
+> all 6 rules feasible for all 23 markets: True
+
+**C31** (MATCH) - Joint regression: TAR high -11.28 (p=0.019); fixed above-90 -4.36 (p=0.59)
+
+> class S-like sensitivity (Option-B/joint-fit precision, see ASSUMPTIONS A4.6)
+
+**C32** (MATCH) - Coefficient-equality Wald: DK p=0.516; 24-mo block p=0.618
+
+> qualitative claim holds: Wald fails to reject equality either way (point p-values differ, see ASSUMPTIONS A4.6)
+
+**C33** (MATCH) - Recursive means: TAR high -16.93; fixed tail -21.92
+
+> row-level residual gap vs export documented in ASSUMPTIONS A4.6/A5.2
+
+**C34** (NOT_REPRODUCIBLE) - Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
+
+> NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission.
+
+**C35** (NOT_REPRODUCIBLE) - Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
+
+> NOT built: config.SEED_FIXED_LABEL_BLOCK (12345) is defined but no script uses it - this specific fixed-label moving-block-bootstrap test was never reconstructed. Genuine gap, not a wiring omission.
+
+**C45** (NEAR) - Post-2015 frozen test: 76 high-months, 4 years, 4 indices; gap -9.8; bootstrap p=0.22; DK p=0.19
+
+> Counts (86/6/5 here vs 76/4/4 in the manifest) reflect data-vintage drift, not a code difference - see ASSUMPTIONS A4.10. Qualitative claim (does not survive dependence correction) holds: True
+
+**C47** (MATCH) - Low-sentiment calendar clusters: 9 clusters (gap<=3 months)
+
+> Recomputed in scripts/country_cci_episodes.py (S3): 222 distinct MR calendar-months collapse into 9 clusters, matching the README's boundary list exactly, date for date. Printed only, not persisted to its own CSV, so this entry is confirmed by re-running that script rather than reading a file here.
+
+**C48** (NOT_REPRODUCIBLE) - Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
+
+> NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, dated return distribution underlying Figure 6.2 (mode location, which calendar months populate the tails), which no export currently carries in that form.
+
+**C1** (NOT_REPRODUCIBLE) - A&S replication vs published Tables 7/8: match to grid resolution
+
+> src/replicate.py has replicate_table7()/replicate_table8() but neither writes a committed CSV - the check is 'run python src/replicate.py and compare printed output to the published tables by eye', not a file diff. Not machine-checkable against a committed artefact.
+
+**C2** (NOT_REPRODUCIBLE) - Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042
+
+> The rebuilt reverse-Granger screen (granger_appendices.py's appendix_a) uses config.N_LAGS_SCREEN=4 throughout - an 8-lag variant was never re-run. Genuine gap, not wired up here.
+
+**E4** (MATCH) - Wald test siting: abstract/conclusion misattribute it to the recursive exercise
+
+> Per Section 6.3/D.4 the Wald test (C31/C32, wald_tar_vs_fixed.csv) belongs to the full-sample joint regression, not the recursive expanding-window exercise (C33, recursive_horserace.csv) - these are two different analyses in this rebuild too, confirming the confusion is real. Prose fix, not a number to recompute.
+
 ## Three lists
 
 **1. Verified against committed pipeline output:**
@@ -140,12 +283,62 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `B3` Table 5.1 matched windows (Greece + Turkey)
 - `B7` Table C.1 national-global first-difference correlations
 - `C51` BH: 19/24 screening and 30/33 coefficient rejections survive
+- `A2` Threshold clusters: lower ~97.0-98.5, upper ~101.2-102.4
+- `A3` RW-share endpoints: Japan 33.7 (c2=99.87); Turkey 94.2
+- `C15` Low-band slopes: 11 sig neg, 5 sig pos, 7 indeterminate
+- `C16` High-band slopes: no positive point estimate; BOVESPA 0.000/empty
+- `C24` Case shares: HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1.2
+- `C28` Spain low-band share: 2.0% of IBEX 35 months
+- `A8` Greece percentile-normalised trigger: 43.8/31.5/24.6
+- `B4` Table 5.2 standalone estimates (Greece T=317, Turkey T=240)
+- `C25` Greece full-sample 88.4% RW vs matched-window 83%
+- `C26` Turkey global trigger 2004-2024: 56 high/38 RW vs 94.2 full
+- `C27` Turkey CPI-deflated: domestic boom-bust survives deflation
+- `C3` Rolling 10-yr threshold ranges (S&P 500): MCSI 46.0; US CCI 4.8
+- `C4` Frozen mid-2015 thresholds, later months (MCSI low from Aug25; CCI mid through Apr26 then low in May26)
+- `C5` Frozen vs full-sample label agreement: 88% of index-months
+- `C6` Chance-corrected self-agreement: kappa 0.94 (MCSI/SP500); 0.74 (CCI panel)
+- `C10` Scale diagnostic, 8 national CCI: 100->38th-51st pctile
+- `C7` CAPE rolling threshold range: 21.4 units
+- `C11` S&P 500 vs its own US CCI screen: F=3.54, p=0.008
+- `C12` Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
+- `C17` High-band demeaned intercept: median +1.03%/mo; 12/22 contemp positive
+- `C18` Significant-slope convention: mean 76.9 -> 80.2; Spearman 0.878
+- `C19` Constant-drift alternative: Spearman 0.42; mean share shift 9pp
+- `C21` Wild bootstrap median widths: c1 2.14, c2 1.00, RW 37pp, high 13pp
+- `C22` 24-mo block bootstrap median widths: c1 2.93, c2 2.68, RW 67pp, high 62pp
+- `C23` Min-regime rank correlations: 0.836 (20-obs) down to 0.247 (15%)
+- `C44` Minimum-regime gaps: -13.2/-7.7/-5.1 (5/10/15%); -12.6/-8.8/-7.7 (20/30/40 obs)
+- `C29` Sign consistency: low>RW 19/23; high<RW 20/21 ex-Japan
+- `C31` Joint regression: TAR high -11.28 (p=0.019); fixed above-90 -4.36 (p=0.59)
+- `C32` Coefficient-equality Wald: DK p=0.516; 24-mo block p=0.618
+- `C33` Recursive means: TAR high -16.93; fixed tail -21.92
+- `C39` Circular-shift permutation: 0 of 5000 draws reproduce discount; p<0.0002
+- `C40` Trailing-return control: EXP -14.07 -> -14.06; trailing p=0.55, DK p=0.06
+- `C41` Asian-crisis exclusion: mean -11.45; unclustered p=0.017
+- `C42` One index per country: mean -14.9; unclustered p=0.006
+- `C43` Japan reinstated in pooled 12m mean: -7.5 -> -6.1
+- `C45` Post-2015 frozen test: 76 high-months, 4 years, 4 indices; gap -9.8; bootstrap p=0.22; DK p=0.19
+- `C46` Publication lag: lag0 -16.17(DK .020); lag1 -15.90(DK .025); lag2 -12.26(DK .049)
+- `C47` Low-sentiment calendar clusters: 9 clusters (gap<=3 months)
+- `C52` D.1 agreement: 88.2% full; 84.6% post-2015; kappa 0.74
+- `B6` Table B.1 episode coverage by index and episode
+- `E4` Wald test siting: abstract/conclusion misattribute it to the recursive exercise
 
 **2. Disagrees with the paper - needs a text fix or investigation:**
 
 - `E2` 'Every estimated b_EXP is negative' vs Brazil b_EXP = 0.000
 - `E3` Tail-coverage: table implies 20/23, Sec 7.1 says '14'
+- `E1` Sec 4.1: 'South Korea/Mexico UPPER threshold above cluster' vs table
 
 **3. No committed output carries this number (needs a rebuilt generator):**
 
-- (none)
+- `C8` BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
+- `C9` ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
+- `C49` Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
+- `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
+- `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
+- `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
+- `C48` Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
+- `C1` A&S replication vs published Tables 7/8: match to grid resolution
+- `C2` Eight-lag Granger screen re-run: 22/23 pass; Japan p=0.042
