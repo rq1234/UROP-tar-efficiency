@@ -1,5 +1,5 @@
 id,item,verdict,target,reproduced
-A12,Fixed-tail percentile cuts vs TAR spread (22.14 / 22.09pp),MATCH,"cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp | +22.09pp",cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp
+A12,Fixed-tail percentile cuts vs TAR spread (22.14 / 22.09pp),NEAR,"cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp | +22.09pp",cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp
 A14,Five calendar-year clusters (year-collapsed test),MATCH,"t=-3.16, p=0.034, 5 clusters","year_collapsed t=-3.155, p=0.0343, clusters=5"
 C37,"Episode spells (30 ex-Japan): count, mean length, mean excess, negative count",MATCH,"30 episodes, mean length 20.5mo, mean excess -15.0, 26 negative","30 episodes, mean length 20.5, mean excess -15.04, 26 negative (col 'excess_pp')"
 C39,"Circular-shift permutation (5,000 draws)",MATCH,"0/5000, p<0.0002","perm_p_le_obs=0.0, B=5000"

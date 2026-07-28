@@ -4,7 +4,7 @@ Every row is pulled directly from `outputs/rebuilt/numbers.json`, itself written
 
 | ID | Check | Verdict | Reproduced value |
 |---|---|---|---|
-| A12 | Fixed-tail percentile cuts vs TAR spread (22.14 / 22.09pp) | MATCH | cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp |
+| A12 | Fixed-tail percentile cuts vs TAR spread (22.14 / 22.09pp) | NEAR † | cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp |
 | A14 | Five calendar-year clusters (year-collapsed test) | MATCH | year_collapsed t=-3.155, p=0.0343, clusters=5 |
 | C37 | Episode spells (30 ex-Japan): count, mean length, mean excess, negative count | MATCH | 30 episodes, mean length 20.5, mean excess -15.04, 26 negative (col 'excess_pp') |
 | C39 | Circular-shift permutation (5,000 draws) | MATCH | perm_p_le_obs=0.0, B=5000 |

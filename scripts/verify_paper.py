@@ -726,9 +726,20 @@ def v_fixed_tail_spread():
         r.observed = (f"cut {lo_cut:.2f}/{hi_cut:.2f}; below {below_mean:.2f} above "
                      f"{above_mean:.2f}; fixed spread {fixed_spread:.2f}pp"
                      + (f"; TAR spread {tar_spread:.2f}pp" if tar_spread is not None else ""))
-        r.cmp(22.14, fixed_spread, 0.5, "fixed_spread")
+        # Cuts are CCI threshold levels - TOL["threshold"] is this file's convention for
+        # that quantity (e.g. Japan's c2 check, line ~623). Previously displayed but never
+        # actually compared - a 98.33/101.39 vs target 98.39/101.40 gap could pass silently.
+        r.cmp(98.39, lo_cut, TOL["threshold"], "lo_cut")
+        r.cmp(101.40, hi_cut, TOL["threshold"], "hi_cut")
+        # Spreads are pp-scale forward-return magnitudes, the same quantity v_horizon()
+        # compares at TOL["pct"]; cross-computation comparisons elsewhere in this file use
+        # TOL["pct"]*10 (e.g. r25's full/matched RW-share checks) rather than TOL["pct"]
+        # itself, since this is recomputed fresh from data/, not read from the same export.
+        # The previous hardcoded 0.5 tolerance was looser than every other convention in
+        # this file and let a real 0.26pp gap pass as MATCH.
+        r.cmp(22.14, fixed_spread, TOL["pct"] * 10, "fixed_spread")
         if tar_spread is not None:
-            r.cmp(22.09, tar_spread, 0.5, "tar_spread")
+            r.cmp(22.09, tar_spread, TOL["pct"] * 10, "tar_spread")
     except Exception as exc:                                    # noqa: BLE001
         r.observed = f"computation failed: {type(exc).__name__}: {exc}"
 

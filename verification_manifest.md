@@ -43,7 +43,7 @@ MATCH / NEAR (rounding only) / MISMATCH / NOT_REPRODUCIBLE.
 | A9 | 12-month forward means by band | +14.60% low / +8.01% RW / -7.49% high | E |
 | A10 | 12-month pooled n by band | 1,109 / 6,676 / 615 | E |
 | A11 | Full-pipeline calendar bootstrap, high minus RW | -10.88, 95% CI [-18.23, -4.32] | S |
-| A12 | Fixed-tail benchmark spread vs TAR spread | 22.14 vs 22.09 points | E |
+| A12 | Fixed-tail benchmark spread vs TAR spread | 22.14 vs 22.09 points | E | CORRECTED VERDICT (was MATCH, now NEAR): the check previously never actually compared the 10th/90th cut values (98.39/101.40), only the spreads, at a hardcoded 0.5 tolerance looser than every other check in this file. Fixed to test cuts too (TOL["threshold"]) and spreads at TOL["pct"]*10, this file's own precedented tolerance for cross-computation pp-scale comparisons. Reproduced: cuts 98.33/101.39 (lo_cut off by 0.06, outside TOL["threshold"]=0.01 but within 10x); fixed spread 22.40pp vs target 22.14pp (0.26pp gap). Per `results/exports/README.md:393`, this exact figure was already a rebuilt/replaced number once before ("F2... this replaces the session number"), consistent with genuine vintage-sensitivity rather than a check bug - Section 6.4's printed 98.4/101.4/22.14/22.09 has not been edited; the gap is reported, not repaired. |
 | A13 | High-sentiment spells in 1997-2000 | 29 of 30 (ex-Japan) | E |
 | A14 | Five-cluster episode test | mean -18.3, t = -3.16, p = 0.034 | E |
 
