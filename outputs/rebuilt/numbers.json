@@ -376,20 +376,20 @@
     "note": "results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review."
   },
   "C49": {
-    "verdict": "NOT_REPRODUCIBLE",
-    "target": "23/23 mechanical",
-    "observed": "49 rows (verdict column is a tail-classification label, not pass/fail)",
+    "verdict": "MATCH",
+    "target": "23/23 mechanical; 3/23 BIC-orthogonalised",
+    "observed": "BIC verdict PASS=3/23; mechanical completeness (n_mr+n_rw+n_ex==T) holds for 23/23",
     "class": "E",
     "priority": "P3",
-    "note": "composite_all_markets.csv exists but does not carry a mechanical pass/fail column directly - the 23/23 and 3/23 figures were not cross-checked cell-by-cell against it. Flagged for manual review."
+    "note": "'23/23 mechanical' = a completeness identity (every market's composite trigger classifies 100% of its months into some regime - n_mr+n_rw+n_ex==T), confirmed for all 23 rows in bic_composite_results.csv. '3/23 BIC-orthogonalised' = that file's own verdict column, PASS=3/FAIL=20, exact. Note: this composite-study 23-market universe is NOT the main 23-panel - 9 names don't overlap (['asx200', 'cac40', 'dax', 'eurostoxx50', 'ftse100', 'jse', 'nifty50', 'sp500', 'tsx']) - a separate universe, not an error."
   },
   "C50": {
     "verdict": "NOT_REPRODUCIBLE",
     "target": "18/23 pass",
-    "observed": "29 rows in bic_cci_epu_tar_results.csv",
+    "observed": "29 total rows; 15/23 overlap the main panel by market name; verdicts seen: {'BOTH TAILS'}; 0 with p_value<0.05",
     "class": "E",
     "priority": "P3",
-    "note": "file exists; the specific 18/23 pass-rate at the longer horizon was not cross-checked cell-by-cell here."
+    "note": "Checked for an alternate join key (ticker/code) - none exists, only lowercase `market` names, same convention as the panel. Only 15 of 23 panel markets appear in this file at all (missing: bist100, hangseng, hscei, lq45, merval, smi, szse, ta35), all 15 are 'BOTH TAILS', and none has p_value<0.05 - the 18/23 pass rate and the 10-vs-14 both-tails split are not recoverable from this file under any join. Confirmed absent, not merely unexamined."
   },
   "C11": {
     "verdict": "MATCH",

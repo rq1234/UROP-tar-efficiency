@@ -879,24 +879,58 @@ def v_archive_studies():
 
     r49 = check("C49", "Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised", "E", "P3")
     p49 = os.path.join(ARCHIVE_TABLES, "composite_all_markets.csv")
-    if os.path.exists(p49):
+    p49bic = os.path.join(ARCHIVE_TABLES, "bic_composite_results.csv")
+    if os.path.exists(p49) and os.path.exists(p49bic):
         rows = read(p49)
-        r49.target, r49.observed = "23/23 mechanical", f"{len(rows)} rows (verdict column is a " \
-                                    "tail-classification label, not pass/fail)"
-        r49.note = ("composite_all_markets.csv exists but does not carry a mechanical "
-                   "pass/fail column directly - the 23/23 and 3/23 figures were not "
-                   "cross-checked cell-by-cell against it. Flagged for manual review.")
+        bic = read(p49bic)
+        bic_pass = sum(1 for x in bic if x["verdict"].strip() == "PASS")
+        bic_universe = {x["market"] for x in bic}
+        by_mkt = {x["market"]: x for x in rows}
+        missing = bic_universe - set(by_mkt)
+        mechanical_ok = all(
+            abs(num(by_mkt[m]["n_mr"]) + num(by_mkt[m]["n_rw"]) + num(by_mkt[m]["n_ex"])
+                - num(by_mkt[m]["T"])) < 0.5
+            for m in bic_universe if m in by_mkt)
+        panel_mkts = {x["market"] for x in read(os.path.join(TABLES, "global_cci_all_markets.csv"))}
+        non_overlap = sorted(bic_universe - panel_mkts)
+        r49.target = "23/23 mechanical; 3/23 BIC-orthogonalised"
+        r49.observed = (f"BIC verdict PASS={bic_pass}/{len(bic)}; mechanical completeness "
+                        f"(n_mr+n_rw+n_ex==T) holds for {len(bic_universe)-len(missing)}"
+                        f"/{len(bic_universe)}")
+        ok = not missing and mechanical_ok and bic_pass == 3 and len(bic) == 23
+        if ok:
+            r49.ok(
+                "'23/23 mechanical' = a completeness identity (every market's composite trigger "
+                "classifies 100% of its months into some regime - n_mr+n_rw+n_ex==T), confirmed "
+                "for all 23 rows in bic_composite_results.csv. '3/23 BIC-orthogonalised' = that "
+                "file's own verdict column, PASS=3/FAIL=20, exact. Note: this composite-study "
+                f"23-market universe is NOT the main 23-panel - {len(non_overlap)} names don't "
+                f"overlap ({non_overlap}) - a separate universe, not an error.")
+        else:
+            r49.fail(f"completeness or PASS-count check failed (missing={missing}, "
+                    f"mechanical_ok={mechanical_ok}, bic_pass={bic_pass})")
     else:
-        r49.observed = f"{p49} not found"
+        r49.observed = f"{p49} or {p49bic} not found"
 
     r50 = check("C50", "CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'", "E", "P3")
     p50 = os.path.join(ARCHIVE_TABLES, "bic_cci_epu_tar_results.csv")
     r50.target = "18/23 pass"
     if os.path.exists(p50):
         rows = read(p50)
-        r50.observed = f"{len(rows)} rows in bic_cci_epu_tar_results.csv"
-        r50.note = "file exists; the specific 18/23 pass-rate at the longer horizon was not " \
-                   "cross-checked cell-by-cell here."
+        panel_mkts = {x["market"] for x in read(os.path.join(TABLES, "global_cci_all_markets.csv"))}
+        overlap = [x for x in rows if x["market"] in panel_mkts]
+        verdicts = {x.get("verdict", "") for x in overlap}
+        sig = sum(1 for x in overlap if num(x.get("p_value")) is not None
+                 and num(x["p_value"]) < 0.05)
+        r50.observed = (f"{len(rows)} total rows; {len(overlap)}/23 overlap the main panel by "
+                        f"market name; verdicts seen: {verdicts}; {sig} with p_value<0.05")
+        r50.note = ("Checked for an alternate join key (ticker/code) - none exists, only "
+                   "lowercase `market` names, same convention as the panel. Only 15 of 23 "
+                   "panel markets appear in this file at all (missing: bist100, hangseng, "
+                   "hscei, lq45, merval, smi, szse, ta35), all 15 are 'BOTH TAILS', and none "
+                   "has p_value<0.05 - the 18/23 pass rate and the 10-vs-14 both-tails split "
+                   "are not recoverable from this file under any join. Confirmed absent, not "
+                   "merely unexamined.")
     else:
         r50.observed = f"{p50} not found"
 

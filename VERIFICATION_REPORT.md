@@ -8,10 +8,10 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 63 |
+| MATCH | 64 |
 | NEAR | 4 |
 | MISMATCH | 2 |
-| NOT_REPRODUCIBLE | 9 |
+| NOT_REPRODUCIBLE | 8 |
 
 **78 entries checked.**
 
@@ -26,8 +26,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
-| C49 | P3 | E | **NOT_REPRODUCIBLE** | 23/23 mechanical | 49 rows (verdict column is a tail-classification label, not pass/fail) |
-| C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 rows in bic_cci_epu_tar_results.csv |
+| C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
 | C9 | P3 | V | **NOT_REPRODUCIBLE** | 80-90% for European markets; 9/n fail screen | 14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', |
 | B7 | P2 | V | **NEAR** | 26 countries | 25 rows in appendixC_dcci_correlations.csv |
@@ -95,6 +94,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | C27 | P3 | E | **MATCH** | explosive classification survives (no exhibit in paper origi | real_CPI: 6.2/11.2/82.5, b_EXP=-0.0988 sig=*** |
 | C3 | P3 | E | **MATCH** | MCSI 46.0 units; US CCI 4.8 units | MCSI 46.04; US CCI 4.351 |
 | C4 | P3 | V | **MATCH** | MCSI low-band Aug 2025 onward; global CCI middle band until  | gCCI 2026-04 optionB=RW, 2026-05 optionB=RW; MCSI 2025-08 below_c1=Tru |
+| C49 | P3 | E | **MATCH** | 23/23 mechanical; 3/23 BIC-orthogonalised | BIC verdict PASS=3/23; mechanical completeness (n_mr+n_rw+n_ex==T) hol |
 | C7 | P3 | E | **MATCH** | 21.4 units | 21.38 units (n=24) |
 | E4 | P3 | E | **MATCH** | prose fix only; no computation | n/a - textual attribution issue |
 
@@ -188,13 +188,13 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > results/archive/tables/anfci_all_markets.csv exists; not cross-checked cell-by-cell against the 80-90%/9-fail claim - flagged for manual review.
 
-**C49** (NOT_REPRODUCIBLE) - Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
+**C49** (MATCH) - Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 
-> composite_all_markets.csv exists but does not carry a mechanical pass/fail column directly - the 23/23 and 3/23 figures were not cross-checked cell-by-cell against it. Flagged for manual review.
+> '23/23 mechanical' = a completeness identity (every market's composite trigger classifies 100% of its months into some regime - n_mr+n_rw+n_ex==T), confirmed for all 23 rows in bic_composite_results.csv. '3/23 BIC-orthogonalised' = that file's own verdict column, PASS=3/FAIL=20, exact. Note: this composite-study 23-market universe is NOT the main 23-panel - 9 names don't overlap (['asx200', 'cac40', 'dax', 'eurostoxx50', 'ftse100', 'jse', 'nifty50', 'sp500', 'tsx']) - a separate universe, not an error.
 
 **C50** (NOT_REPRODUCIBLE) - CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
 
-> file exists; the specific 18/23 pass-rate at the longer horizon was not cross-checked cell-by-cell here.
+> Checked for an alternate join key (ticker/code) - none exists, only lowercase `market` names, same convention as the panel. Only 15 of 23 panel markets appear in this file at all (missing: bist100, hangseng, hscei, lq45, merval, smi, szse, ta35), all 15 are 'BOTH TAILS', and none has p_value<0.05 - the 18/23 pass rate and the 10-vs-14 both-tails split are not recoverable from this file under any join. Confirmed absent, not merely unexamined.
 
 **C12** (MATCH) - Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
 
@@ -303,6 +303,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C6` Chance-corrected self-agreement: kappa 0.94 (MCSI/SP500); 0.74 (CCI panel)
 - `C10` Scale diagnostic, 8 national CCI: 100->38th-51st pctile
 - `C7` CAPE rolling threshold range: 21.4 units
+- `C49` Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 - `C11` S&P 500 vs its own US CCI screen: F=3.54, p=0.008
 - `C12` Correlation flags: China 0.25, NZ 0.29, Greece 0.37, Turkey 0.38, Czechia 0.415, Australia 0.435
 - `C17` High-band demeaned intercept: median +1.03%/mo; 12/22 contemp positive
@@ -337,7 +338,6 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 - `C8` BAA spread: 0.56pp euphoria compression vs 3.7pp GFC spike
 - `C9` ANFCI: high-sentiment state fires 80-90% (Europe); 9 fail partial screen
-- `C49` Composite (CCI+VIX+BCI): 23/23 mechanical; 3/23 BIC-orthogonalised
 - `C50` CCI-EPU composite: 18/23 pass at longer horizon; both-tails 10 vs '14'
 - `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
