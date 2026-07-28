@@ -263,6 +263,14 @@
     "priority": "P1",
     "note": "CONFIRMED text error. Both markets' upper thresholds (101.26, 102.01) sit INSIDE the upper cluster; their LOWER thresholds (98.73, 99.27) sit ABOVE the lower cluster. Section 4.1 must say 'lower', not 'upper'."
   },
+  "A12": {
+    "verdict": "MATCH",
+    "target": "cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp | +22.09pp",
+    "observed": "cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR spread 22.09pp",
+    "class": "E",
+    "priority": "P1",
+    "note": ""
+  },
   "A8": {
     "verdict": "MATCH",
     "target": "43.8 / 31.5 / 24.6",

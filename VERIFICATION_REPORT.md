@@ -8,12 +8,12 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 | Verdict | Count |
 |---|---|
-| MATCH | 61 |
+| MATCH | 62 |
 | NEAR | 4 |
 | MISMATCH | 3 |
 | NOT_REPRODUCIBLE | 9 |
 
-**77 entries checked.**
+**78 entries checked.**
 
 ## Results
 
@@ -38,6 +38,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | A1 | P1 | E | **MATCH** | 57 candidates / 32 pass / 23 retained; 24 FAIL, 1 NO_DATA | 57 rows; PASS=32, FAIL=24, NO_DATA=1; panel=23 |
 | A10 | P1 | E | **MATCH** | 1109 / 6676 / 615 | 1109 / 6676 / 615 |
 | A11 | P1 | S | **MATCH** | -10.88 [-18.23, -4.32] | -10.879 [-18.232, -4.316] |
+| A12 | P1 | E | **MATCH** | cut 98.39,101.40; +17.58/+7.68/-4.57; spread +22.14pp \| +22 | cut 98.33/101.39; below 17.84 above -4.57; fixed spread 22.40pp; TAR s |
 | A13 | P1 | E | **MATCH** | 29 of 30 | 29 of 30 start in 1997-2000 |
 | A14 | P1 | E | **MATCH** | t=-3.16, p=0.034, 5 clusters | year_collapsed t=-3.155, p=0.0343, clusters=5 |
 | A3 | P1 | E | **MATCH** | Japan 33.7 (c2=99.87); Turkey 94.2 | Japan 33.7 (c2=99.87); Turkey 94.2 |
@@ -289,6 +290,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C16` High-band slopes: no positive point estimate; BOVESPA 0.000/empty
 - `C24` Case shares: HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1.2
 - `C28` Spain low-band share: 2.0% of IBEX 35 months
+- `A12` Fixed-tail benchmark spread vs TAR spread: 22.14 vs 22.09 points
 - `A8` Greece percentile-normalised trigger: 43.8/31.5/24.6
 - `B4` Table 5.2 standalone estimates (Greece T=317, Turkey T=240)
 - `C25` Greece full-sample 88.4% RW vs matched-window 83%

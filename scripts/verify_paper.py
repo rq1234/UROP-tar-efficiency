@@ -27,6 +27,7 @@ import csv
 import json
 import math
 import os
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXPORTS = os.path.join(ROOT, "results", "exports")
@@ -608,6 +609,64 @@ def v_panel_characterisation():
 
 
 # ===========================================================================
+#  A12 - fixed-tail benchmark spread vs TAR spread
+# ===========================================================================
+def v_fixed_tail_spread():
+    """Target values (F2/F3) live in paper_numbers_manifest.csv, not in a per-round
+    export - computed fresh here from the committed panel + monthly_panel.csv price
+    data, the same 12m-forward-return construction round01_horizon.py uses. This is
+    the one check in this file that reads data/ directly, since no export carries
+    fixed-percentile-band pooled means."""
+    import numpy as np
+    import pandas as pd
+
+    r = check("A12", "Fixed-tail benchmark spread vs TAR spread: 22.14 vs 22.09 points", "E", "P1")
+    manifest = read(os.path.join(EXPORTS, "paper_numbers_manifest.csv"))
+    f2 = next((x for x in manifest if x.get("id") == "F2"), None)
+    f3 = next((x for x in manifest if x.get("id") == "F3"), None)
+    r.target = (f2["value"] if f2 else "cut 98.39,101.40; spread +22.14pp") + " | " + \
+               (f3["value"] if f3 else "+22.09pp")
+
+    panel = read(os.path.join(TABLES, "global_cci_all_markets.csv"))
+    try:
+        sys.path.insert(0, os.path.join(ROOT, "src"))
+        from global_cci_study import load_global_cci_pair  # noqa: E402
+
+        zs, fwds = [], []
+        for p in panel:
+            y, z, dates = load_global_cci_pair(p["market"], "1990-01", None)
+            logp = y[1:]
+            h = 12
+            fwd = np.full(len(logp), np.nan)
+            fwd[:-h] = 100.0 * (logp[h:] - logp[:-h])
+            zs.append(z[1:])
+            fwds.append(fwd)
+        zpool = np.concatenate(zs)
+        fpool = np.concatenate(fwds)
+        ok = ~np.isnan(fpool)
+        lo_cut, hi_cut = np.percentile(zpool, 10), np.percentile(zpool, 90)
+        below = ok & (zpool < lo_cut)
+        above = ok & (zpool > hi_cut)
+        below_mean, above_mean = float(fpool[below].mean()), float(fpool[above].mean())
+        fixed_spread = below_mean - above_mean
+
+        tar_row = next((x for x in RESULTS if x.id == "A9"), None)
+        tar_spread = None
+        if tar_row and tar_row.values.get("MR_mean_pct") is not None \
+                and tar_row.values.get("EXP_mean_pct") is not None:
+            tar_spread = tar_row.values["MR_mean_pct"] - tar_row.values["EXP_mean_pct"]
+
+        r.observed = (f"cut {lo_cut:.2f}/{hi_cut:.2f}; below {below_mean:.2f} above "
+                     f"{above_mean:.2f}; fixed spread {fixed_spread:.2f}pp"
+                     + (f"; TAR spread {tar_spread:.2f}pp" if tar_spread is not None else ""))
+        r.cmp(22.14, fixed_spread, 0.5, "fixed_spread")
+        if tar_spread is not None:
+            r.cmp(22.09, tar_spread, 0.5, "tar_spread")
+    except Exception as exc:                                    # noqa: BLE001
+        r.observed = f"computation failed: {type(exc).__name__}: {exc}"
+
+
+# ===========================================================================
 #  A8 / B4 / C25 / C26 / C27 - Greece/Turkey standalone and matched-window
 # ===========================================================================
 def v_localised_and_matched():
@@ -1170,7 +1229,7 @@ def v_section_e4():
 def main():
     for fn in (v_cascade, v_table41, v_horizon, v_rwband, v_placebo, v_bootstrap,
                v_episodes, v_matched, v_appendixC, v_fdr, v_section_e,
-               v_panel_characterisation, v_localised_and_matched, v_scale_and_stability,
+               v_panel_characterisation, v_fixed_tail_spread, v_localised_and_matched, v_scale_and_stability,
                v_archive_studies, v_granger_and_correlations, v_efficiency_and_rank_metrics,
                v_bootstrap_and_minregime, v_wald_and_recursive, v_permutation_and_horserace,
                v_episode_variants, v_oos_publag_clusters, v_appendixD_and_coverage,
