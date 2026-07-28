@@ -311,6 +311,26 @@ exactly (per-rule MR/RW/EXP pooled means match to the reported 2 decimal places)
   not investigated further. The cross-trigger ORDERING the finding rests on - global CCI >
   MCSI > US-CCI on both `range_over_sigma` and `range_over_span` - reproduces correctly.
 
+**A4.12 — the three FRED-API-key blockers (A4.8, A4.9's V4 twelfth month, A4.10's X5) are
+resolved.** A `FRED_API_KEY` was supplied and stored in a project-root `.env` (gitignored, never
+committed - see `.gitignore`). All three now reproduce their exports exactly, not approximately:
+- T3 (China CCI): `scripts/round03_episodes.py` fetches `CSCICP03CNM665S` live and gets 408 obs,
+  1990-01..2023-12 - byte-identical to `results/exports/cci_CHN_fetched.csv`. The series really is
+  discontinued in FRED after 2023-12; that was never a vintage-drift artefact. Shanghai and SZSE's
+  `localised_runs.csv` rows now match the export exactly (T, c1, c2, MR/RW/EXP all `IDENTICAL` per
+  `compare_rebuilt.py`).
+- X5 (Turkey real return): `scripts/round07_dependence.py` fetches `TURCPIALLMINMEI` live and
+  deflates bist100's log price by log(CPI). Both rows of `turkey_real_return.csv` (real_CPI and
+  the nominal baseline) reproduce exactly.
+- V4 (`mcsi_2025_2026.csv` twelfth month): `scripts/round05_audit.py` fetches `UMCSENT` live when
+  the committed `data/` vintage doesn't reach the target month; got `2026-05 = 44.8`, matching the
+  export exactly (all 12 rows now `IDENTICAL`).
+
+None of these write to `data/` - the fetched series are used in memory (X5, V4's extra month) or
+saved only to `outputs/rebuilt/` (T3's `cci_CHN_fetched.csv`). All three functions degrade
+gracefully (print a clear skip message, return no rows) if `FRED_API_KEY` is absent, so the
+scripts still run cleanly in an environment without the key.
+
 **A4.8 — Round 3 (`scripts/round03_episodes.py`) reproduces exactly; China rows (Round 4 T3)
 deferred.** S1's athex/bist100 rows match `localised_runs.csv` to every printed decimal place,
 and S3's MR-cluster count (222 distinct calendar-months, 9 clusters gap<=3 months) matches the

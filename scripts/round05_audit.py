@@ -108,9 +108,10 @@ def v4_mcsi_repull():
 
     2026-05 (44.8) is in the export but not in data/sentiment/mcsi_monthly.csv
     or data/combined/monthly_panel.csv (both stop at 2026-04) - a live re-pull
-    beyond the committed vintage, and no FRED_API_KEY is configured here to
-    redo that pull. Reported for the 11 months the committed data covers;
-    the final month is a documented gap, not fabricated. See ASSUMPTIONS.md.
+    beyond the committed vintage. If FRED_API_KEY is configured (.env or the
+    environment), the missing month is fetched fresh (data/ still untouched -
+    the extra month is merged in memory only); otherwise it is reported as a
+    documented gap rather than fabricated. See ASSUMPTIONS.md.
     """
     import pandas as pd
 
@@ -126,13 +127,31 @@ def v4_mcsi_repull():
     window = mcsi.loc[(mcsi.index >= pd.Period("2025-06", "M"))
                        & (mcsi.index <= pd.Period("2026-05", "M"))]
 
+    target = pd.Period("2026-05", "M")
+    if target not in window.index:
+        key = os.environ.get("FRED_API_KEY")
+        if not key:
+            try:
+                from dotenv import load_dotenv  # noqa: E402
+                load_dotenv()
+                key = os.environ.get("FRED_API_KEY")
+            except ImportError:
+                pass
+        if key:
+            from collect_data import fetch_fred  # noqa: E402
+            fresh = fetch_fred("mcsi", "UMCSENT", key)["mcsi"]
+            fresh.index = fresh.index.to_period("M")
+            if target in fresh.index:
+                window = pd.concat([window, fresh.loc[[target]]]).sort_index()
+                print(f"  V4: fetched the missing {target} month live "
+                      f"({float(fresh.loc[target]):.1f}) - not written to data/")
+
     rows = []
     for m, v in window.items():
         rows.append({"month": str(m), "umcsent": float(v), "below_c1_flag": bool(v < c1)})
-    missing = pd.Period("2026-05", "M") not in window.index
-    if missing:
-        print("  V4: 2026-05 (44.8 in the export) is missing from data/ - not fabricated,"
-              " see ASSUMPTIONS.md A4.9")
+    if target not in window.index:
+        print(f"  V4: {target} is missing from data/ and no FRED_API_KEY is configured - "
+              "not fabricated, see ASSUMPTIONS.md A4.9")
     for r in rows:
         print(f"    {r['month']}  {r['umcsent']}  below_c1={r['below_c1_flag']}")
     return rows

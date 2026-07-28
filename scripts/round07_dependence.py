@@ -452,6 +452,60 @@ def x3_horserace_label_vs_trailing():
     return rows
 
 
+def x5_turkey_real_return():
+    """Deflate bist100 by Turkish CPI (FRED TURCPIALLMINMEI) and re-run the
+    same standalone country-CCI TAR as S1 (round03_episodes.py), on the real
+    series. data/ is untouched - the fetched CPI is used in memory only."""
+    import pandas as pd
+
+    key = os.environ.get("FRED_API_KEY")
+    if not key:
+        try:
+            from dotenv import load_dotenv  # noqa: E402
+            load_dotenv()
+            key = os.environ.get("FRED_API_KEY")
+        except ImportError:
+            pass
+    if not key:
+        print("  X5: skipped - no FRED_API_KEY configured (checked .env and "
+              "the environment). See ASSUMPTIONS.md.")
+        return []
+
+    from collect_data import fetch_fred                             # noqa: E402
+    from country_cci_study import load_cci_pair                     # noqa: E402
+    from estimate import find_optimal_thresholds, standard_errors   # noqa: E402
+    from global_cci_study import _grid_bounds, _sig_marker          # noqa: E402
+
+    def fit(y, z, tag):
+        z_min, z_max, gl, mg = _grid_bounds(z)
+        opt = find_optimal_thresholds(y, z, z_min, z_max, gl, mg, 1, "returns")
+        res = standard_errors(y, z, opt["c1"], opt["c2"], 1, "returns")
+        T = res["n1"] + res["n2"] + res["n3"]
+        row = {"basis": tag, "cpi_series": "TURCPIALLMINMEI" if tag == "real_CPI" else "-",
+               "trigger": "cci_TUR", "T": T,
+               "c1": round(opt["c1"], 3), "c2": round(opt["c2"], 3),
+               "MR_pct": round(100.0 * res["n1"] / T, 1),
+               "RW_pct": round(100.0 * res["n2"] / T, 1),
+               "EXP_pct": round(100.0 * res["n3"] / T, 1),
+               "beta_ex": round(res["beta3"], 5), "sig_ex": _sig_marker(res.get("tstat3"))}
+        print(f"  X5 {tag:<22} c1={row['c1']} c2={row['c2']}  "
+              f"{row['MR_pct']}/{row['RW_pct']}/{row['EXP_pct']}  b_EXP={row['beta_ex']}")
+        return row
+
+    y_nom, z, dates = load_cci_pair("bist100", "TUR", start=config.START)
+    nominal_row = fit(y_nom, z, "nominal_country(paper)")
+
+    cpi = fetch_fred("cpi", "TURCPIALLMINMEI", key)["cpi"]
+    cpi.index = cpi.index + pd.offsets.MonthEnd(0)
+    dates_idx = pd.DatetimeIndex(dates)
+    cpi_aligned = cpi.reindex(dates_idx)
+    keep = ~cpi_aligned.isna().to_numpy()
+    y_real = y_nom[keep] - np.log(cpi_aligned.to_numpy(dtype=float)[keep])
+    real_row = fit(y_real, z[keep], "real_CPI")
+
+    return [real_row, nominal_row]
+
+
 def write(name, rows):
     path = os.path.join(config.ensure_rebuilt_dir(), name)
     with open(path, "w", encoding="utf-8", newline="") as fh:
@@ -467,9 +521,7 @@ def main():
     write("oos_exp_dep_corrected.csv", x2_oos_exp_dep_corrected())
     write("horserace_label_vs_trailing.csv", x3_horserace_label_vs_trailing())
     write("matched_window_localisation.csv", x4_matched_window())
-    print("  X5: skipped - turkey_real_return.csv needs Turkish CPI "
-          "(FRED TURCPIALLMINMEI), not in data/ and no FRED_API_KEY here. "
-          "See ASSUMPTIONS.md.")
+    write("turkey_real_return.csv", x5_turkey_real_return())
     write("kappa_stability.csv", x6_kappa())
     write("drift_variance_ratio.csv", x7_drift_variance())
     write("rho_confidence_intervals.csv", x8_rho_cis())
