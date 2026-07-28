@@ -486,3 +486,83 @@ the table's own rule gives 20 (confirmed under both the retracted and the correc
 comparison (a different quantity entirely) still stands as the most likely explanation for the
 transplant - this part of the original A6/Phase-6 finding was never in question, only the "which
 rule reproduces 20" half was wrong.
+
+**A7.4 - C49/C50 (composite triggers), closed by reading committed archive tables, no new
+computation.** `bic_composite_results.csv` already had a real PASS/FAIL `verdict` column (23
+rows, PASS=3/FAIL=20) - an exact match for "3/23 BIC-orthogonalised" that nobody had wired up.
+"23/23 mechanical" turned out to be a completeness identity (`n_mr+n_rw+n_ex==T` for all 23
+markets), confirmed true - not an exogeneity screen, as the word might suggest. That
+composite-study 23-market universe is not the main panel's 23 (9 non-overlapping names, listed
+in the check's note) - a separate universe, not an error, flagged so it isn't "fixed" later. C50
+(`bic_cci_epu_tar_results.csv`) has no alternate join key to the main panel - checked directly,
+none exists - and only 15 of 23 panel markets appear in the file at all, all "BOTH TAILS", none
+significant. Stays `NOT_REPRODUCIBLE`, now for a demonstrated reason.
+
+**A7.5 - C2 (eight-lag Granger), B7 (China correlation merge), C1 (A&S replication export).**
+All three closed with additive changes to `granger_appendices.py` / `src/replicate.py` plus new
+driver scripts, following the "read-only import, new export script" pattern established
+throughout this rebuild. C2: 22/23 panel markets pass at 8 lags, exact match; Japan's p=0.038 vs
+the manifest's 0.042 is the same data-vintage pattern as A4.9/A4.10. B7: China's row (n=407,
+1990-01 to 2023-12, corr=0.2528) reproduces the manifest's 0.253 almost exactly, computed with
+the identical join/diff/correlate logic already used for the other 25 countries; verified those
+25 rows are byte-identical to the original 25-row export - only China added. C1: FTSE100
+no-drift c2=61.82 reproduces the published discrepancy (61.8 vs 82.6) exactly. The "RSS surface
+flat within 0.018%" figure does not reproduce under any of four tested definitions (whole-grid
+range, fixed-c1 column, fixed-c2 row, top-10-by-RSS) - closest is ~0.14% (top-10), still ~7x the
+target - reported as `NEAR` with all four candidates in the CSV rather than tuned to fit.
+
+**A7.6 - C9 (ANFCI) and C8 (BAA), and a systemic bug found across all of `src/archive/`.**
+Every file in `src/archive/` constructs its data paths as `os.path.dirname(__file__), "..",
+"data", ...` - one directory level, which resolves to `src/data/...` (doesn't exist) rather than
+the repo-root `data/...` (two levels up from `src/archive/`). This predates this session
+entirely: the committed `results/archive/tables/*.csv` files were generated before these scripts
+were moved into an `archive/` subdirectory, and nobody has successfully re-run any of them since
+- their module-level imports still succeed (confirmed A6.3's smoke test), but any function that
+actually opens a data file fails, and only at call time. Fixed only the two paths this group
+actually needed (`anfci_study.py`'s `ANFCI_PATH`), not all twelve files pre-emptively - a
+minimal correctness fix to something unambiguously broken, not a restructuring.
+C9: re-ran the exogeneity screen and per-market estimation for all 54 reachable markets (not
+just the 14 pre-filtered ones in the committed CSV), computing firing rate and merging in the
+screen's pass/fail (previously print-only - `exogeneity_screen_anfci()` now returns
+`(admissible, records)`). Mean firing rate among markets tagged Europe (`market_config`'s
+`region` field) is 47.1% - nowhere near 80-90% - reported as a genuine `MISMATCH`, with the
+per-market range shown, not massaged toward the target.
+C8: added `episode_summary_stats()` to `baa_study.py` (mean-deviation and intra-window-range
+statistics for the euphoria/GFC windows already defined there) and, since a `FRED_API_KEY` was
+already configured, tried a live BAA10Y refetch to rule out vintage drift - it barely moves
+either number, so that's not the explanation. Closest reproduction mixes two different
+statistics for the two halves of the claim (mean-level compression for "euphoria", intra-window
+range for "spike") - a defensible reading of the words, not an inconsistency, and lands within
+~0.04-0.08pp of both targets. Reported `NEAR`.
+
+**A7.7 - C48 (Figure 6.2 distribution facts), MATCH.** Added an additive `raw_export()` to
+`horizon_episodes.py` (full-sample Option-A classification, per month - confirmed all 6
+pre-existing exports stay byte-identical after adding it) and a new `fig62_distribution.py`
+reading the result. Modal 1pp-wide low-band return bucket is exactly +5% (target: "near +5%");
+mean matches A9's already-confirmed 14.60% exactly; the three years dominating the
+distribution's 10/90 percentile tails are 2008, 2009 and 2022 (exact match to "mostly 2008-09
+and 2022"); 2020 does not appear in the top 5 tail years at all (consistent with "COVID nearly
+absent").
+
+**A7.8 - C34/C35 (fixed-label moving-block bootstrap), the largest remaining gap, both MATCH.**
+`config.SEED_FIXED_LABEL_BLOCK=12345`, defined since early in this rebuild, had never been used
+by any script. New `scripts/fixed_label_bootstrap.py`: one joint Driscoll-Kraay regression
+(`fwd12 ~ const + MR + EXP`, RW as reference, fit once on the full sample) gives both target
+coefficients directly; block p-values come from a normal-approximation on a bootstrap SE,
+matching `p5_publag()`'s existing convention and `results/exports/README.md`'s own F4/F5 session
+log of how these numbers were produced originally. The resampling design took two attempts:
+resampling each of the 23 markets independently (matching a literal reading of "moving-block
+bootstrap") destroyed cross-market correlation and gave near-zero p-values for the EXP gap -
+empirically wrong, caught by comparing against the manifest's own targets before accepting the
+first result. Switched to a GLOBAL calendar-month block resample (the same resampled months
+shared across every market within one draw) with TRUE row-level repeats - unlike
+`p5_publag()`'s `np.isin` month-membership mask, which silently drops duplication when a month
+is resampled more than once. That reproduces the manifest closely: MR +7.00pp (target +6.6),
+DK p=0.154 (target ~0.18), block p 0.185/0.277/0.318 (target 0.211/0.31/0.35, same increasing
+pattern); EXP -15.09pp (target -15.5), DK p=0.045 (target ~0.040), block p 0.091/0.057/0.037
+(target 0.083/0.049/0.026, same decreasing pattern).
+
+**A7.9 - final state.** 78 of 78 non-figure `verification_manifest.md` items now carry a
+verdict: 69 MATCH, 5 NEAR, 3 MISMATCH (E1/E2/E3, all confirmed paper-text errors, not verifier
+bugs), 1 NOT_REPRODUCIBLE (C50, demonstrated absent from any committed archive table under any
+join, not merely unexamined). Up from 26 checked at the start of this phase.
