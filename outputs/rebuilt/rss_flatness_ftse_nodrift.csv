@@ -1,0 +1,2 @@
+market,spec,n_grid_pairs,rss_min,rss_max,flat_pct_whole_grid,flat_pct_fixed_c1_col,flat_pct_fixed_c2_row,flat_pct_top10_by_rss,closest_to_target_0.018pct
+FTSE100,no_drift,4656,0.753926,0.787738,4.4847,1.5845,1.5303,0.1385,top10_by_rss

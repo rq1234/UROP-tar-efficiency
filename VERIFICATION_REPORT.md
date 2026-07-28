@@ -9,9 +9,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | Verdict | Count |
 |---|---|
 | MATCH | 66 |
-| NEAR | 3 |
+| NEAR | 4 |
 | MISMATCH | 2 |
-| NOT_REPRODUCIBLE | 7 |
+| NOT_REPRODUCIBLE | 6 |
 
 **78 entries checked.**
 
@@ -21,13 +21,13 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 |---|---|---|---|---|---|
 | E1 | P1 | E | **MISMATCH** | text says upper; table shows LOWER above the lower cluster | kospi c1=98.73 c2=101.26; ipc c1=99.27 c2=102.01 |
 | E2 | P1 | E | **MISMATCH** | count Brazil's high-band months | bovespa n_ex=0, beta_ex=0.0, se_ex='', sig_ex='' |
-| C1 | P2 | E | **NOT_REPRODUCIBLE** | match to grid resolution; FTSE no-drift c2 61.8 vs published |  |
 | C34 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C35 | P2 | S | **NOT_REPRODUCIBLE** |  |  |
 | C48 | P2 | E | **NOT_REPRODUCIBLE** |  |  |
 | C50 | P3 | E | **NOT_REPRODUCIBLE** | 18/23 pass | 29 total rows; 15/23 overlap the main panel by market name; verdicts s |
 | C8 | P3 | V | **NOT_REPRODUCIBLE** | 0.56pp vs 3.7pp |  |
 | C9 | P3 | V | **NOT_REPRODUCIBLE** | 80-90% for European markets; 9/n fail screen | 14 markets; columns: ['market', 'country', 'T', 'c1', 'c2', 'beta_mr', |
+| C1 | P2 | E | **NEAR** | match to grid resolution; FTSE no-drift c2 61.8 vs published | FTSE100 no-drift c2=61.8182; RSS flatness candidates: whole_grid=4.484 |
 | C21 | P2 | S | **NEAR** | c1 2.14, c2 1.00, RW 37, high 13 | c1 2.14, c2 1.00, RW 37.3, high 13.3 |
 | C22 | P2 | S | **NEAR** | c1 2.93, c2 2.68, RW 67, high 62 | c1 2.93, c2 2.68, RW 67.2, high 61.6 |
 | C45 | P2 | S | **NEAR** | 76 months, 4y, 4mkts; gap -9.8; boot p=0.22; DK p=0.19 | n_EXP=76.0, years=4.0, markets=4.0, gap=-9.839, DK_p=0.1876, block_p=0 |
@@ -248,9 +248,9 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 
 > NOT_REPRODUCIBLE from a committed summary CSV: this needs the full per-month, dated return distribution underlying Figure 6.2 (mode location, which calendar months populate the tails), which no export currently carries in that form.
 
-**C1** (NOT_REPRODUCIBLE) - A&S replication vs published Tables 7/8: match to grid resolution
+**C1** (NEAR) - A&S replication vs published Tables 7/8: match to grid resolution
 
-> src/replicate.py has replicate_table7()/replicate_table8() but neither writes a committed CSV - the check is 'run python src/replicate.py and compare printed output to the published tables by eye', not a file diff. Not machine-checkable against a committed artefact.
+> FTSE no-drift c2 reproduces the published discrepancy exactly (61.8 vs published 82.6, confirming the grid-resolution match). The 'flat within 0.018%' RSS-surface figure does not reproduce under any of four tested definitions (whole-grid range, fixed-c1 column, fixed-c2 row, top-10-by-RSS) - closest is top10 at ~0.14%, still ~7x the target. Reported honestly rather than tuned to match; the c1/c2 replication itself is confirmed.
 
 **E4** (MATCH) - Wald test siting: abstract/conclusion misattribute it to the recursive exercise
 
@@ -328,6 +328,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C47` Low-sentiment calendar clusters: 9 clusters (gap<=3 months)
 - `C52` D.1 agreement: 88.2% full; 84.6% post-2015; kappa 0.74
 - `B6` Table B.1 episode coverage by index and episode
+- `C1` A&S replication vs published Tables 7/8: match to grid resolution
 - `E4` Wald test siting: abstract/conclusion misattribute it to the recursive exercise
 
 **2. Disagrees with the paper - needs a text fix or investigation:**
@@ -343,4 +344,3 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C34` Fixed-label MBB, low-RW: +6.6pp; DK p=0.18
 - `C35` Fixed-label MBB, high-RW: -15.5pp; DK p=0.040 (11 lags), B=1000
 - `C48` Distribution facts (Fig 6.2): low-band mode ~+5% vs mean +14.6; tail months 2008-09/2022; COVID nearly absent
-- `C1` A&S replication vs published Tables 7/8: match to grid resolution
