@@ -67,20 +67,32 @@ def part1_window_effect():
 
 
 def part2_rank_correlation():
-    block = [r for r in read(os.path.join(EXPORTS, "placebo_1000.csv")) if r["dgp"] == "block12"]
-    impr = [float(r["real_rss_impr"]) for r in block]
-    emp_p = [float(r["emp_p_rss"]) for r in block]
-    pctile = [float(r["real_pctile"]) for r in block]
+    block = {r["market"]: r for r in read(os.path.join(EXPORTS, "placebo_1000.csv"))
+              if r["dgp"] == "block12"}
+    panel = {r["market"]: r for r in read(os.path.join(ROOT, "results", "tables",
+                                                          "global_cci_all_markets.csv"))}
+    markets = list(block.keys())
+    impr = [float(block[m]["real_rss_impr"]) for m in markets]
+    emp_p = [float(block[m]["emp_p_rss"]) for m in markets]
+    pctile = [float(block[m]["real_pctile"]) for m in markets]
+    T = [float(panel[m]["T"]) for m in markets]
 
     rho_p, p_p = spearmanr(impr, emp_p)
     rho_pc, p_pc = spearmanr(impr, pctile)
+    rho_T, p_T = spearmanr(T, emp_p)
 
     print("\n" + "=" * 70)
-    print("PART 2: rank correlation, real RSS improvement vs placebo p-value")
+    print("PART 2: rank correlation, real RSS improvement AND T vs placebo p-value")
     print("=" * 70)
     print(f"n=23 markets, block12 null")
     print(f"Spearman(real_rss_impr, emp_p_rss)   = {rho_p:.3f}  (p={p_p:.2e})")
     print(f"Spearman(real_rss_impr, real_pctile) = {rho_pc:.3f}  (p={p_pc:.2e})")
+    print(f"Spearman(T, emp_p_rss)               = {rho_T:.3f}  (p={p_T:.2e})")
+    print(f"\nT range across panel: {min(T):.0f} to {max(T):.0f}")
+    passers = sorted([m for m in markets if emp_p[markets.index(m)] < 0.05],
+                      key=lambda m: emp_p[markets.index(m)])
+    print(f"Passers (emp_p<0.05): " +
+          ", ".join(f"{m} T={int(panel[m]['T'])}" for m in passers))
     print(f"\nSuggested Section 4.2 line: \"Across the panel, the block-null p-value "
           f"is strongly rank-correlated with the real RSS improvement itself "
           f"(Spearman rho={rho_p:.2f}, block12 null, n=23) - which markets clear the "
