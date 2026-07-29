@@ -7,3 +7,11 @@ bist100_global,iid,240,7.714,4.238,7.154,0.031,96.9
 bist100_global,block12,240,7.714,4.453,8.339,0.074,92.6
 bist100_country(TUR),iid,240,7.357,5.11,8.404,0.122,87.8
 bist100_country(TUR),block12,240,7.357,5.826,9.965,0.254,74.6
+shanghai_global,iid,317,6.139,4.412,6.867,0.108,89.2
+shanghai_global,block12,317,6.139,5.37,9.483,0.361,63.9
+shanghai_country(CHN),iid,317,3.912,4.675,7.374,0.73,27.0
+shanghai_country(CHN),block12,317,3.912,5.547,9.972,0.82,18.0
+szse_global,iid,316,4.979,4.435,6.99,0.341,65.9
+szse_global,block12,316,4.979,5.248,9.893,0.544,45.6
+szse_country(CHN),iid,316,4.25,4.724,7.37,0.634,36.6
+szse_country(CHN),block12,316,4.25,5.452,9.576,0.761,23.9

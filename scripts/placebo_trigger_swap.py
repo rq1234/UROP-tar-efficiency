@@ -6,14 +6,12 @@ transportability finding (global trigger fails, national trigger succeeds, in
 the SAME market) rather than a property of these particular markets or of the
 estimator.
 
-Only ATHEX (Greek CCI) and BIST100 (Turkish CCI) are reproducible from this
-codebase: country_cci_study.py's TARGET_MARKETS = {"athex": "GRC", "bist100":
-"TUR"} is the only country-CCI mapping that exists, and market_config.py:104
-explicitly documents China (Shanghai/SZSE) as excluded - no OECD CCI data
-covers China. Table 5.2's Shanghai/SZSE "Country CCI" rows were never
-reproduced by this pipeline (verify_paper.py's B4 check only validates the
-Greece/Turkey rows) and cannot be run here without a China sentiment series
-this repo does not have.
+Covers all four markets with a national-CCI counterpart: ATHEX (Greek CCI),
+BIST100 (Turkish CCI), and Shanghai/SZSE (Chinese CCI, live-fetched from FRED
+series CSCICP03CNM665S via the same call scripts/country_cci_episodes.py's
+t3_china_cci() uses - an earlier version of this script incorrectly claimed
+this data didn't exist; it does, already committed at
+results/exports/localised_runs.csv, see verification_manifest.md's B4 note).
 
 Design: for each market, restrict BOTH triggers to the SAME matched-window
 months (same month-intersection logic as dependence_corrections.x4_matched_
@@ -45,21 +43,42 @@ from global_cci_study import load_global_cci_pair, _grid_bounds   # noqa: E402
 from threshold_bootstrap import moving_block_indices                # noqa: E402
 from placebo_1000 import improvement                                 # noqa: E402
 
-MARKETS = [("athex", "GRC"), ("bist100", "TUR")]
+OECD_MARKETS = [("athex", "GRC"), ("bist100", "TUR")]
+CHINA_MARKETS = ["shanghai", "szse"]
 
 
-def matched_window(market, oecd_code):
-    """Same intersection logic as dependence_corrections.x4_matched_window():
-    restrict to months present in the country-CCI file."""
-    y, z, dates = load_global_cci_pair(market, config.START, None)
-    months = pd.to_datetime(dates).to_period("M")
+def _load_country_series(oecd_code):
     cpath = os.path.join(config.DATA, "sentiment", f"oecd_cci_{oecd_code}.csv")
     cs = pd.read_csv(cpath, index_col=0, parse_dates=True).iloc[:, 0]
     cs.index = pd.to_datetime(cs.index).to_period("M")
-    keep = np.array([m in set(cs.index) for m in months])
+    return cs
+
+
+def _load_china_series():
+    """Live-fetch China's OECD CCI from FRED, identical call to
+    country_cci_episodes.t3_china_cci()."""
+    key = os.environ.get("FRED_API_KEY")
+    if not key:
+        from dotenv import load_dotenv
+        load_dotenv()
+        key = os.environ.get("FRED_API_KEY")
+    if not key:
+        raise RuntimeError("FRED_API_KEY not configured (checked .env and environment)")
+    from collect_data import fetch_fred  # noqa: E402
+    cci = fetch_fred("cci", "CSCICP03CNM665S", key)["cci"]
+    cci.index = pd.to_datetime(cci.index).to_period("M")
+    return cci
+
+
+def matched_window(market, country_series):
+    """Same intersection logic as dependence_corrections.x4_matched_window():
+    restrict to months present in the country-CCI series."""
+    y, z, dates = load_global_cci_pair(market, config.START, None)
+    months = pd.to_datetime(dates).to_period("M")
+    keep = np.array([m in set(country_series.index) for m in months])
     ym = y[keep]
     zm_global = z[keep]
-    zm_country = cs.reindex(months[keep]).to_numpy(dtype=float)
+    zm_country = country_series.reindex(months[keep]).to_numpy(dtype=float)
     return ym, zm_global, zm_country
 
 
@@ -110,17 +129,21 @@ def main():
     print(f"Trigger-swap placebo | B={B} | seed={config.SEED_PLACEBO_T1}\n")
 
     all_rows = []
-    for market, code in MARKETS:
-        ym, z_global, z_country = matched_window(market, code)
+    for market, code in OECD_MARKETS:
+        cs = _load_country_series(code)
+        ym, z_global, z_country = matched_window(market, cs)
         print(f"{market.upper()} matched window, T={len(ym)}:")
         all_rows += run_trigger(f"{market}_global", ym, z_global, B, rng)
         all_rows += run_trigger(f"{market}_country({code})", ym, z_country, B, rng)
         print()
 
-    print("SKIPPED: shanghai, szse - no China sentiment series exists in this repo "
-          "(market_config.py:104 documents China as excluded from OECD CCI coverage); "
-          "Table 5.2's Shanghai/SZSE Country-CCI rows were never reproduced by "
-          "verify_paper.py's B4 check and cannot be run without fabricating a trigger.")
+    china_cci = _load_china_series()
+    for market in CHINA_MARKETS:
+        ym, z_global, z_country = matched_window(market, china_cci)
+        print(f"{market.upper()} matched window, T={len(ym)}:")
+        all_rows += run_trigger(f"{market}_global", ym, z_global, B, rng)
+        all_rows += run_trigger(f"{market}_country(CHN)", ym, z_country, B, rng)
+        print()
 
     out = os.path.join(config.ensure_rebuilt_dir(), "placebo_trigger_swap.csv")
     with open(out, "w", newline="", encoding="utf-8") as f:
