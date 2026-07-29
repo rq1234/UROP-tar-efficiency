@@ -1,0 +1,4 @@
+band,mean_with_covid_pct,n_with_covid,mean_ex_covid_pct,n_ex_covid,delta_pct
+low (MR),14.601,1109,14.921,1008,0.32
+RW,8.009,6676,7.854,6233,-0.155
+high (EXP),-7.492,615,-7.492,615,0.0
