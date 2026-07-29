@@ -106,6 +106,19 @@ Turkey,2004-01 to 2024-01,240,Turkish CCI,7,45,48
 
 ### B4. Table 5.2 standalone estimates (P1)
 
+RESOLVED (previously believed unreproducible - that was wrong, see below). Shanghai/SZSE's
+"Country CCI" comes from `scripts/country_cci_episodes.py`'s `t3_china_cci()`: a live fetch of
+China's OECD CCI from FRED (series `CSCICP03CNM665S`, 408 obs, 1990-01 to 2023-12, apparently
+discontinued after that - not a vintage artefact), fit with the identical standalone country-CCI
+TAR code path as Greece/Turkey. Already committed at `results/exports/localised_runs.csv` (all
+four rows, Greece/Turkey/Shanghai/SZSE) - re-running the script reproduces it byte-for-byte,
+including the beta/significance-star columns. The actual gap was narrower than it looked:
+`scripts/verify_paper.py`'s B4 check only ever compared the Greece/Turkey rows against target,
+silently never looking at the Shanghai/SZSE rows sitting in the same already-committed file -
+fixed to check all four. `data/` is never touched by the fetch (saved only to
+`outputs/rebuilt/cci_CHN_fetched.csv`); class V (vintage-sensitive) for the China pair only,
+since it depends on a live FRED fetch rather than a static committed source file.
+
 ```csv
 index,trigger,T,c1,c2,low_pct,rw_pct,high_pct,low_slope,low_stars,high_slope,high_stars
 ATHEX,Global CCI,345,97.55,101.54,4.1,88.4,7.5,-0.158,3,-0.270,3

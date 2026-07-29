@@ -763,18 +763,33 @@ def v_localised_and_matched():
               and abs(num(athex_pct["EXP_pct"]) - 24.6) <= 0.5)
         r8.ok() if ok else r8.fail("percentile-normalised split differs")
 
-    r4 = check("B4", "Table 5.2 standalone estimates (Greece T=317, Turkey T=240)", "E", "P1")
+    r4 = check("B4", "Table 5.2 standalone estimates (Greece T=317, Turkey T=240, "
+               "Shanghai T=317, SZSE T=316)", "E", "P1")
     gr, tr = loc.get("athex"), loc.get("bist100")
-    r4.target = "Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85"
-    if gr and tr:
+    sh, sz = loc.get("shanghai"), loc.get("szse")
+    r4.target = ("Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85; "
+                 "Shanghai c1=100.77 c2=104.37; SZSE c1=100.77 c2=104.38")
+    if gr and tr and sh and sz:
         r4.observed = (f"Greece T={gr['T']} c1={gr['c1']} c2={gr['c2']}; "
-                       f"Turkey T={tr['T']} c1={tr['c1']} c2={tr['c2']}")
+                       f"Turkey T={tr['T']} c1={tr['c1']} c2={tr['c2']}; "
+                       f"Shanghai T={sh['T']} c1={sh['c1']} c2={sh['c2']}; "
+                       f"SZSE T={sz['T']} c1={sz['c1']} c2={sz['c2']}")
+        # China's CCI is live-fetched from FRED (CSCICP03CNM665S) by
+        # scripts/country_cci_episodes.py's t3_china_cci(), not a static
+        # data/ file - class V (vintage-sensitive) for that pair, tolerance
+        # accordingly, though a fresh re-fetch reproduced these numbers
+        # byte-for-byte at the time this check was extended.
         ok = (int(float(gr["T"])) == 317 and int(float(tr["T"])) == 240
+              and int(float(sh["T"])) == 317 and int(float(sz["T"])) == 316
               and abs(num(gr["c1"]) - 99.08) <= 0.02 and abs(num(gr["c2"]) - 101.59) <= 0.02
-              and abs(num(tr["c1"]) - 95.17) <= 0.02 and abs(num(tr["c2"]) - 100.85) <= 0.02)
+              and abs(num(tr["c1"]) - 95.17) <= 0.02 and abs(num(tr["c2"]) - 100.85) <= 0.02
+              and abs(num(sh["c1"]) - 100.77) <= 0.02 and abs(num(sh["c2"]) - 104.37) <= 0.02
+              and abs(num(sz["c1"]) - 100.77) <= 0.02 and abs(num(sz["c2"]) - 104.38) <= 0.02)
         r4.ok() if ok else r4.fail("one or more standalone estimates differ")
     else:
-        r4.observed = "athex/bist100 rows missing from localised_runs.csv"
+        missing = [n for n, x in [("athex", gr), ("bist100", tr), ("shanghai", sh),
+                                    ("szse", sz)] if not x]
+        r4.observed = f"missing from localised_runs.csv: {missing}"
 
     r25 = check("C25", "Greece full-sample 88.4% RW vs matched-window 83%", "E", "P1")
     full_rw = 100 * num(panel["athex"]["n_rw"]) / num(panel["athex"]["T"]) if "athex" in panel else None

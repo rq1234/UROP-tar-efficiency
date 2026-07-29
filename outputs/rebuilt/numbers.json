@@ -281,8 +281,8 @@
   },
   "B4": {
     "verdict": "MATCH",
-    "target": "Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85",
-    "observed": "Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853",
+    "target": "Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85; Shanghai c1=100.77 c2=104.37; SZSE c1=100.77 c2=104.38",
+    "observed": "Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853; Shanghai T=317 c1=100.766 c2=104.368; SZSE T=316 c1=100.767 c2=104.375",
     "class": "E",
     "priority": "P1",
     "note": ""

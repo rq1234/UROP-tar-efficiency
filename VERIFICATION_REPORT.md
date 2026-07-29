@@ -44,7 +44,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 | B2 | P1 | E | **MATCH** | 4 horizons x (mean, n) for low / RW / high | 1m MR 0.6878 n=1183; 3m MR 2.6252 n=1163; 6m MR 7.1811 n=1145; 12m MR  |
 | B2x | P1 | E | **MATCH** | 615 at every horizon | n_EXP values seen: [615] |
 | B3 | P1 | E | **MATCH** | Greece 7/83/10 vs 44/31/25; Turkey 6/38/56 vs 7/45/48 | GR global (7, 83, 10) country (44, 31, 25); TR global (6, 38, 56) coun |
-| B4 | P1 | E | **MATCH** | Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85 | Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853 |
+| B4 | P1 | E | **MATCH** | Greece c1=99.08 c2=101.59; Turkey c1=95.17 c2=100.85; Shangh | Greece T=317 c1=99.084 c2=101.595; Turkey T=240 c1=95.168 c2=100.853;  |
 | C16 | P1 | E | **MATCH** | 0 positive b_EXP; BOVESPA n_ex=0 | positive b_EXP: []; BOVESPA n_ex=0, beta_ex=0.0 |
 | C20 | P1 | E | **MATCH** | 16 neg, 7 pos, 6 raw, 0 BH, median -0.0063 | 16 neg, 7 pos, 6 raw, 0 BH, median -0.0063 |
 | C24 | P1 | E | **MATCH** | HK 87.4/10.1/2.5; Japan 33.7/5.7/60.6; Shanghai 52.0/46.8/1. | HK (87.38532110091744, 10.091743119266056, 2.522935779816514); Japan ( |
@@ -297,7 +297,7 @@ recomputed from `data/`, and no value is ever adjusted to force agreement.
 - `C28` Spain low-band share: 2.0% of IBEX 35 months
 - `A12` Fixed-tail benchmark spread vs TAR spread: 22.14 vs 22.09 points
 - `A8` Greece percentile-normalised trigger: 43.8/31.5/24.6
-- `B4` Table 5.2 standalone estimates (Greece T=317, Turkey T=240)
+- `B4` Table 5.2 standalone estimates (Greece T=317, Turkey T=240, Shanghai T=317, SZSE T=316)
 - `C25` Greece full-sample 88.4% RW vs matched-window 83%
 - `C26` Turkey global trigger 2004-2024: 56 high/38 RW vs 94.2 full
 - `C27` Turkey CPI-deflated: domestic boom-bust survives deflation
