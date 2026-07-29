@@ -1,0 +1,5 @@
+pairing,dgp,T,real_rss_impr,null_rss_p50,null_rss_p95,emp_p_rss,real_pctile
+S&P500+MCSI,iid,450,7.953,2.983,4.807,0.0,100.0
+S&P500+MCSI,block12,450,7.953,3.147,5.829,0.006,99.4
+FTSE100+VIX,iid,6259,2.498,0.244,0.384,0.0,100.0
+FTSE100+VIX,block12,6259,2.498,0.243,0.525,0.0,100.0
