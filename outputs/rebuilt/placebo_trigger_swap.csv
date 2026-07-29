@@ -1,0 +1,9 @@
+label,dgp,T,real_rss_impr,null_rss_p50,null_rss_p95,emp_p_rss,real_pctile
+athex_global,iid,317,8.278,4.488,6.991,0.008,99.2
+athex_global,block12,317,8.278,4.96,8.527,0.064,93.6
+athex_country(GRC),iid,317,7.992,4.743,7.467,0.023,97.7
+athex_country(GRC),block12,317,7.992,5.126,8.528,0.072,92.8
+bist100_global,iid,240,7.714,4.238,7.154,0.031,96.9
+bist100_global,block12,240,7.714,4.453,8.339,0.074,92.6
+bist100_country(TUR),iid,240,7.357,5.11,8.404,0.122,87.8
+bist100_country(TUR),block12,240,7.357,5.826,9.965,0.254,74.6

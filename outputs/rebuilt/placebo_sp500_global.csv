@@ -1,0 +1,3 @@
+market,dgp,T,real_rss_impr,null_rss_p50,null_rss_p95,emp_p_rss,real_pctile
+sp500_global,iid,436,5.338,3.027,4.71,0.016,98.4
+sp500_global,block12,436,5.338,3.029,6.456,0.094,90.6
