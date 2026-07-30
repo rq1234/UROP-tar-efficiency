@@ -1,34 +1,16 @@
 """
-Test whether the paper's four heuristic groups (Section 4.2 prose, "the point
-estimates can be organised into four heuristic groups rather than statistically
-estimated clusters") survive re-estimation, even though the RW-share RANKING
-does not (min_regime_summary.csv: Spearman vs base falls from 0.84 to 0.25 as
-the minimum-regime-size constraint tightens).
+Dominant-band stability test, run across the FULL 23-market panel rather than
+only the 17 markets Section 4.2's prose names across its four heuristic
+groups. Simpler question than the group-membership version this replaces:
+for every panel market, does the base run's dominant regime (whichever of
+MR/RW/EXP has the largest share) survive under the same six minimum-regime
+rules (outputs/rebuilt/min_regime_trimming.csv) plus a fresh constant-drift
+(spec=2) full-sample refit computed here - seven alternative specifications
+in total, same design as the original 17-market check (C53).
 
-The four groups, and their member markets, are read directly out of the
-manuscript's Section 4.2 text (paper/Full_Paper_Draft_Tier2_Reworked_Referee_Revision.docx):
-
-  G1  Global-stress-aligned (high RW share): Hong Kong, Singapore, Switzerland,
-      Spain, Netherlands, Israel, Indonesia, Malaysia, Taiwan
-  G2  Structural-mismatch cases: Japan, the Chinese exchanges (Shanghai, SZSE)
-  G3  Mexico and Brazil: comparatively large low-sentiment (MR) shares
-  G4  South Korea and the Philippines: low-sentiment classifications around
-      stress episodes
-
-Operationalisation (read the caveat in main() before citing this as a full
-membership test): on the base panel (spec=1, full sample), G1 markets are
-uniformly RW-dominant with MR% under ~15%; Japan is EXP-dominant; Shanghai,
-SZSE, and the G3/G4 markets are RW-dominant but with a materially elevated
-MR% (18-50%). That elevated-vs-low MR% split is the one thing regime shares
-alone can test - it is NOT possible to test the finer G2-vs-G3-vs-G4
-boundary from regime shares alone, since that boundary rests on episode-
-timing/economic-history evidence (e.g. Shanghai's booms being domestic and
-mistimed vs the global trigger), not on a different numeric profile. This
-script tests two things per market: (a) does the base-run's dominant regime
-survive, (b) does an elevated MR% (>=15pp, the rough gap separating G1 from
-everyone else in the base run) survive - across the six min-regime rules
-(outputs/rebuilt/min_regime_trimming.csv) and a fresh constant-drift (spec=2)
-full-sample refit computed here.
+Panel-wide rather than group-restricted specifically so the result doesn't
+depend on which markets Section 4.2 chose to name - one number, one panel,
+no explanation needed about which markets were in scope and why.
 
 Output: outputs/rebuilt/group_membership_stability.csv
 
@@ -52,15 +34,13 @@ BASE_PANEL = os.path.join(ROOT, "results", "tables", "global_cci_all_markets.csv
 MIN_REGIME_CSV = os.path.join(ROOT, "outputs", "rebuilt", "min_regime_trimming.csv")
 OUT_CSV = os.path.join(ROOT, "outputs", "rebuilt", "group_membership_stability.csv")
 
-GROUPS = {
-    "G1_global_stress_aligned": ["hangseng", "sti", "smi", "ibex35", "aex",
-                                  "ta125", "ta35", "jkse", "klci", "twse"],
-    "G2_structural_mismatch": ["nikkei225", "shanghai", "szse"],
-    "G3_mexico_brazil": ["ipc", "bovespa"],
-    "G4_korea_philippines": ["kospi", "psei"],
-}
-ALL_MARKETS = [m for grp in GROUPS.values() for m in grp]
-ELEVATED_MR_THRESHOLD = 15.0  # pp; roughly the gap between G1's MR% (<=10.1) and everyone else's (>=18.4)
+
+def _all_markets():
+    with open(BASE_PANEL, newline="", encoding="utf-8") as f:
+        return [r["market"] for r in csv.DictReader(f)]
+
+
+ALL_MARKETS = _all_markets()
 
 
 def dominant(mr, rw, exp):
@@ -109,56 +89,60 @@ def constant_drift_spec():
 def main():
     base = base_panel()
     min_regime = min_regime_specs()
-    print("Computing constant-drift (spec=2) full-sample refit for 17 named markets...")
+    print(f"Computing constant-drift (spec=2) full-sample refit for all {len(ALL_MARKETS)} "
+          f"panel markets...")
     spec2 = constant_drift_spec()
 
     alt_specs = {**min_regime, "constant_drift_spec2": spec2}
 
     rows = []
-    for group, markets in GROUPS.items():
-        for m in markets:
-            mr0, rw0, exp0 = base[m]
-            dom0 = dominant(mr0, rw0, exp0)
-            elevated0 = mr0 >= ELEVATED_MR_THRESHOLD
+    for m in ALL_MARKETS:
+        mr0, rw0, exp0 = base[m]
+        dom0 = dominant(mr0, rw0, exp0)
 
-            dom_agree, elevated_agree, n_specs = 0, 0, 0
-            for spec_name, spec_data in alt_specs.items():
-                if m not in spec_data:
-                    continue
-                mr, rw, exp = spec_data[m]
-                n_specs += 1
-                if dominant(mr, rw, exp) == dom0:
-                    dom_agree += 1
-                if (mr >= ELEVATED_MR_THRESHOLD) == elevated0:
-                    elevated_agree += 1
+        dom_agree, n_specs = 0, 0
+        for spec_name, spec_data in alt_specs.items():
+            if m not in spec_data:
+                continue
+            mr, rw, exp = spec_data[m]
+            n_specs += 1
+            if dominant(mr, rw, exp) == dom0:
+                dom_agree += 1
 
-            rows.append({
-                "group": group, "market": m,
-                "base_dominant": dom0, "base_MR_pct": round(mr0, 1),
-                "base_elevated_MR": elevated0,
-                "n_alt_specs": n_specs,
-                "dominant_regime_agreement": f"{dom_agree}/{n_specs}",
-                "elevated_MR_agreement": f"{elevated_agree}/{n_specs}",
-            })
+        rows.append({
+            "market": m, "base_dominant": dom0,
+            "base_MR_pct": round(mr0, 1), "base_RW_pct": round(rw0, 1),
+            "base_EXP_pct": round(exp0, 1),
+            "n_alt_specs": n_specs,
+            "dominant_regime_agreement": f"{dom_agree}/{n_specs}",
+            "is_exception": dom_agree < n_specs,
+        })
 
     with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         w.writeheader()
         w.writerows(rows)
 
-    print(f"\n{'Group':<28}{'Market':<12}{'Base dom.':<10}{'Base MR%':<10}"
-          f"{'Dom. agree':<12}{'Elevated-MR agree'}")
+    print(f"\n{'Market':<12}{'Base dom.':<10}{'MR%':<7}{'RW%':<7}{'EXP%':<7}"
+          f"{'Dom. agree'}")
     for r in rows:
-        print(f"{r['group']:<28}{r['market']:<12}{r['base_dominant']:<10}"
-              f"{r['base_MR_pct']:<10}{r['dominant_regime_agreement']:<12}"
-              f"{r['elevated_MR_agreement']}")
+        print(f"{r['market']:<12}{r['base_dominant']:<10}{r['base_MR_pct']:<7}"
+              f"{r['base_RW_pct']:<7}{r['base_EXP_pct']:<7}"
+              f"{r['dominant_regime_agreement']}")
+
+    n_stable = sum(1 for r in rows if not r["is_exception"])
+    exceptions = [r["market"] for r in rows if r["is_exception"]]
+    print(f"\n{n_stable} of {len(rows)} panel markets keep the same dominant regime "
+          f"across all 7 alternative specifications.")
+    if exceptions:
+        print(f"Exceptions: {', '.join(exceptions)}")
+    else:
+        print("No exceptions.")
 
     print(f"\nWrote: {OUT_CSV}")
-    print("\nCAVEAT: this tests regime-dominance and elevated-MR-share stability only.")
-    print("It does NOT test the finer G2-vs-G3-vs-G4 boundary (Shanghai/SZSE's mistimed")
-    print("domestic booms vs Mexico/Brazil's general elevation vs Korea/Philippines'")
-    print("episode-clustered MR months), which rests on episode-timing evidence this")
-    print("script does not recompute.")
+    print("\nCAVEAT: tests regime-dominance stability only (whichever of MR/RW/EXP has the")
+    print("largest share) - not a test of the four heuristic groups' finer boundaries,")
+    print("which rest partly on episode-timing evidence this script does not recompute.")
 
 
 if __name__ == "__main__":
